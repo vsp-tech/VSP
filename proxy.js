@@ -1,5 +1,10 @@
 import { NextResponse } from 'next/server'
-import { verifySession, COOKIE_NAME } from '@/lib/session.js'
+import { jwtVerify } from 'jose'
+
+const SECRET = new TextEncoder().encode(
+  process.env.VSP_SESSION_SECRET || 'vsp-dev-secret-change-in-production'
+)
+const COOKIE_NAME = 'vsp_session'
 
 export async function proxy(request) {
   const { pathname } = request.nextUrl
@@ -21,14 +26,16 @@ export async function proxy(request) {
     return redirectToLogin(request, pathname)
   }
 
-  const session = await verifySession(cookie.value)
-  if (!session) {
+  let session
+  try {
+    const { payload } = await jwtVerify(cookie.value, SECRET)
+    session = payload
+  } catch {
     return redirectToLogin(request, pathname)
   }
 
   // Admin can access everything
   if (session.role === 'admin') {
-    // Add role header for downstream pages
     const response = NextResponse.next()
     response.headers.set('x-vsp-role', 'admin')
     return response
@@ -38,7 +45,6 @@ export async function proxy(request) {
   if (session.role === 'client' && session.slug) {
     const allowedPrefix = `/portal/${session.slug}`
 
-    // Client accessing their own portal — allow
     if (pathname.startsWith(allowedPrefix)) {
       const response = NextResponse.next()
       response.headers.set('x-vsp-role', 'client')
