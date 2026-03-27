@@ -1,33 +1,64 @@
 import { NextResponse } from 'next/server'
+import { verifySession, COOKIE_NAME } from '@/lib/session.js'
 
-const PASSWORD_HASH = '4c9187cfae578ef1f84edaf9103abcfc953d825a6ebf4e963f21e34e202f6a8a'
-
-export function proxy(request) {
+export async function proxy(request) {
   const { pathname } = request.nextUrl
 
-  // Allow the login page and login API through
-  if (pathname === '/login' || pathname === '/api/login') {
-    return NextResponse.next()
-  }
-
-  // Allow static assets (CSS, JS, images, fonts) through
+  // Public routes — no auth needed
   if (
+    pathname === '/login' ||
+    pathname === '/api/login' ||
     pathname.startsWith('/_next/') ||
-    pathname.startsWith('/assets/css/') ||
-    pathname.startsWith('/assets/images/') ||
-    pathname.startsWith('/assets/js/') ||
-    pathname.match(/\.(ico|svg|png|jpg|jpeg|gif|woff|woff2)$/)
+    pathname.startsWith('/assets/') ||
+    pathname.match(/\.(ico|svg|png|jpg|jpeg|gif|woff|woff2|css|js)$/)
   ) {
     return NextResponse.next()
   }
 
-  // Check for session cookie
-  const session = request.cookies.get('vsp_session')
-  if (session && session.value === PASSWORD_HASH) {
-    return NextResponse.next()
+  // Verify session
+  const cookie = request.cookies.get(COOKIE_NAME)
+  if (!cookie) {
+    return redirectToLogin(request, pathname)
   }
 
-  // Redirect to login
+  const session = await verifySession(cookie.value)
+  if (!session) {
+    return redirectToLogin(request, pathname)
+  }
+
+  // Admin can access everything
+  if (session.role === 'admin') {
+    // Add role header for downstream pages
+    const response = NextResponse.next()
+    response.headers.set('x-vsp-role', 'admin')
+    return response
+  }
+
+  // Client can only access their own portal
+  if (session.role === 'client' && session.slug) {
+    const allowedPrefix = `/portal/${session.slug}`
+
+    // Client accessing their own portal — allow
+    if (pathname.startsWith(allowedPrefix)) {
+      const response = NextResponse.next()
+      response.headers.set('x-vsp-role', 'client')
+      response.headers.set('x-vsp-slug', session.slug)
+      return response
+    }
+
+    // Client accessing root — redirect to their portal
+    if (pathname === '/' || pathname === '') {
+      return NextResponse.redirect(new URL(allowedPrefix, request.url))
+    }
+
+    // Client accessing someone else's portal or admin — forbidden
+    return new NextResponse('Forbidden', { status: 403 })
+  }
+
+  return redirectToLogin(request, pathname)
+}
+
+function redirectToLogin(request, pathname) {
   const loginUrl = new URL('/login', request.url)
   loginUrl.searchParams.set('redirect', pathname)
   return NextResponse.redirect(loginUrl)

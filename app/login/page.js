@@ -22,8 +22,18 @@ function LoginForm() {
     })
 
     if (res.ok) {
-      const redirect = searchParams.get('redirect') || '/'
-      router.push(redirect)
+      const data = await res.json()
+      const redirect = searchParams.get('redirect')
+
+      if (redirect) {
+        router.push(redirect)
+      } else if (data.role === 'admin') {
+        router.push('/admin')
+      } else if (data.role === 'client' && data.slug) {
+        router.push(`/portal/${data.slug}`)
+      } else {
+        router.push('/')
+      }
       router.refresh()
     } else {
       setError('Incorrect password')
@@ -57,9 +67,9 @@ export default function LoginPage() {
   return (
     <div style={styles.page}>
       <div style={styles.box}>
-        <img src="/assets/images/vsp-logo.svg" alt="VSP" style={styles.logo} />
+        <img src="/assets/images/vsp-logo.svg" alt="Victory Square Partners" style={styles.logo} />
         <h2 style={styles.title}>Access Required</h2>
-        <p style={styles.subtitle}>Enter the password to continue.</p>
+        <p style={styles.subtitle}>Enter your password to continue.</p>
         <Suspense fallback={null}>
           <LoginForm />
         </Suspense>

@@ -1,0 +1,19 @@
+{
+  "admin": {
+    "passwordHash": "4c9187cfae578ef1f84edaf9103abcfc953d825a6ebf4e963f21e34e202f6a8a"
+  },
+  "clients": {
+    "acme-corp": {
+      "name": "Acme Corporation",
+      "passwordHash": "197156109d1dabb18b3f5002dbd554df2c8e96659667653b8ff88e9cc21e71df",
+      "accentColor": "#2563eb",
+      "logo": null
+    },
+    "globex-inc": {
+      "name": "Globex Inc",
+      "passwordHash": "ffb4791c44686ccf42e16b21bbf90e87f2356e050141a10905f34099268551c9",
+      "accentColor": "#059669",
+      "logo": null
+    }
+  }
+}
