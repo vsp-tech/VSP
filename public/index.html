@@ -1,21 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Victory Square Partners</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0a0a0a; color: #e0e0e0; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
-    .container { text-align: center; padding: 2rem; }
-    h1 { font-size: 2.5rem; font-weight: 300; letter-spacing: 0.1em; margin-bottom: 0.5rem; color: #fff; }
-    p { font-size: 1.1rem; color: #888; letter-spacing: 0.05em; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/assets/css/vsp-theme.css">
+<title>Victory Square Partners — Shared Resources</title>
+<style>
+  .directory-list { list-style: none; padding: 0; margin: 24px 0; }
+  .directory-list li {
+    background: var(--vsp-card-bg);
+    border: 1px solid var(--vsp-card-border);
+    border-radius: var(--vsp-radius-sm);
+    margin-bottom: 8px;
+    transition: border-color 0.2s;
+  }
+  .directory-list li:hover { border-color: var(--vsp-accent); }
+  .directory-list a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    color: var(--vsp-text);
+    text-decoration: none;
+    font-size: 14px;
+  }
+  .directory-list a:hover { color: var(--vsp-text-bright); }
+  .file-icon { color: var(--vsp-text-dim); font-size: 16px; flex-shrink: 0; width: 20px; text-align: center; }
+  .file-type {
+    margin-left: auto;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    color: var(--vsp-text-dim);
+    background: var(--vsp-navy-mid);
+  }
+  .empty-state {
+    text-align: center;
+    padding: 48px 24px;
+    color: var(--vsp-text-dim);
+    font-size: 14px;
+  }
+</style>
 </head>
 <body>
-  <div class="container">
-    <h1>Victory Square Partners</h1>
-    <p>Shared Resources</p>
+
+<header class="vsp-hero">
+  <div class="vsp-container">
+    <img src="/assets/images/vsp-logo.svg" alt="Victory Square Partners" class="vsp-logo">
+    <h1>Shared Resources</h1>
+    <p class="vsp-subtitle">Reports, proposals, and documents for prospects, clients, and teammates.</p>
   </div>
+</header>
+
+<main>
+  <section class="vsp-section">
+    <div class="vsp-container">
+      <span class="vsp-section-label">Documents</span>
+      <h2>Available Files</h2>
+      <div class="empty-state vsp-mt-3">
+        <p>No documents published yet.</p>
+        <p class="vsp-mt-1">Drop HTML or PDF files into <code class="vsp-mono">public/</code> and push to deploy.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="vsp-footer">
+  <div class="vsp-container">
+    <p>Victory Square Partners &mdash; Confidential</p>
+  </div>
+</footer>
+
 </body>
 </html>
