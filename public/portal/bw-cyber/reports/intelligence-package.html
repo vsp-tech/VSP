@@ -1,0 +1,1497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BW Cyber Services — Intelligence Package</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e17;
+    --card: #141925;
+    --border: #1e293b;
+    --green: #10b981;
+    --blue: #3b82f6;
+    --amber: #f59e0b;
+    --red: #ef4444;
+    --purple: #8b5cf6;
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --dim: #64748b;
+    --surface2: #1a2332;
+    --white: #f8fafc;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ─── HEADER ─── */
+  .header {
+    background: linear-gradient(135deg, #0f172a 0%, #1a2332 100%);
+    border-bottom: 3px solid var(--green);
+    padding: 28px 40px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+  }
+  .header-title { font-size: 22px; font-weight: 800; color: var(--white); }
+  .header-sub { font-size: 12px; color: var(--dim); margin-top: 3px; }
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(16,185,129,0.12);
+    border: 1px solid rgba(16,185,129,0.3);
+    border-radius: 6px;
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--green);
+    white-space: nowrap;
+  }
+
+  /* ─── TABS ─── */
+  .tabs {
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab {
+    padding: 11px 22px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--dim);
+    cursor: pointer;
+    border: none;
+    background: none;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -3px;
+    transition: all 0.2s;
+    font-family: inherit;
+    white-space: nowrap;
+  }
+  .tab:hover { color: var(--muted); }
+  .tab.active { color: var(--green); border-bottom-color: var(--green); }
+
+  /* ─── CONTENT ─── */
+  .content { max-width: 1060px; margin: 0 auto; padding: 32px 40px 80px; }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  h2 {
+    font-size: 20px; font-weight: 800; color: var(--white);
+    margin: 28px 0 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  h2:first-child { margin-top: 0; }
+  h3 { font-size: 15px; font-weight: 700; color: var(--text); margin: 20px 0 10px; }
+  h4 {
+    font-size: 12px; font-weight: 700; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.07em;
+    margin: 16px 0 8px;
+  }
+
+  p { margin-bottom: 12px; font-size: 14px; color: var(--muted); }
+  strong { color: var(--text); }
+  ul, ol { margin: 0 0 14px 18px; font-size: 14px; color: var(--muted); }
+  li { margin-bottom: 6px; }
+  li strong { color: var(--text); }
+
+  /* ─── STAT ROW ─── */
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+  }
+  .stat-card .label { font-size: 10px; font-weight: 700; color: var(--dim); text-transform: uppercase; letter-spacing: 0.08em; }
+  .stat-card .value { font-size: 18px; font-weight: 900; color: var(--white); margin-top: 4px; line-height: 1.2; }
+  .stat-card .note { font-size: 11px; color: var(--muted); margin-top: 3px; }
+  .stat-card.green-card { border-color: rgba(16,185,129,0.3); }
+  .stat-card.green-card .value { color: var(--green); }
+  .stat-card.blue-card { border-color: rgba(59,130,246,0.3); }
+  .stat-card.blue-card .value { color: var(--blue); }
+  .stat-card.amber-card { border-color: rgba(245,158,11,0.3); }
+  .stat-card.amber-card .value { color: var(--amber); }
+  .stat-card.purple-card { border-color: rgba(139,92,246,0.3); }
+  .stat-card.purple-card .value { color: var(--purple); }
+
+  /* ─── QUICK SUMMARY CARDS ─── */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .summary-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 20px;
+  }
+  .summary-card .sc-label {
+    font-size: 10px; font-weight: 700; color: var(--dim);
+    text-transform: uppercase; letter-spacing: 0.08em;
+    margin-bottom: 8px;
+  }
+  .summary-card .sc-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+  .summary-card p { font-size: 13px; color: var(--muted); margin-bottom: 0; }
+
+  /* ─── OPPORTUNITY CARDS ─── */
+  .opp-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .opp-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 20px;
+  }
+  .opp-card.near { border-left: 3px solid var(--red); }
+  .opp-card.medium { border-left: 3px solid var(--amber); }
+  .opp-card.long { border-left: 3px solid var(--green); }
+  .opp-card.ongoing { border-left: 3px solid var(--purple); }
+  .opp-tag {
+    display: inline-block; font-size: 10px; font-weight: 700;
+    padding: 2px 8px; border-radius: 4px; text-transform: uppercase;
+    letter-spacing: 0.05em; margin-bottom: 8px;
+  }
+  .tag-near { background: rgba(239,68,68,0.12); color: var(--red); }
+  .tag-medium { background: rgba(245,158,11,0.12); color: var(--amber); }
+  .tag-long { background: rgba(16,185,129,0.12); color: var(--green); }
+  .tag-ongoing { background: rgba(139,92,246,0.12); color: var(--purple); }
+  .opp-card .opp-title { font-size: 14px; font-weight: 700; color: var(--white); margin-bottom: 6px; }
+  .opp-card .opp-value { font-size: 20px; font-weight: 900; color: var(--white); margin-bottom: 4px; }
+  .opp-card p { font-size: 13px; color: var(--muted); margin-bottom: 4px; }
+
+  /* ─── MEDDPIC ─── */
+  .meddpic-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+  .m-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 20px;
+  }
+  .m-letter {
+    font-size: 28px; font-weight: 900; color: var(--dim);
+    line-height: 1; margin-bottom: 4px;
+  }
+  .m-title { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+  .m-status { display: inline-flex; align-items: center; gap: 6px; margin: 8px 0; }
+  .badge {
+    display: inline-block;
+    font-size: 11px; font-weight: 700;
+    padding: 3px 10px; border-radius: 5px;
+    text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .badge-strong { background: rgba(16,185,129,0.15); color: var(--green); border: 1px solid rgba(16,185,129,0.3); }
+  .badge-moderate { background: rgba(245,158,11,0.15); color: var(--amber); border: 1px solid rgba(245,158,11,0.3); }
+  .badge-unknown { background: rgba(100,116,139,0.12); color: var(--dim); border: 1px solid rgba(100,116,139,0.25); }
+  .badge-red { background: rgba(239,68,68,0.12); color: var(--red); border: 1px solid rgba(239,68,68,0.3); }
+  .badge-blue { background: rgba(59,130,246,0.12); color: var(--blue); border: 1px solid rgba(59,130,246,0.3); }
+  .m-card p { font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+  .m-card .m-need { font-size: 12px; color: var(--dim); border-top: 1px solid var(--border); margin-top: 10px; padding-top: 10px; }
+  .m-card .m-need strong { color: var(--amber); font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; }
+
+  /* ─── TABLES ─── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-bottom: 20px;
+  }
+  th {
+    text-align: left;
+    padding: 9px 12px;
+    background: var(--surface2);
+    color: var(--muted);
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    border-bottom: 1px solid var(--border);
+  }
+  td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--muted);
+    vertical-align: top;
+  }
+  tr:last-child td { border-bottom: none; }
+  td:first-child { color: var(--text); font-weight: 500; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+
+  /* ─── CALLOUTS ─── */
+  .callout {
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 14px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .callout-green { background: rgba(16,185,129,0.07); border: 1px solid rgba(16,185,129,0.2); border-left: 3px solid var(--green); }
+  .callout-green strong { color: var(--green); }
+  .callout-amber { background: rgba(245,158,11,0.07); border: 1px solid rgba(245,158,11,0.2); border-left: 3px solid var(--amber); }
+  .callout-amber strong { color: var(--amber); }
+  .callout-red { background: rgba(239,68,68,0.07); border: 1px solid rgba(239,68,68,0.2); border-left: 3px solid var(--red); }
+  .callout-red strong { color: var(--red); }
+  .callout-blue { background: rgba(59,130,246,0.07); border: 1px solid rgba(59,130,246,0.2); border-left: 3px solid var(--blue); }
+  .callout-blue strong { color: var(--blue); }
+  .callout-purple { background: rgba(139,92,246,0.07); border: 1px solid rgba(139,92,246,0.2); border-left: 3px solid var(--purple); }
+  .callout-purple strong { color: var(--purple); }
+
+  /* ─── QUOTE BLOCK ─── */
+  .quote-block {
+    background: rgba(16,185,129,0.06);
+    border: 1px solid rgba(16,185,129,0.2);
+    border-left: 4px solid var(--green);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 14px 0;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.75;
+  }
+  .quote-block cite {
+    display: block; font-style: normal;
+    font-size: 11px; color: var(--dim);
+    margin-top: 8px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.05em;
+  }
+
+  /* ─── ACTION ITEMS ─── */
+  .action-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 14px 16px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 8px;
+  }
+  .action-num {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 800;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .num-red { background: var(--red); color: #fff; }
+  .num-amber { background: var(--amber); color: #0a0e17; }
+  .num-green { background: var(--green); color: #0a0e17; }
+  .num-blue { background: var(--blue); color: #fff; }
+  .num-purple { background: var(--purple); color: #fff; }
+  .action-body .action-title { font-size: 14px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
+  .action-body p { font-size: 13px; color: var(--muted); margin-bottom: 0; }
+  .action-meta { display: flex; gap: 8px; margin-top: 6px; flex-wrap: wrap; }
+
+  /* ─── NETWORK MAP ─── */
+  .net-container {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .net-title { font-size: 13px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 20px; }
+
+  /* SVG-based network */
+  .net-svg { width: 100%; overflow: visible; }
+
+  /* Node styles */
+  .node-vsp { fill: rgba(59,130,246,0.15); stroke: var(--blue); stroke-width: 2; }
+  .node-champion { fill: rgba(16,185,129,0.15); stroke: var(--green); stroke-width: 2; }
+  .node-prospect { fill: rgba(245,158,11,0.15); stroke: var(--amber); stroke-width: 2; }
+  .node-weak { fill: rgba(100,116,139,0.1); stroke: var(--dim); stroke-width: 1.5; stroke-dasharray: 5,3; }
+  .node-pe { fill: rgba(139,92,246,0.1); stroke: var(--purple); stroke-width: 1.5; }
+
+  .node-label { font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 700; fill: var(--text); text-anchor: middle; }
+  .node-sub { font-family: 'Inter', sans-serif; font-size: 9.5px; fill: var(--muted); text-anchor: middle; }
+
+  .edge { stroke: var(--border); stroke-width: 1.5; fill: none; }
+  .edge-strong { stroke: var(--green); stroke-width: 2; opacity: 0.6; }
+  .edge-medium { stroke: var(--amber); stroke-width: 1.5; opacity: 0.5; }
+  .edge-weak { stroke: var(--dim); stroke-width: 1; stroke-dasharray: 5,4; opacity: 0.4; }
+
+  .edge-label { font-family: 'Inter', sans-serif; font-size: 9px; fill: var(--dim); text-anchor: middle; }
+
+  /* ─── LAYER CARDS ─── */
+  .layer-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 22px;
+    margin-bottom: 14px;
+  }
+  .layer-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+  .layer-num {
+    width: 32px; height: 32px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 900; flex-shrink: 0;
+  }
+  .layer-num-1 { background: rgba(59,130,246,0.2); color: var(--blue); border: 1px solid rgba(59,130,246,0.3); }
+  .layer-num-2 { background: rgba(16,185,129,0.2); color: var(--green); border: 1px solid rgba(16,185,129,0.3); }
+  .layer-num-3 { background: rgba(245,158,11,0.2); color: var(--amber); border: 1px solid rgba(245,158,11,0.3); }
+  .layer-num-opt { background: rgba(139,92,246,0.2); color: var(--purple); border: 1px solid rgba(139,92,246,0.3); }
+  .layer-info {}
+  .layer-info .layer-title { font-size: 15px; font-weight: 800; color: var(--white); }
+  .layer-info .layer-cost { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .layer-card p { font-size: 13px; color: var(--muted); margin-bottom: 8px; }
+  .layer-card ul { margin-bottom: 0; }
+  .layer-card li { font-size: 13px; }
+
+  /* Day table */
+  .day-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 16px; }
+  .day-table th { background: rgba(59,130,246,0.1); color: var(--blue); font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; padding: 8px 10px; border-bottom: 1px solid rgba(59,130,246,0.2); text-align: left; }
+  .day-table td { padding: 8px 10px; border-bottom: 1px solid var(--border); color: var(--muted); vertical-align: top; }
+  .day-table td:first-child { color: var(--blue); font-weight: 700; width: 60px; }
+  .day-table tr:last-child td { border-bottom: none; }
+
+  /* Regulatory pressure section */
+  .reg-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--red);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 12px;
+  }
+  .reg-card .reg-source { font-size: 11px; font-weight: 700; color: var(--red); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
+  .reg-card .reg-title { font-size: 14px; font-weight: 700; color: var(--white); margin-bottom: 8px; }
+  .reg-card ul { margin-bottom: 0; }
+  .reg-card li { font-size: 13px; }
+
+  .sales-line {
+    background: rgba(245,158,11,0.08);
+    border: 1px solid rgba(245,158,11,0.25);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-style: italic;
+    color: var(--amber);
+    font-weight: 500;
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 768px) {
+    .header { padding: 20px 20px 0; }
+    .content { padding: 20px 20px 60px; }
+    .stat-row { grid-template-columns: 1fr 1fr; }
+    .summary-grid { grid-template-columns: 1fr; }
+    .opp-grid { grid-template-columns: 1fr; }
+    .meddpic-grid { grid-template-columns: 1fr; }
+    .header-top { flex-direction: column; gap: 10px; }
+    .header-badge { white-space: normal; }
+  }
+  @media (max-width: 480px) {
+    .stat-row { grid-template-columns: 1fr; }
+    .tab { padding: 10px 14px; font-size: 12px; }
+  }
+
+  /* ─── SECTION DIVIDER ─── */
+  .section-divider {
+    height: 1px; background: var(--border);
+    margin: 24px 0;
+  }
+
+  /* partner opportunity flow */
+  .flow-row {
+    display: flex; align-items: center; gap: 0;
+    margin-bottom: 8px; flex-wrap: wrap;
+  }
+  .flow-box {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 8px; padding: 10px 14px;
+    font-size: 13px; font-weight: 600; color: var(--text);
+    min-width: 120px; text-align: center;
+  }
+  .flow-arrow {
+    font-size: 18px; color: var(--dim); padding: 0 8px;
+    font-weight: 300;
+  }
+  .flow-box.highlight-red { border-color: rgba(239,68,68,0.4); color: var(--red); }
+  .flow-box.highlight-green { border-color: rgba(16,185,129,0.4); color: var(--green); }
+  .flow-box.highlight-amber { border-color: rgba(245,158,11,0.4); color: var(--amber); }
+  .flow-box.highlight-blue { border-color: rgba(59,130,246,0.4); color: var(--blue); }
+
+  /* deliverable sections */
+  .deliverable-item {
+    display: flex; gap: 14px; padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: flex-start;
+  }
+  .deliverable-item:last-child { border-bottom: none; }
+  .deliverable-num {
+    width: 26px; height: 26px; border-radius: 6px;
+    background: rgba(59,130,246,0.15); border: 1px solid rgba(59,130,246,0.3);
+    color: var(--blue); font-size: 12px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .deliverable-body .d-title { font-size: 13px; font-weight: 700; color: var(--text); }
+  .deliverable-body .d-desc { font-size: 12px; color: var(--muted); margin-top: 2px; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════ HEADER ═══════════════════ -->
+<div class="header">
+  <div class="header-top">
+    <div>
+      <div class="header-title">BW Cyber Services — Intelligence Package</div>
+      <div class="header-sub">Prepared for VSP Engineering Team &nbsp;|&nbsp; March 2026 &nbsp;|&nbsp; Michael Brice, Founder</div>
+    </div>
+    <div class="header-badge">
+      <span style="color:var(--green);">●</span>
+      Discovery / Referral Partner &nbsp;|&nbsp; Cybersecurity × Financial Services
+    </div>
+  </div>
+  <div class="tabs">
+    <button class="tab active" onclick="showTab(0)">Overview</button>
+    <button class="tab" onclick="showTab(1)">MEDDPIC</button>
+    <button class="tab" onclick="showTab(2)">AI Assessment Tool Research</button>
+    <button class="tab" onclick="showTab(3)">Network Map</button>
+    <button class="tab" onclick="showTab(4)">Regulatory Pressure Points</button>
+    <button class="tab" onclick="showTab(5)">Action Items</button>
+  </div>
+</div>
+
+<div class="content">
+
+<!-- ═══════════════════ TAB 0: OVERVIEW ═══════════════════ -->
+<div class="tab-panel active" id="tab-0">
+
+  <div class="stat-row">
+    <div class="stat-card green-card">
+      <div class="label">Opportunity Vectors</div>
+      <div class="value">4</div>
+      <div class="note">Active, distinct threads</div>
+    </div>
+    <div class="stat-card blue-card">
+      <div class="label">AI Assessment Product</div>
+      <div class="value">$15–25K</div>
+      <div class="note">Per engagement, 2-week delivery</div>
+    </div>
+    <div class="stat-card amber-card">
+      <div class="label">Solomon Partners Deal</div>
+      <div class="value">~$100K</div>
+      <div class="note">AI jumpstart, CTO intro pending</div>
+    </div>
+    <div class="stat-card purple-card">
+      <div class="label">PE Fund Channel AUM</div>
+      <div class="value">$200–300B</div>
+      <div class="note">30–50 portcos per fund</div>
+    </div>
+  </div>
+
+  <!-- Quick Summary Cards -->
+  <h2>Quick Brief</h2>
+  <div class="summary-grid">
+    <div class="summary-card">
+      <div class="sc-label">WHO</div>
+      <div class="sc-title">Michael Brice — BW Cyber Services</div>
+      <p>Former Marine (SIGINT), Gulf War veteran. Founder of BW Cyber Services, a cybersecurity compliance firm serving hedge funds ($1B or less AUM), PE firms, and investment banks. Currently serves as virtual CISO at Solomon Partners. Connected through Matt Walnock, a years-long, high-trust relationship.</p>
+    </div>
+    <div class="summary-card">
+      <div class="sc-label">WHAT</div>
+      <div class="sc-title">Cybersecurity Compliance + New AI Assessment Product</div>
+      <p>BW Cyber specializes in compliance-driven cybersecurity for financial services. Michael is actively building a new <strong>AI Security Assessment product</strong> priced at $15–25K per 2-week engagement — and needs automated AI misconfiguration scanning tools to complete it. He calls it "Tenable for AI."</p>
+    </div>
+    <div class="summary-card">
+      <div class="sc-label">WHY VSP</div>
+      <div class="sc-title">Tool Research + $100K+ Door-Opener</div>
+      <p>Michael needs VSP to identify automated AI scanning tools for his assessment product. In return, he's offering a <strong>warm intro to Solomon Partners CTO</strong> (~$100K AI engagement) — whose CEO is pushing hard to implement AI right now. He also has PE fund clients with 30–50 portcos each.</p>
+    </div>
+    <div class="summary-card">
+      <div class="sc-label">RELATIONSHIP</div>
+      <div class="sc-title">Exceptionally Strong — Marine Bond + Matt Trust</div>
+      <p>Michael <strong>drove 3.5 hours</strong> just to show face at a VSP event. He's offering warm intros before asking for anything. Military bond between Tyler (infantry) and Michael (SIGINT) adds a second loyalty layer on top of the Walnock relationship. Low politics, high trust.</p>
+    </div>
+  </div>
+
+  <!-- Opportunity Map -->
+  <h2>Opportunity Map</h2>
+  <div class="opp-grid">
+    <div class="opp-card near">
+      <span class="opp-tag tag-near">Near-Term · NOW</span>
+      <div class="opp-title">AI Security Assessment Collaboration</div>
+      <div class="opp-value">$15–25K per deal</div>
+      <p>BW Cyber is building a 2-week AI security assessment for SMB financial firms. Needs VSP to research and recommend automated AI misconfiguration scanning tools. Could evolve into VSP providing the platform layer, BW Cyber sells and delivers.</p>
+      <p><strong>VSP Role:</strong> Technical advisory, tool research, potential ongoing tooling partnership.</p>
+    </div>
+    <div class="opp-card near">
+      <span class="opp-tag tag-near">Near-Term · URGENT</span>
+      <div class="opp-title">Solomon Partners Introduction</div>
+      <div class="opp-value">~$100K</div>
+      <p>Michael is virtual CISO at Solomon Partners. CTO is being pushed by CEO to implement AI and is "struggling." Michael will make a warm intro directly to the CTO. CEO pressure means this is <strong>active pain, not future.</strong></p>
+      <p><strong>VSP Role:</strong> AI-enabled development, fractional AI advisory.</p>
+    </div>
+    <div class="opp-card medium">
+      <span class="opp-tag tag-medium">Medium-Term</span>
+      <div class="opp-title">PE Fund Referral Channel</div>
+      <div class="opp-value">$200–300B AUM</div>
+      <p>Michael has relationships with PE firms managing massive AUM with 30–50 portfolio companies each. Non-competitive entry: PE firm tells portco to work with VSP. 2–3 clients already being pushed by exec management to implement AI.</p>
+      <p><strong>VSP Role:</strong> AI pods, fractional AI officer engagements at portcos.</p>
+    </div>
+    <div class="opp-card ongoing">
+      <span class="opp-tag tag-ongoing">Long-Term</span>
+      <div class="opp-title">Ongoing BW Cyber ↔ VSP Partnership</div>
+      <div class="opp-value">Recurring</div>
+      <p>Co-delivery model: BW Cyber handles the compliance layer, VSP handles AI implementation. Natural cross-sell: BW Cyber client needs AI → VSP builds it → BW Cyber secures it. Both sides multiply distribution without adding cost.</p>
+      <p><strong>VSP Role:</strong> Primary AI implementation partner for BW Cyber's client base.</p>
+    </div>
+  </div>
+
+  <div class="callout callout-red">
+    <strong>Critical Risk:</strong> Michael is a solo operator who will NOT chase Tyler. If Tyler doesn't deliver the tool research by the week of March 30, this opportunity evaporates silently. Speed = credibility = Solomon Partners intro.
+  </div>
+
+  <div class="callout callout-green">
+    <strong>Why This Is Different:</strong> Michael offered help before asking for anything. He named Solomon Partners unprompted. He drove 3.5 hours to show face. This is the kind of champion relationship that takes years to build — it landed on the first meeting.
+  </div>
+
+</div>
+
+<!-- ═══════════════════ TAB 1: MEDDPIC ═══════════════════ -->
+<div class="tab-panel" id="tab-1">
+
+  <h2>MEDDPIC Qualification — BW Cyber Services</h2>
+  <p>Last updated: March 26, 2026 &nbsp;|&nbsp; Stage: Early Discovery / Referral Partner &nbsp;|&nbsp; Deal Type: Service Collaboration + Referral Channel</p>
+
+  <div class="callout callout-green">
+    <strong>Overall Rating: Early Discovery — Strong Relationship, Multiple Opportunity Vectors.</strong> Michael Brice is a high-trust referral partner connected through Matt Walnock. Four distinct opportunity threads. Relationship is exceptionally warm for a first meeting — Marine Corps bond, unsolicited offers to help, 3.5-hour drive. Primary risk is Tyler failing to deliver tool research by March 30.
+  </div>
+
+  <div class="meddpic-grid">
+    <!-- Metrics -->
+    <div class="m-card">
+      <div class="m-letter">M</div>
+      <div class="m-title">Metrics</div>
+      <div class="m-status"><span class="badge badge-moderate">Moderate</span></div>
+      <p><strong>AI Security Assessment:</strong> $15–25K per engagement, 2-week delivery. Michael believes this offering could double his business in 2 years.</p>
+      <p><strong>Solomon Partners:</strong> ~$100K AI jumpstart (CTO engagement). CEO is pushing hard now.</p>
+      <p><strong>Hedge Fund Referrals:</strong> 2–3 clients with exec-level AI mandates, ~$100K each.</p>
+      <p><strong>PE Channel:</strong> $200–300B AUM firms, 30–50 portcos — highest ceiling, least defined.</p>
+      <div class="m-need"><strong>Gap:</strong> BW Cyber's current revenue / client count; Solomon Partners actual budget authority; PE firm specifics; referral fee structure.</div>
+    </div>
+
+    <!-- Economic Buyer -->
+    <div class="m-card">
+      <div class="m-letter">E</div>
+      <div class="m-title">Economic Buyer</div>
+      <div class="m-status">
+        <span class="badge badge-strong">Strong</span>
+        <span style="font-size:12px;color:var(--dim);margin-left:4px;">(BW Cyber)</span>
+        <span class="badge badge-unknown" style="margin-left:8px;">Unknown</span>
+        <span style="font-size:12px;color:var(--dim);margin-left:4px;">(Solomon)</span>
+      </div>
+      <p><strong>BW Cyber:</strong> Michael is sole decision-maker for his product. No board approval layer for tool selection.</p>
+      <p><strong>Solomon Partners:</strong> CEO is pushing CTO to implement AI. CEO is the true EB. CTO is champion under pressure. Michael as virtual CISO is the internal trust bridge.</p>
+      <p><strong>BW Cyber's clients:</strong> Michael sells to CFO and Chief Compliance Officer — not CTO/CIO. Compliance-driven sale. SEC enforcement risk is the fear lever.</p>
+      <div class="m-need"><strong>Gap:</strong> Confirm whether Solomon CTO has budget authority or requires CEO sign-off. Who signs checks at hedge funds — managing partner, CFO, or COO?</div>
+    </div>
+
+    <!-- Decision Criteria -->
+    <div class="m-card">
+      <div class="m-letter">D</div>
+      <div class="m-title">Decision Criteria</div>
+      <div class="m-status"><span class="badge badge-moderate">Moderate</span></div>
+      <p><strong>Trust first:</strong> Michael drove 3.5 hours to show face. Relationship currency is his primary currency.</p>
+      <p><strong>Regulatory defensibility:</strong> Any tool VSP recommends must survive a compliance audit. SEC risk is background dread for all Michael's clients.</p>
+      <p><strong>Non-competitive:</strong> Michael used "non-competitive entry" language re PE firms. VSP must never appear to edge into cybersecurity advisory.</p>
+      <p><strong>Solomon CTO:</strong> Needs someone he can "trust to throw money at and get into the 22nd century safely." Trust + capability + speed, not lowest cost.</p>
+      <div class="m-need"><strong>Gap:</strong> Solomon CTO's specific AI use cases; whether Michael's clients require SOC 2 or specific compliance frameworks for AI vendors.</div>
+    </div>
+
+    <!-- Decision Process -->
+    <div class="m-card">
+      <div class="m-letter">D</div>
+      <div class="m-title">Decision Process</div>
+      <div class="m-status"><span class="badge badge-moderate">Moderate</span></div>
+      <p><strong>Tool research:</strong> Tyler researches → reports back week of March 30 → Michael evaluates. Simple two-step.</p>
+      <p><strong>Solomon intro:</strong> Michael controls the intro → Tyler meets CTO → Tyler proposes engagement → CTO gets CEO sign-off. Timeline imminent — CEO is pushing hard NOW.</p>
+      <p><strong>PE channel:</strong> No process defined. Michael mentioned casually. Needs deliberate surfacing in next conversation.</p>
+      <div class="m-need"><strong>Gap:</strong> Solomon Partners procurement process for technology vendors; would Michael want a formal referral agreement or keep it informal?</div>
+    </div>
+
+    <!-- Paper Process -->
+    <div class="m-card">
+      <div class="m-letter">P</div>
+      <div class="m-title">Paper Process</div>
+      <div class="m-status"><span class="badge badge-unknown">Unknown</span></div>
+      <p>No discussion of contracts, MSAs, or referral agreements. First exploratory conversation — too early to push paper.</p>
+      <p>Michael's relationship style is loyalty-based; forcing contracts early could be counterproductive.</p>
+      <div class="m-need"><strong>Strategy:</strong> Monitor. Don't force. Revisit after first successful value exchange (tool research delivery).</div>
+    </div>
+
+    <!-- Identify Pain -->
+    <div class="m-card">
+      <div class="m-letter">I</div>
+      <div class="m-title">Identify Pain</div>
+      <div class="m-status"><span class="badge badge-strong">Strong</span></div>
+      <p><strong>Michael's pain:</strong> Missing a critical component of his AI security assessment product — an automated misconfiguration scanning tool ("Tenable for AI"). Without it, his $15–25K offering is incomplete and less defensible.</p>
+      <p><strong>Solomon CTO's pain:</strong> Being pushed hard by CEO to implement AI and "struggling." Active pain, not future.</p>
+      <p><strong>Broader client base:</strong> 2–3 clients with exec-level AI mandates, no dev teams, no roadmap. Need a trusted partner to hand money to.</p>
+      <div class="m-need"><strong>Gap:</strong> Solomon: specific AI use cases the CTO is trying to implement. BW Cyber: has Michael evaluated any tools already?</div>
+    </div>
+
+    <!-- Champion -->
+    <div class="m-card">
+      <div class="m-letter">C</div>
+      <div class="m-title">Champion</div>
+      <div class="m-status"><span class="badge badge-strong">Strong</span></div>
+      <p><strong>Drove 3.5 hours</strong> just to attend a VSP event — missionary-level commitment.</p>
+      <p><strong>Offered to help first</strong> — proactively named Solomon Partners before being asked.</p>
+      <p><strong>Internal credibility</strong> at Solomon Partners as virtual CISO — not an outsider trying to refer.</p>
+      <p><strong>Military bond</strong> with Tyler adds a second loyalty layer (infantry + SIGINT).</p>
+      <p><strong>Motivated by Matt Walnock</strong> — "he's been a big friend, big big friend of our firm."</p>
+      <div class="m-need"><strong>Risk:</strong> Solo operator with limited bandwidth. He will NOT chase Tyler. If Tyler doesn't follow up, this evaporates silently.</div>
+    </div>
+
+    <!-- Competition -->
+    <div class="m-card">
+      <div class="m-letter">C</div>
+      <div class="m-title">Competition</div>
+      <div class="m-status"><span class="badge badge-unknown">Unknown</span></div>
+      <p>No competitors discussed in the initial call.</p>
+      <p>For Solomon Partners: unknown if CTO has already been pitched by other AI consultancies.</p>
+      <p>For BW Cyber tool search: Michael is presumably researching multiple options — VSP competes to surface the right answer first.</p>
+      <div class="m-need"><strong>Action:</strong> Ask Michael in next call: has Solomon CTO already started conversations with anyone else? Speed is the competitive advantage here.</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════ TAB 2: AI ASSESSMENT TOOL RESEARCH ═══════════════════ -->
+<div class="tab-panel" id="tab-2">
+
+  <h2>AI Security Assessment Tool Research</h2>
+  <p>This is the primary deliverable for Vlad and Coman to review, and for Tyler to deliver to Michael Brice. BW Cyber needs an automated tooling layer to complete their $15–25K AI security assessment product for hedge funds and PE firms.</p>
+
+  <div class="callout callout-amber">
+    <strong>Deliverable Due:</strong> Week of March 30, 2026. This tool research is Tyler's first trust-building deposit with Michael. It unlocks the Solomon Partners introduction and everything downstream.
+  </div>
+
+  <!-- The Problem -->
+  <h3>The Problem Michael Described</h3>
+
+  <div class="quote-block">
+    "Are there some automated tools that we can use to tell them where there are any security leaks? ... My company, we have everything locked down on SharePoint. But if we fucked up on some of our settings and I didn't realize, that we've got some files where we have employee payroll open to everybody because we misconfigured it — I'd like to have an automated tool tell me, by the way, Claude can get to this."
+    <cite>— Michael Brice, March 26, 2026 Intro Call</cite>
+  </div>
+
+  <div class="quote-block">
+    "Basically Tenable for AI. Is there something like that we can use?"
+    <cite>— Michael Brice, March 26, 2026 Intro Call</cite>
+  </div>
+
+  <p>Translation — Michael needs a tool that:</p>
+  <ol>
+    <li>Scans Microsoft 365 / SharePoint for permission misconfigurations that expose sensitive data to Copilot</li>
+    <li>Detects shadow AI usage (employees using ChatGPT, Claude, etc. without approval)</li>
+    <li>Reviews 25–200 M365 Defender / Purview / Copilot control settings</li>
+    <li>Produces a compliance-ready report for CFO/CCO buyers</li>
+    <li>Runs within a 2-week engagement by a small team</li>
+    <li>Costs less than the $15–25K assessment price</li>
+  </ol>
+
+  <div class="section-divider"></div>
+
+  <!-- Recommended Stack -->
+  <h3>Recommended 3-Layer Stack</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Layer</th>
+        <th>Tool</th>
+        <th>Cost</th>
+        <th>What It Does</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="badge badge-blue">Layer 1</span> Discovery</td>
+        <td>Microsoft Purview DSPM for AI + Defender for Cloud Apps</td>
+        <td>Included in M365 E5 (or 90-day trial)</td>
+        <td>AI activity inventory, shadow AI detection, oversharing risk assessment</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-strong">Layer 2</span> Scanning</td>
+        <td>Varonis Free Copilot Security Scan + SharePoint Advanced Management</td>
+        <td>Free assessment + included with Copilot license</td>
+        <td>SharePoint permissions analysis, sensitive data exposure to Copilot, misconfiguration detection</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-moderate">Layer 3</span> Compliance</td>
+        <td>Microsoft Compliance Manager (NIST AI RMF template)</td>
+        <td>Included in M365</td>
+        <td>SEC/FINRA-ready compliance mapping, regulatory gap scoring</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout callout-green">
+    <strong>Bottom line:</strong> BW Cyber doesn't need to buy a $50K+ platform. The Microsoft-native stack plus Varonis's free scan covers 80% of the automated scanning Michael described. The remaining 20% is assessor expertise — which is BW Cyber's margin.
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- Layer 1 -->
+  <div class="layer-card">
+    <div class="layer-header">
+      <div class="layer-num layer-num-1">1</div>
+      <div class="layer-info">
+        <div class="layer-title">Microsoft Purview DSPM for AI — The Oversharing Scanner</div>
+        <div class="layer-cost">Cost: Included in M365 E5 | 90-day free trial available for assessments</div>
+      </div>
+    </div>
+    <p><strong>The closest thing to "Tenable for AI" in the Microsoft stack.</strong> DSPM for AI automatically identifies the top 100 SharePoint sites by Copilot usage, flags oversharing risks, enables item-level investigation, and monitors Copilot prompts/responses for sensitive data exposure.</p>
+    <p><strong>The payroll file scenario:</strong> DSPM runs a Data Risk Assessment that surfaces exactly the problem Michael described — files with sensitive data (payroll, PII, financial records) accessible to Copilot due to misconfigured SharePoint permissions. Flags "Everyone except external users" access, broad security groups, and anyone-links.</p>
+    <h4>How to use in a 2-week engagement</h4>
+    <table class="day-table">
+      <tr><th>Day</th><th>Activity</th><th>Output</th></tr>
+      <tr><td>1–2</td><td>Get delegated Global Reader + Compliance Administrator access to client's M365 tenant</td><td>Access confirmed</td></tr>
+      <tr><td>2</td><td>Activate DSPM for AI — Microsoft offers 90-day free trial of Purview premium for assessments</td><td>Tool active</td></tr>
+      <tr><td>3</td><td>Run automated Data Risk Assessment — produces prioritized site-by-site risk report within hours</td><td>Oversharing risk report</td></tr>
+      <tr><td>4–5</td><td>Review AI activity logs — who's using Copilot, what sensitive data is being referenced, any policy violations</td><td>AI activity summary</td></tr>
+    </table>
+    <p><strong>Gap:</strong> Only covers Microsoft ecosystem. Cannot scan ChatGPT or Claude deployments.</p>
+    <p><strong>Licensing note:</strong> Requires M365 E5 or E5 Compliance add-on. Most small hedge funds are on E3 or Business Premium — <strong>the assessment will almost certainly surface an E5 upgrade as a Priority 1 finding</strong>, which is a natural expansion opportunity.</p>
+  </div>
+
+  <!-- Layer 2 -->
+  <div class="layer-card">
+    <div class="layer-header">
+      <div class="layer-num layer-num-2">2</div>
+      <div class="layer-info">
+        <div class="layer-title">Varonis Free Copilot Security Scan — The Permissions Deep-Dive</div>
+        <div class="layer-cost">Cost: Free for the assessment scan | Full Varonis platform $50K+/year (client recommendation, not BW Cyber's cost)</div>
+      </div>
+    </div>
+    <p><strong>Why it matters:</strong> Microsoft's native tools check policies. Varonis checks the <em>actual data</em>. In a documented client case, Varonis found <strong>120,000 sensitive files</strong> and <strong>57,000 with excessive access</strong> in a single organization.</p>
+    <p>Varonis crawls the entire M365 environment and calculates true effective permissions — including nested permissions, group memberships, and link-based access — across SharePoint, OneDrive, Teams, and Exchange.</p>
+    <h4>How to use in a 2-week engagement</h4>
+    <table class="day-table">
+      <tr><th>Day</th><th>Activity</th><th>Output</th></tr>
+      <tr><td>3</td><td>Request Varonis free Copilot Security Scan — designed as a sales tool for Varonis but fully usable as third-party validation</td><td>Scan submitted</td></tr>
+      <tr><td>5–6</td><td>Receive scan results (2–3 business day turnaround)</td><td>Sensitive file inventory, permission analysis, risk scoring</td></tr>
+      <tr><td>Week 2</td><td>Incorporate findings into assessment deliverable as the "data exposure" section</td><td>Professional report the client can act on</td></tr>
+    </table>
+    <div class="callout callout-blue" style="margin-top:12px;">
+      <strong>Partnership opportunity:</strong> Varonis benefits from deal flow. BW Cyber runs the scan, surfaces the risk, and if the client wants ongoing monitoring, Varonis gets the license sale. Consider a formal referral agreement — see Tab 5 for details.
+    </div>
+  </div>
+
+  <!-- Layer 3 -->
+  <div class="layer-card">
+    <div class="layer-header">
+      <div class="layer-num layer-num-3">3</div>
+      <div class="layer-info">
+        <div class="layer-title">SharePoint Advanced Management + Compliance Manager (NIST AI RMF)</div>
+        <div class="layer-cost">Cost: Included with M365 Copilot license | $3/user/month add-on for non-Copilot tenants</div>
+      </div>
+    </div>
+    <p><strong>SharePoint Advanced Management (SAM)</strong> was specifically built for the Copilot oversharing problem: Site Permissions Reports, Data Access Governance Reports (who has access to what), Restricted Access Control (one-click lockdown), and Content Discovery Controls (prevent sites from Copilot search).</p>
+    <p><strong>Compliance Manager (NIST AI RMF)</strong> provides regulatory assessment templates mapping M365 configurations to recognized frameworks — NIST AI RMF (referenced by the SEC), EU AI Act (hard deadline August 2, 2026), and ISO/IEC 42001. Produces a percentage compliance score with specific control gaps highlighted. Runs in under an hour. Output is a regulatory gap report a CCO can hand directly to an SEC examiner.</p>
+  </div>
+
+  <!-- Shadow AI -->
+  <h3>Layer 4: Shadow AI Detection — Microsoft Defender for Cloud Apps</h3>
+  <div class="callout callout-red">
+    <strong>For hedge funds specifically:</strong> Defender for Cloud Apps can surface if employees are uploading client data, trading strategies, or financial models to ChatGPT, Claude, Gemini, etc. — a direct SEC/FINRA compliance risk.
+  </div>
+  <p>Discovers 400+ AI/GenAI apps in use across the organization. Assigns each app a risk score (1–10), shows usage volume, allows admin to tag apps as Sanctioned, Monitored, or Unsanctioned. Available with E3 (basic) or E5/MDCA (~$3.50/user/month) for full capabilities. Output: the "Shadow AI Inventory" section of the assessment.</p>
+
+  <div class="section-divider"></div>
+
+  <!-- Optional Layer -->
+  <h3>Optional Layer: LLM Vulnerability Scanning (Open-Source, Free)</h3>
+  <p>For clients running deployed LLM applications or custom AI agents, add a technical testing layer:</p>
+
+  <table>
+    <thead>
+      <tr><th>Tool</th><th>What It Does</th><th>Best For</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Promptfoo</strong> (open-source)</td>
+        <td>Automated red-teaming — tests for prompt injection, data leakage, jailbreaks. Maps to OWASP LLM Top 10.</td>
+        <td>Clients using ChatGPT Enterprise, Claude for Work, or custom AI apps</td>
+      </tr>
+      <tr>
+        <td><strong>NVIDIA Garak</strong> (open-source)</td>
+        <td>LLM vulnerability scanner — probes for hallucination, data leakage, prompt injection, toxic content.</td>
+        <td>Clients with deployed LLMs on Azure or custom infrastructure</td>
+      </tr>
+      <tr>
+        <td><strong>Microsoft PyRIT</strong> (open-source)</td>
+        <td>Python Risk Identification Tool — programmatic attack orchestration, multi-turn adversarial testing.</td>
+        <td>Azure-based AI deployments</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>Run Promptfoo or Garak against the client's deployed AI tools during Week 1. Document findings as the "Technical Vulnerability Assessment" section. Takes 1–2 days. <strong>Recommended as a premium add-on</strong> at the $25K price point.</p>
+
+  <div class="section-divider"></div>
+
+  <!-- Competitive Landscape -->
+  <h3>Competitive Landscape: Where BW Cyber's White Space Is</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Competitor</th>
+        <th>Price Point</th>
+        <th>AI Depth</th>
+        <th>Hedge Fund Focus</th>
+        <th>White Space?</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Drawbridge</strong></td>
+        <td>$15–50K+/yr (platform)</td>
+        <td>Low — AI is a section of broader cyber risk</td>
+        <td>Very High (700+ hedge fund clients)</td>
+        <td><span class="badge badge-moderate">Partial</span></td>
+      </tr>
+      <tr>
+        <td><strong>Kroll AI Risk</strong></td>
+        <td>$50–500K+</td>
+        <td>High</td>
+        <td>Moderate — financial services native</td>
+        <td><span class="badge badge-unknown">Priced Out</span></td>
+      </tr>
+      <tr>
+        <td><strong>Mandiant (Google)</strong></td>
+        <td>$100K+</td>
+        <td>Very High</td>
+        <td>Low — enterprise/government</td>
+        <td><span class="badge badge-strong">Yes</span></td>
+      </tr>
+      <tr>
+        <td><strong>Big 4 (Deloitte, EY)</strong></td>
+        <td>$150K–1M+</td>
+        <td>High</td>
+        <td>Low at fund level</td>
+        <td><span class="badge badge-strong">Yes</span></td>
+      </tr>
+      <tr>
+        <td><strong>ACA Global</strong></td>
+        <td>Advisory pricing</td>
+        <td>Low — compliance advisory</td>
+        <td>Moderate</td>
+        <td><span class="badge badge-moderate">Partial</span></td>
+      </tr>
+      <tr>
+        <td style="color:var(--green);font-weight:700;">BW Cyber</td>
+        <td style="color:var(--green);font-weight:700;">$15–25K</td>
+        <td style="color:var(--green);font-weight:700;">High (with this stack)</td>
+        <td style="color:var(--green);font-weight:700;">Very High</td>
+        <td><span class="badge badge-strong">OWNS IT</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout callout-green">
+    <strong>BW Cyber's white space:</strong> Deep AI expertise + hedge fund focus + accessible price point. Nobody credible lives there right now. <strong>Key stat:</strong> Varonis's 2025 data report found 90% of organizations have sensitive files exposed to Copilot. That is a door-opener for every hedge fund with M365.
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- 2-Week Methodology -->
+  <h3>2-Week Assessment Methodology</h3>
+
+  <h4>Week 1 — Discovery and Scanning</h4>
+  <table class="day-table">
+    <tr><th>Day</th><th>Activity</th><th>Tool</th><th>Output</th></tr>
+    <tr><td>1</td><td>Kick-off, establish delegated M365 admin access</td><td>—</td><td>Access confirmed</td></tr>
+    <tr><td>2</td><td>Run Microsoft Automated Readiness Assessment script + pull Secure Score</td><td>ARA (open-source), Secure Score (free)</td><td>Baseline config health + gap list</td></tr>
+    <tr><td>2–3</td><td>Initiate Varonis free Copilot Security Scan</td><td>Varonis</td><td>Pending (2–3 day turnaround)</td></tr>
+    <tr><td>3</td><td>Run DSPM for AI Data Risk Assessment</td><td>Purview DSPM</td><td>Oversharing risk report</td></tr>
+    <tr><td>3–4</td><td>Run SAM Site Permissions report</td><td>SharePoint Advanced Mgmt</td><td>Full permissions inventory</td></tr>
+    <tr><td>4</td><td>Pull Shadow AI discovery report</td><td>Defender for Cloud Apps</td><td>AI app inventory + risk scores</td></tr>
+    <tr><td>5</td><td>Run NIST AI RMF compliance template</td><td>Compliance Manager</td><td>Regulatory gap score</td></tr>
+    <tr><td>5</td><td>(Optional) Run Promptfoo/Garak scans against deployed AI</td><td>Open-source</td><td>LLM vulnerability findings</td></tr>
+  </table>
+
+  <h4>Week 2 — Analysis and Deliverable</h4>
+  <table class="day-table">
+    <tr><th>Day</th><th>Activity</th><th>Output</th></tr>
+    <tr><td>6–7</td><td>Consolidate all scan results into unified control framework</td><td>Master findings spreadsheet</td></tr>
+    <tr><td>7–8</td><td>Map findings to SEC 2026 Exam Priorities + FINRA 2026 requirements</td><td>Regulatory alignment matrix</td></tr>
+    <tr><td>8–9</td><td>Prioritize remediation by risk score and effort</td><td>30/60/90 day roadmap</td></tr>
+    <tr><td>9</td><td>Draft final report</td><td>Assessment deliverable</td></tr>
+    <tr><td>10</td><td>Client walkthrough + Q&amp;A + handoff</td><td>Delivered</td></tr>
+  </table>
+
+  <div class="section-divider"></div>
+
+  <!-- Deliverable Structure -->
+  <h3>Assessment Deliverable Structure (9 Sections)</h3>
+  <div class="layer-card">
+    <div class="deliverable-item">
+      <div class="deliverable-num">1</div>
+      <div class="deliverable-body">
+        <div class="d-title">Executive Summary</div>
+        <div class="d-desc">AI security posture score, top 5 critical findings, regulatory exposure. Written for CFO/CCO, not IT.</div>
+      </div>
+    </div>
+    <div class="deliverable-item">
+      <div class="deliverable-num">2</div>
+      <div class="deliverable-body">
+        <div class="d-title">AI Asset Register</div>
+        <div class="d-desc">All AI tools in use (sanctioned and shadow), configurations, data access levels.</div>
+      </div>
+    </div>
+    <div class="deliverable-item">
+      <div class="deliverable-num">3</div>
+      <div class="deliverable-body">
+        <div class="d-title">Microsoft 365 Control Assessment</div>
+        <div class="d-desc">25–200 controls across Purview, Defender, SAM, Entra, Copilot Control System — scored against Microsoft recommended settings.</div>
+      </div>
+    </div>
+    <div class="deliverable-item">
+      <div class="deliverable-num">4</div>
+      <div class="deliverable-body">
+        <div class="d-title">SharePoint Oversharing Analysis</div>
+        <div class="d-desc">Specific sites, risk scores, sensitive data types exposed to Copilot. The payroll file scenario made explicit.</div>
+      </div>
+    </div>
+    <div class="deliverable-item">
+      <div class="deliverable-num">5</div>
+      <div class="deliverable-body">
+        <div class="d-title">Shadow AI Inventory</div>
+        <div class="d-desc">All detected AI apps, sanctioned/unsanctioned status, risk scores. Flags trading strategy or client data exposure to unapproved AI.</div>
+      </div>
+    </div>
+    <div class="deliverable-item">
+      <div class="deliverable-num">6</div>
+      <div class="deliverable-body">
+        <div class="d-title">Regulatory Gap Analysis</div>
+        <div class="d-desc">NIST AI RMF maturity score + SEC/FINRA alignment gaps. A CCO can hand this to an SEC examiner.</div>
+      </div>
+    </div>
+    <div class="deliverable-item">
+      <div class="deliverable-num">7</div>
+      <div class="deliverable-body">
+        <div class="d-title">Technical Vulnerability Assessment (Optional)</div>
+        <div class="d-desc">OWASP LLM Top 10 scan results for clients with deployed LLM applications.</div>
+      </div>
+    </div>
+    <div class="deliverable-item">
+      <div class="deliverable-num">8</div>
+      <div class="deliverable-body">
+        <div class="d-title">Remediation Roadmap</div>
+        <div class="d-desc">Prioritized by risk, with licensing requirements and estimated effort. 30/60/90-day view.</div>
+      </div>
+    </div>
+    <div class="deliverable-item">
+      <div class="deliverable-num">9</div>
+      <div class="deliverable-body">
+        <div class="d-title">Policy Templates</div>
+        <div class="d-desc">AI Acceptable Use Policy, AI Risk Register, AI Vendor Due Diligence checklist — pre-built for the client's compliance team.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-amber">
+    <strong>Pricing recommendation:</strong> Price at $25K (not $15K). The competitive landscape shows no credible alternative at this depth for hedge funds. The compliance-ready deliverable and regulatory alignment justify the higher number. The Microsoft E5 upgrade finding alone often pays for the assessment in the client's mind.
+  </div>
+
+</div>
+
+<!-- ═══════════════════ TAB 3: NETWORK MAP ═══════════════════ -->
+<div class="tab-panel" id="tab-3">
+
+  <h2>VSP Cybersecurity Network Map</h2>
+  <p>Last updated: March 26, 2026 &nbsp;|&nbsp; Source: Pipedrive CRM + Intro Call notes</p>
+
+  <!-- Visual Network Map -->
+  <div class="net-container">
+    <div class="net-title">Relationship Strength Map</div>
+
+    <svg class="net-svg" viewBox="0 0 900 400" xmlns="http://www.w3.org/2000/svg">
+
+      <!-- STRONG edges first (behind nodes) -->
+      <!-- Matt → Michael (strong) -->
+      <path d="M 180 110 Q 320 60 390 145" class="edge-strong" marker-end="url(#arrow-green)"/>
+      <!-- Tyler → Michael (strong) -->
+      <path d="M 180 170 Q 290 170 390 165" class="edge-strong" marker-end="url(#arrow-green)"/>
+      <!-- Michael → Solomon CTO -->
+      <path d="M 490 160 Q 590 120 640 120" class="edge-medium" marker-end="url(#arrow-amber)"/>
+      <!-- Solomon CEO → Solomon CTO -->
+      <path d="M 700 65 L 700 95" class="edge-medium" marker-end="url(#arrow-amber)"/>
+      <!-- Michael → Hedge Funds -->
+      <path d="M 490 175 Q 580 200 640 200" class="edge-medium" marker-end="url(#arrow-amber)"/>
+      <!-- Michael → PE Firms -->
+      <path d="M 490 190 Q 560 270 640 275" class="edge" marker-end="url(#arrow-dim)"/>
+
+      <!-- WEAK edges (dashed) -->
+      <!-- Tyler → Rick Gordon -->
+      <path d="M 180 220 Q 260 300 350 305" class="edge-weak" marker-end="url(#arrow-dim)"/>
+      <!-- Tyler → Jaime Blasco -->
+      <path d="M 175 230 Q 255 340 350 360" class="edge-weak" marker-end="url(#arrow-dim)"/>
+
+      <!-- Arrow markers -->
+      <defs>
+        <marker id="arrow-green" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M 0 0 L 6 3 L 0 6 Z" fill="#10b981" opacity="0.6"/>
+        </marker>
+        <marker id="arrow-amber" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M 0 0 L 6 3 L 0 6 Z" fill="#f59e0b" opacity="0.5"/>
+        </marker>
+        <marker id="arrow-dim" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M 0 0 L 6 3 L 0 6 Z" fill="#64748b" opacity="0.4"/>
+        </marker>
+      </defs>
+
+      <!-- VSP BOX -->
+      <rect x="30" y="70" width="145" height="150" rx="10" fill="rgba(30,41,59,0.5)" stroke="#1e293b" stroke-width="1"/>
+      <text x="103" y="90" class="node-label" style="font-size:9px;fill:#64748b;letter-spacing:0.08em;text-transform:uppercase;">VICTORY SQUARE</text>
+
+      <!-- Tyler node -->
+      <rect x="45" y="145" width="115" height="56" rx="8" class="node-vsp"/>
+      <text x="103" y="168" class="node-label">Tyler Goble</text>
+      <text x="103" y="181" class="node-sub">Entrepreneur in Residence</text>
+      <text x="103" y="192" class="node-sub">Infantry (USMC)</text>
+
+      <!-- Matt node -->
+      <rect x="45" y="95" width="115" height="46" rx="8" class="node-vsp"/>
+      <text x="103" y="116" class="node-label">Matt Walnock</text>
+      <text x="103" y="128" class="node-sub">Head of AI &amp; Advisory</text>
+
+      <!-- Michael Brice node (CHAMPION) -->
+      <rect x="385" y="128" width="130" height="64" rx="8" class="node-champion"/>
+      <text x="450" y="149" class="node-label" style="fill:#10b981;">Michael Brice</text>
+      <text x="450" y="162" class="node-sub">BW Cyber Services</text>
+      <text x="450" y="173" class="node-sub">Founder · vCISO · USMC SIGINT</text>
+      <text x="450" y="184" class="node-sub" style="fill:#10b981;font-weight:700;">★ CHAMPION</text>
+
+      <!-- Solomon Partners box -->
+      <rect x="635" y="68" width="115" height="30" rx="6" fill="rgba(245,158,11,0.08)" stroke="rgba(245,158,11,0.3)" stroke-width="1"/>
+      <text x="693" y="87" class="node-label" style="font-size:10px;fill:#f59e0b;">Solomon CEO</text>
+
+      <rect x="635" y="106" width="115" height="40" rx="6" class="node-prospect"/>
+      <text x="693" y="123" class="node-label" style="fill:#f59e0b;">Solomon Partners</text>
+      <text x="693" y="135" class="node-sub">CTO — needs AI help</text>
+      <text x="693" y="146" class="node-sub" style="fill:#f59e0b;">~$100K deal</text>
+
+      <!-- Hedge Funds -->
+      <rect x="635" y="178" width="115" height="42" rx="6" class="node-prospect"/>
+      <text x="693" y="196" class="node-label" style="fill:#f59e0b;">Hedge Fund</text>
+      <text x="693" y="208" class="node-sub">Clients (2–3)</text>
+      <text x="693" y="219" class="node-sub" style="fill:#f59e0b;">~$100K each</text>
+
+      <!-- PE Firms -->
+      <rect x="635" y="256" width="115" height="44" rx="6" class="node-pe"/>
+      <text x="693" y="274" class="node-label" style="fill:#8b5cf6;">PE Firm Channel</text>
+      <text x="693" y="286" class="node-sub">$200–300B AUM</text>
+      <text x="693" y="297" class="node-sub" style="fill:#8b5cf6;">30–50 portcos each</text>
+
+      <!-- Rick Gordon (weak) -->
+      <rect x="350" y="285" width="110" height="40" rx="6" class="node-weak"/>
+      <text x="405" y="304" class="node-label" style="fill:#94a3b8;">Rick Gordon</text>
+      <text x="405" y="316" class="node-sub">Tidal Cyber · Navy vet</text>
+
+      <!-- Jaime Blasco (weak) -->
+      <rect x="350" y="340" width="110" height="40" rx="6" class="node-weak"/>
+      <text x="405" y="359" class="node-label" style="fill:#94a3b8;">Jaime Blasco</text>
+      <text x="405" y="371" class="node-sub">Nudge Security · Austin</text>
+
+      <!-- Edge labels -->
+      <text x="280" y="100" class="edge-label" style="fill:#10b981;">Years-long trust</text>
+      <text x="265" y="168" class="edge-label" style="fill:#10b981;">Marine bond</text>
+      <text x="570" y="108" class="edge-label" style="fill:#f59e0b;">vCISO · warm intro</text>
+      <text x="220" y="290" class="edge-label">LinkedIn only</text>
+      <text x="218" y="345" class="edge-label">Shadow AI tool?</text>
+
+    </svg>
+  </div>
+
+  <!-- Legend -->
+  <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:20px;font-size:12px;color:var(--muted);">
+    <span style="display:flex;align-items:center;gap:6px;"><span style="width:20px;height:2px;background:var(--green);display:inline-block;"></span> Strong relationship</span>
+    <span style="display:flex;align-items:center;gap:6px;"><span style="width:20px;height:2px;background:var(--amber);display:inline-block;"></span> Active opportunity</span>
+    <span style="display:flex;align-items:center;gap:6px;"><span style="width:20px;height:2px;background:var(--dim);display:inline-block;border-top:2px dashed var(--dim);"></span> Weak / dormant connection</span>
+  </div>
+
+  <!-- Active Contacts Table -->
+  <h2>Active Cybersecurity Contacts</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Person</th>
+        <th>Organization</th>
+        <th>Role</th>
+        <th>Persona</th>
+        <th>Email</th>
+        <th>Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong style="color:var(--green);">Michael Brice ★</strong></td>
+        <td>BW Cyber Services</td>
+        <td>Founder, vCISO</td>
+        <td><span class="badge badge-strong">Champion</span></td>
+        <td>michael.brice@bwcyberservices.com</td>
+        <td>Former Marine SIGINT. Virtual CISO at Solomon Partners. Building AI assessment product. Referral via Matt Walnock.</td>
+      </tr>
+      <tr>
+        <td>Rick Gordon</td>
+        <td>Tidal Cyber</td>
+        <td>Co-Founder &amp; CEO</td>
+        <td><span class="badge badge-blue">CXO</span></td>
+        <td>rick.gordon@tidalcyber.com</td>
+        <td>25+ yrs cybersecurity. Navy submarine officer. Former MITRE MD. Founded MACH37 Cyber Accelerator (launched Huntress, Black Kite). $19M raised. DC-based.</td>
+      </tr>
+      <tr>
+        <td>Jaime Blasco</td>
+        <td>Nudge Security</td>
+        <td>Co-Founder &amp; CTO</td>
+        <td><span class="badge badge-blue">CXO</span></td>
+        <td>jaime.blasco@nudgesecurity.com</td>
+        <td>Security researcher. Former VP AT&amp;T Cybersecurity. Malware analysis, incident response. Austin-based. <strong>Nudge does Shadow AI detection — potential tool for BW Cyber's assessment stack.</strong></td>
+      </tr>
+      <tr>
+        <td>Dr. James Hall</td>
+        <td>Security 2.0</td>
+        <td>Founder</td>
+        <td><span class="badge badge-unknown">—</span></td>
+        <td><span style="color:var(--red);font-size:12px;">No email on file</span></td>
+        <td>LinkedIn connection Oct 2025. No email. Needs enrichment if worth keeping.</td>
+      </tr>
+      <tr>
+        <td>Micheal Hollar</td>
+        <td>Adamo Security Group</td>
+        <td>—</td>
+        <td><span class="badge badge-unknown">—</span></td>
+        <td>micheal.hollar@adamosg.com</td>
+        <td>Added March 2026. No context. Needs notes or archive.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="section-divider"></div>
+
+  <!-- Cross-Pollination -->
+  <h2>Cross-Pollination Opportunities</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Intro</th>
+        <th>Why</th>
+        <th>Priority</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Michael Brice ↔ Jaime Blasco</strong><br><span style="font-size:12px;color:var(--muted);">Via Tyler</span></td>
+        <td>Nudge Security literally does shadow AI detection — one of the core capabilities BW Cyber needs for their assessment product. Could become a tool partnership, referral relationship, or even a licensed component of BW Cyber's stack.</td>
+        <td><span class="badge badge-strong">High</span></td>
+      </tr>
+      <tr>
+        <td><strong>Michael Brice ↔ Rick Gordon</strong><br><span style="font-size:12px;color:var(--muted);">Via Tyler</span></td>
+        <td>Both veteran-led cybersecurity founders (Marine SIGINT + Navy sub officer). Rick's MACH37 accelerator network could surface AI security tools for BW Cyber's assessment product. Tidal Cyber's threat intel could complement BW Cyber's compliance work.</td>
+        <td><span class="badge badge-moderate">Medium</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Orgs without contacts -->
+  <h3>Org Shell Cleanup (Pipedrive)</h3>
+  <p>These organizations exist in Pipedrive with no people attached. Review and either enrich or archive:</p>
+  <div style="display:flex;flex-wrap:wrap;gap:8px;">
+    <span style="background:var(--card);border:1px solid var(--border);border-radius:6px;padding:5px 12px;font-size:12px;color:var(--muted);">Catena Cyber</span>
+    <span style="background:var(--card);border:1px solid var(--border);border-radius:6px;padding:5px 12px;font-size:12px;color:var(--muted);">Rhindon Cyber</span>
+    <span style="background:var(--card);border:1px solid rgba(239,68,68,0.3);border-radius:6px;padding:5px 12px;font-size:12px;color:var(--red);">CyberExecConnect ⚠ Duplicate (IDs 1722+1587)</span>
+    <span style="background:var(--card);border:1px solid var(--border);border-radius:6px;padding:5px 12px;font-size:12px;color:var(--muted);">National Cybersecurity Alliance</span>
+    <span style="background:var(--card);border:1px solid var(--border);border-radius:6px;padding:5px 12px;font-size:12px;color:var(--muted);">BetterWorld Technology</span>
+    <span style="background:var(--card);border:1px solid var(--border);border-radius:6px;padding:5px 12px;font-size:12px;color:var(--muted);">Aedify Security LLC</span>
+    <span style="background:var(--card);border:1px solid var(--border);border-radius:6px;padding:5px 12px;font-size:12px;color:var(--muted);">The Security Bulldog</span>
+    <span style="background:var(--card);border:1px solid var(--border);border-radius:6px;padding:5px 12px;font-size:12px;color:var(--muted);">Minuteman Security</span>
+    <span style="background:var(--card);border:1px solid var(--border);border-radius:6px;padding:5px 12px;font-size:12px;color:var(--muted);">Charm Security</span>
+    <span style="background:var(--card);border:1px solid var(--border);border-radius:6px;padding:5px 12px;font-size:12px;color:var(--muted);">Acre Security</span>
+  </div>
+
+</div>
+
+<!-- ═══════════════════ TAB 4: REGULATORY PRESSURE POINTS ═══════════════════ -->
+<div class="tab-panel" id="tab-4">
+
+  <h2>Regulatory Pressure Points — Sales Ammunition</h2>
+  <p>These are the facts that make a CFO/CCO pick up the phone. Michael's clients are small financial firms with no AI governance in place — these are existential compliance risks, not future concerns.</p>
+
+  <div class="reg-card">
+    <div class="reg-source">SEC · FY2026 Examination Priorities (Released December 2025)</div>
+    <div class="reg-title">AI is one of 5 explicit focus areas for registered investment advisers</div>
+    <ul>
+      <li>Examiners will ask for: <strong>written AI policies, training records, human oversight documentation, risk assessments</strong></li>
+      <li>"AI washing" enforcement is live — firms claiming AI capabilities in their ADV without governance documentation are exposed</li>
+      <li>Shadow AI usage (employees sending client data to ChatGPT) is a direct exam risk</li>
+      <li>BW Cyber's assessment produces the exact documentation SEC examiners will ask for</li>
+    </ul>
+  </div>
+
+  <div class="reg-card">
+    <div class="reg-source">FINRA · 2026 Annual Regulatory Oversight Report (December 2025)</div>
+    <div class="reg-title">Declares a "supervisory reckoning" for AI</div>
+    <ul>
+      <li>Firms must <strong>capture AI-enabled communications in books and records</strong></li>
+      <li>Agentic AI (AI that takes actions) triggers materially different supervisory obligations</li>
+      <li>Explicitly requires testing AI systems for: privacy, integrity, reliability, accuracy</li>
+      <li>BW Cyber's OWASP LLM Top 10 scan directly maps to FINRA's testing requirement</li>
+    </ul>
+  </div>
+
+  <div class="reg-card" style="border-left-color:var(--amber);">
+    <div class="reg-source" style="color:var(--amber);">EU AI Act · Hard Deadline August 2, 2026</div>
+    <div class="reg-title">Extraterritorial reach catches US funds with EU investors</div>
+    <ul>
+      <li>Credit scoring, fraud detection, and AML profiling classified as <strong>high-risk AI</strong> — heavy compliance burden</li>
+      <li>Penalties up to <strong>35M EUR or 7% of global annual turnover</strong></li>
+      <li>Deadline is August 2, 2026 — less than 6 months away</li>
+      <li>Compliance Manager's EU AI Act template gives BW Cyber a ready-made gap assessment</li>
+    </ul>
+  </div>
+
+  <div class="reg-card" style="border-left-color:var(--blue);">
+    <div class="reg-source" style="color:var(--blue);">Varonis · 2025 Global Data Risk Report</div>
+    <div class="reg-title">90% of organizations have sensitive files exposed to Copilot</div>
+    <ul>
+      <li>In one documented client assessment: <strong>120,000 sensitive files found, 57,000 with excessive access</strong></li>
+      <li>This stat is a door-opener for every hedge fund with M365 — use it as a cold opener</li>
+      <li>The free Copilot Security Scan can replicate this finding for BW Cyber's clients at zero cost</li>
+    </ul>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <h2>Sales Language That Resonates</h2>
+  <p>Calibrated for CFO/CCO buyers at small hedge funds and PE firms. Michael's clients respond to fear of SEC enforcement, not technical capability demos.</p>
+
+  <div class="sales-line">"SEC examiners will ask for written AI policies in 2026. We tell you what's missing before they do."</div>
+  <div class="sales-line">"Your SOC 2 doesn't cover your AI stack. We close that gap."</div>
+  <div class="sales-line">"We deliver what Big Four charges $150,000 for — in two weeks, at a fraction of the cost."</div>
+  <div class="sales-line">"FINRA says firms must capture AI-enabled communications in books and records. We test whether yours are."</div>
+  <div class="sales-line">"90% of organizations have sensitive files exposed to Copilot. Let's find out if yours does — before your SEC examiner does."</div>
+  <div class="sales-line">"The EU AI Act deadline is August 2nd. If you have EU investors, the clock is running."</div>
+
+  <div class="callout callout-green">
+    <strong>Why fear works here:</strong> Michael's clients are CFOs and Chief Compliance Officers at small funds. They don't have IT teams. They can't evaluate technology — but they understand regulatory risk viscerally. Every sales conversation should start with the regulatory threat, not the tool.
+  </div>
+
+</div>
+
+<!-- ═══════════════════ TAB 5: ACTION ITEMS ═══════════════════ -->
+<div class="tab-panel" id="tab-5">
+
+  <h2>Priority Action Items &amp; Next Steps</h2>
+  <p>As of March 30, 2026. Sorted by urgency — the first action unlocks everything downstream.</p>
+
+  <!-- Action 1 -->
+  <div class="action-item" style="border-left:3px solid var(--red);">
+    <div class="action-num num-red">1</div>
+    <div class="action-body">
+      <div class="action-title">Tyler delivers AI tool research to Michael — Week of March 30</div>
+      <p>Send Michael the 3-layer stack (Purview DSPM + Varonis + Compliance Manager), the 2-week methodology, and the competitive landscape analysis. This is the trust-building deposit that unlocks the Solomon Partners intro. Do NOT miss this window.</p>
+      <div class="action-meta">
+        <span class="badge badge-red">URGENT</span>
+        <span class="badge badge-moderate">Trust-Building</span>
+        <span style="font-size:12px;color:var(--dim);">Owner: Tyler &nbsp;|&nbsp; Due: Week of Mar 30</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Action 2 -->
+  <div class="action-item" style="border-left:3px solid var(--amber);">
+    <div class="action-num num-amber">2</div>
+    <div class="action-body">
+      <div class="action-title">Secure Solomon Partners introduction via Michael</div>
+      <p>After delivering tool research, circle back with Michael to schedule the intro to Solomon Partners CTO. CEO is pushing AI mandate now — this is active pain. Estimated deal: ~$100K AI jumpstart. Ask Michael what the CTO's specific pain is so Tyler can come into the intro meeting prepared.</p>
+      <div class="action-meta">
+        <span class="badge badge-moderate">High Value</span>
+        <span style="font-size:12px;color:var(--dim);">Owner: Tyler &nbsp;|&nbsp; Due: After tool research delivery</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Action 3 -->
+  <div class="action-item">
+    <div class="action-num num-blue">3</div>
+    <div class="action-body">
+      <div class="action-title">Explore Varonis referral partnership for BW Cyber</div>
+      <p>Varonis offers a free Copilot Security Scan as a sales tool. BW Cyber uses it in every assessment — Varonis gets the license sale when clients want ongoing monitoring. Reach out to Varonis channel team about formalizing a referral agreement. Could generate passive revenue for both sides.</p>
+      <div class="action-meta">
+        <span class="badge badge-blue">Partnership</span>
+        <span style="font-size:12px;color:var(--dim);">Owner: Tyler/Michael jointly &nbsp;|&nbsp; Due: April 2026</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Action 4 -->
+  <div class="action-item">
+    <div class="action-num num-blue">4</div>
+    <div class="action-body">
+      <div class="action-title">Explore Drawbridge co-sell arrangement</div>
+      <p>Drawbridge has 700+ hedge fund clients but only shallow AI assessment capability. Their clients needing deeper AI coverage are warm referrals for BW Cyber. Explore whether Drawbridge would refer overflow AI assessment work in exchange for BW Cyber referring clients needing Drawbridge's platform.</p>
+      <div class="action-meta">
+        <span class="badge badge-blue">Partnership</span>
+        <span style="font-size:12px;color:var(--dim);">Owner: Michael (Tyler to suggest) &nbsp;|&nbsp; Due: April 2026</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Action 5 -->
+  <div class="action-item">
+    <div class="action-num num-purple">5</div>
+    <div class="action-body">
+      <div class="action-title">Surface PE fund channel specifics in next conversation</div>
+      <p>Michael mentioned PE firms managing $200–300B AUM with 30–50 portcos each in passing. This is the highest-ceiling opportunity in the relationship. In the next call after tool research delivery, deliberately ask: Which PE firms? Which portcos are being pushed to implement AI? What stage of adoption are they at?</p>
+      <div class="action-meta">
+        <span class="badge badge-unknown">Exploratory</span>
+        <span style="font-size:12px;color:var(--dim);">Owner: Tyler &nbsp;|&nbsp; Due: Next call with Michael</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Action 6 -->
+  <div class="action-item">
+    <div class="action-num num-green">6</div>
+    <div class="action-body">
+      <div class="action-title">Formalize BW Cyber ↔ VSP referral path (both directions)</div>
+      <p>Define the mutual referral structure: BW Cyber clients who need AI implementation → VSP. VSP clients who need cybersecurity compliance → BW Cyber. Should be lightweight (handshake agreement), not a contract. Revisit after first successful value exchange (tool research + Solomon intro).</p>
+      <div class="action-meta">
+        <span class="badge badge-strong">Long-Term</span>
+        <span style="font-size:12px;color:var(--dim);">Owner: Tyler + Christine &nbsp;|&nbsp; Due: Q2 2026</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- Partnership Opportunities Table -->
+  <h2>Partnership Opportunities for BW Cyber</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Partner</th>
+        <th>Opportunity</th>
+        <th>Next Step</th>
+        <th>Priority</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Varonis</strong></td>
+        <td>Use their free Copilot scan in every assessment. Refer clients who want ongoing monitoring ($50K+/yr). Varonis gets license sales; BW Cyber gets deal-flow credibility.</td>
+        <td>Reach out to Varonis channel team about a formal referral agreement</td>
+        <td><span class="badge badge-strong">High</span></td>
+      </tr>
+      <tr>
+        <td><strong>Drawbridge</strong></td>
+        <td>700 hedge fund clients with no dedicated AI assessment capability. Their clients needing deeper AI coverage are warm referrals for BW Cyber. Explore co-sell or referral arrangement.</td>
+        <td>Michael reaches out to Drawbridge partnerships team</td>
+        <td><span class="badge badge-moderate">Medium</span></td>
+      </tr>
+      <tr>
+        <td><strong>Microsoft</strong></td>
+        <td>Microsoft Solution Assessments program funds partner-delivered readiness assessments. Check if BW Cyber qualifies as a Microsoft partner for funded assessments — could make the engagement free to the client.</td>
+        <td>Check BW Cyber's Microsoft partner status; apply if eligible</td>
+        <td><span class="badge badge-moderate">Medium</span></td>
+      </tr>
+      <tr>
+        <td><strong>VSP (Victory Square Partners)</strong></td>
+        <td>For clients who need AI <em>implemented</em> after the assessment (not just secured), VSP is the natural handoff. For VSP clients who need compliance and cyber governance, BW Cyber is the natural handoff.</td>
+        <td>Formalize the referral path after first successful value exchange</td>
+        <td><span class="badge badge-strong">High</span></td>
+      </tr>
+      <tr>
+        <td><strong>Nudge Security</strong></td>
+        <td>Nudge does shadow AI detection natively — exactly one of the capabilities BW Cyber needs for their assessment stack. Explore tool partnership or referral. Tyler to intro Michael to Jaime Blasco.</td>
+        <td>Tyler makes intro: Michael Brice ↔ Jaime Blasco</td>
+        <td><span class="badge badge-strong">High</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="section-divider"></div>
+
+  <!-- Opportunity Flow Visual -->
+  <h2>Opportunity Dependency Flow</h2>
+  <p>Each step earns credibility for the next. The tool research this week is the linchpin for everything downstream.</p>
+
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:24px;margin-bottom:20px;">
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:16px;">
+      <div class="flow-box highlight-red">Tool Research<br><span style="font-size:11px;font-weight:400;">Mar 30</span></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box highlight-amber">Solomon Intro<br><span style="font-size:11px;font-weight:400;">April</span></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box highlight-green">Solomon Deal<br><span style="font-size:11px;font-weight:400;">~$100K</span></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:16px;">
+      <div class="flow-box highlight-red">Tool Research<br><span style="font-size:11px;font-weight:400;">Mar 30</span></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box highlight-amber">BW Cyber Product<br><span style="font-size:11px;font-weight:400;">Completes stack</span></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box highlight-amber">HF Referrals<br><span style="font-size:11px;font-weight:400;">2–3 × $100K</span></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box" style="border-color:rgba(139,92,246,0.4);color:var(--purple);">PE Channel<br><span style="font-size:11px;font-weight:400;">$200–300B AUM</span></div>
+    </div>
+  </div>
+
+  <div class="callout callout-red">
+    <strong>The single most important action this week:</strong> Send Michael the tool research. Everything else is downstream of this one delivery. Michael will not follow up. Speed is trust.
+  </div>
+
+</div>
+
+</div><!-- /content -->
+
+<script>
+function showTab(idx) {
+  document.querySelectorAll('.tab-panel').forEach(function(p, i) {
+    p.classList.toggle('active', i === idx);
+  });
+  document.querySelectorAll('.tab').forEach(function(t, i) {
+    t.classList.toggle('active', i === idx);
+  });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
