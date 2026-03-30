@@ -3,342 +3,1166 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="/assets/css/vsp-theme.css">
-<title>Mission Control — 2026-03-30 — VSP Internal</title>
+<title>Mission Control — March 30, 2026 | VSP</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0e17;
+  --card: #141925;
+  --card-hover: #1a2133;
+  --border: #1e293b;
+  --green: #10b981;
+  --blue: #3b82f6;
+  --amber: #f59e0b;
+  --red: #ef4444;
+  --purple: #8b5cf6;
+  --text: #e2e8f0;
+  --muted: #94a3b8;
+  --dim: #64748b;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Inter',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+a { color:var(--blue); text-decoration:none; }
+a:hover { text-decoration:underline; }
+
+/* Header */
+.header { background:linear-gradient(135deg,#0f1629 0%,#0d1a2e 50%,#0f1629 100%); border-bottom:1px solid var(--border); padding:2rem 2rem 1.5rem; text-align:center; }
+.header-top { display:flex; align-items:center; justify-content:center; gap:1rem; margin-bottom:.4rem; }
+.header h1 { font-size:2rem; font-weight:800; background:linear-gradient(135deg,var(--blue),var(--purple)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.header .subtitle { color:var(--muted); font-size:.88rem; }
+.header-badges { display:flex; flex-wrap:wrap; gap:.5rem; justify-content:center; margin-top:.75rem; }
+.header-badge { display:inline-block; font-size:.72rem; font-weight:600; padding:.2rem .65rem; border-radius:999px; }
+.badge-blue { background:rgba(59,130,246,.12); color:var(--blue); border:1px solid rgba(59,130,246,.25); }
+.badge-green { background:rgba(16,185,129,.12); color:var(--green); border:1px solid rgba(16,185,129,.25); }
+.badge-amber { background:rgba(245,158,11,.12); color:var(--amber); border:1px solid rgba(245,158,11,.25); }
+.badge-red { background:rgba(239,68,68,.12); color:var(--red); border:1px solid rgba(239,68,68,.25); }
+.badge-purple { background:rgba(139,92,246,.12); color:var(--purple); border:1px solid rgba(139,92,246,.25); }
+
+/* Dot indicators */
+.dot { display:inline-block; width:7px; height:7px; border-radius:50%; flex-shrink:0; margin-right:4px; vertical-align:middle; position:relative; top:-1px; }
+.dot-green { background:var(--green); }
+.dot-blue { background:var(--blue); }
+.dot-amber { background:var(--amber); }
+.dot-red { background:var(--red); }
+.dot-purple { background:var(--purple); }
+
+/* Pulse animation for prospect tab */
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(245,158,11,.6); }
+  70% { box-shadow: 0 0 0 6px rgba(245,158,11,0); }
+  100% { box-shadow: 0 0 0 0 rgba(245,158,11,0); }
+}
+.tab-pulse .dot { animation: pulse 1.8s infinite; }
+
+/* Tabs */
+.tabs { display:flex; flex-wrap:wrap; gap:0; background:var(--card); border-bottom:2px solid var(--border); padding:0 .75rem; overflow-x:auto; position:sticky; top:0; z-index:100; }
+.tab { display:flex; align-items:center; gap:4px; padding:.8rem .95rem; font-size:.74rem; font-weight:500; color:var(--muted); cursor:pointer; border-bottom:2px solid transparent; margin-bottom:-2px; transition:all .2s; white-space:nowrap; }
+.tab:hover { color:var(--text); background:rgba(255,255,255,.03); }
+.tab.active { color:var(--text); border-bottom-color:var(--blue); font-weight:600; }
+.tab.active.tab-green { color:var(--green); border-bottom-color:var(--green); }
+.tab.active.tab-amber { color:var(--amber); border-bottom-color:var(--amber); }
+.tab.active.tab-red { color:var(--red); border-bottom-color:var(--red); }
+.tab.active.tab-purple { color:var(--purple); border-bottom-color:var(--purple); }
+
+/* Content */
+.content { max-width:1200px; margin:0 auto; padding:2rem 1.5rem; }
+.panel { display:none; }
+.panel.active { display:block; }
+
+/* Cards */
+.card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:1.5rem; margin-bottom:1.25rem; }
+.card:hover { border-color:rgba(59,130,246,.2); }
+.card h3 { font-size:.95rem; font-weight:600; margin-bottom:.85rem; color:var(--green); display:flex; align-items:center; gap:.5rem; }
+.card h4 { font-size:.85rem; font-weight:600; margin-bottom:.5rem; color:var(--text); }
+
+/* Tables */
+table { width:100%; border-collapse:collapse; font-size:.82rem; }
+th { text-align:left; padding:.55rem .75rem; background:rgba(59,130,246,.07); color:var(--blue); font-weight:600; font-size:.72rem; text-transform:uppercase; letter-spacing:.5px; border-bottom:1px solid var(--border); }
+td { padding:.55rem .75rem; border-bottom:1px solid rgba(30,41,59,.5); color:var(--text); vertical-align:top; }
+tr:last-child td { border-bottom:none; }
+tr:hover td { background:rgba(255,255,255,.02); }
+
+/* Tags */
+.tag { display:inline-block; padding:.15rem .5rem; border-radius:4px; font-size:.7rem; font-weight:500; margin:.1rem; white-space:nowrap; }
+.tag-green { background:rgba(16,185,129,.15); color:var(--green); border:1px solid rgba(16,185,129,.2); }
+.tag-blue { background:rgba(59,130,246,.15); color:var(--blue); border:1px solid rgba(59,130,246,.2); }
+.tag-amber { background:rgba(245,158,11,.15); color:var(--amber); border:1px solid rgba(245,158,11,.2); }
+.tag-purple { background:rgba(139,92,246,.15); color:var(--purple); border:1px solid rgba(139,92,246,.2); }
+.tag-red { background:rgba(239,68,68,.15); color:var(--red); border:1px solid rgba(239,68,68,.2); }
+.tag-dim { background:rgba(100,116,139,.15); color:var(--dim); border:1px solid rgba(100,116,139,.2); }
+
+/* Stats Grid */
+.stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:1rem; margin-bottom:1.5rem; }
+.stat { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:1.2rem; text-align:center; }
+.stat .num { font-size:2rem; font-weight:700; line-height:1.1; }
+.stat .num-blue { background:linear-gradient(135deg,var(--blue),var(--purple)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.stat .num-green { background:linear-gradient(135deg,var(--green),var(--blue)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.stat .num-amber { color:var(--amber); }
+.stat .num-red { color:var(--red); }
+.stat .label { font-size:.7rem; color:var(--muted); margin-top:.3rem; text-transform:uppercase; letter-spacing:.5px; }
+
+/* Meeting card (per-tab) */
+.meeting-header { display:flex; align-items:flex-start; gap:1rem; padding:1.25rem 1.5rem; background:linear-gradient(135deg,rgba(59,130,246,.04),rgba(139,92,246,.04)); border:1px solid var(--border); border-radius:12px; margin-bottom:1.25rem; }
+.meeting-time-block { text-align:center; flex-shrink:0; width:72px; }
+.meeting-time-block .time { font-size:1.1rem; font-weight:700; color:var(--blue); line-height:1.1; }
+.meeting-time-block .dur { font-size:.68rem; color:var(--dim); margin-top:.2rem; }
+.meeting-info { flex:1; }
+.meeting-info h2 { font-size:1.15rem; font-weight:700; margin-bottom:.35rem; }
+.meeting-info .meta-row { display:flex; flex-wrap:wrap; gap:.4rem; align-items:center; font-size:.78rem; color:var(--muted); }
+
+/* Section divider */
+.section-title { font-size:.75rem; font-weight:600; color:var(--dim); text-transform:uppercase; letter-spacing:1px; margin:1.75rem 0 .65rem; padding-bottom:.35rem; border-bottom:1px solid var(--border); }
+
+/* Two-col grid */
+.two-col { display:grid; grid-template-columns:1fr 1fr; gap:1.25rem; }
+.three-col { display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem; }
+
+/* Context block */
+.context-block { background:rgba(59,130,246,.05); border:1px solid rgba(59,130,246,.15); border-radius:8px; padding:1rem 1.25rem; font-size:.83rem; line-height:1.7; color:var(--text); margin-bottom:1rem; }
+.context-block strong { color:var(--blue); }
+
+/* Alert blocks */
+.alert { border-radius:8px; padding:.9rem 1.1rem; margin-bottom:.85rem; font-size:.83rem; line-height:1.65; }
+.alert strong { display:block; margin-bottom:.2rem; font-size:.8rem; text-transform:uppercase; letter-spacing:.4px; }
+.alert-amber { background:rgba(245,158,11,.07); border:1px solid rgba(245,158,11,.25); color:var(--text); }
+.alert-amber strong { color:var(--amber); }
+.alert-red { background:rgba(239,68,68,.07); border:1px solid rgba(239,68,68,.25); color:var(--text); }
+.alert-red strong { color:var(--red); }
+.alert-green { background:rgba(16,185,129,.07); border:1px solid rgba(16,185,129,.25); color:var(--text); }
+.alert-green strong { color:var(--green); }
+.alert-blue { background:rgba(59,130,246,.07); border:1px solid rgba(59,130,246,.25); color:var(--text); }
+.alert-blue strong { color:var(--blue); }
+.alert-purple { background:rgba(139,92,246,.07); border:1px solid rgba(139,92,246,.25); color:var(--text); }
+.alert-purple strong { color:var(--purple); }
+
+/* MEDDPIC score row */
+.meddpic-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:.75rem; }
+.meddpic-item { background:var(--card); border:1px solid var(--border); border-radius:8px; padding:.8rem 1rem; }
+.meddpic-item .m-label { font-size:.68rem; text-transform:uppercase; letter-spacing:.5px; color:var(--dim); margin-bottom:.3rem; }
+.meddpic-item .m-status { font-size:.82rem; font-weight:600; }
+.m-strong { color:var(--green); }
+.m-moderate { color:var(--amber); }
+.m-weak { color:var(--red); }
+.m-unknown { color:var(--dim); }
+
+/* Agenda table */
+.agenda-table td:first-child { width:90px; color:var(--dim); font-size:.78rem; white-space:nowrap; }
+.agenda-table td:nth-child(2) { font-weight:500; }
+.agenda-table td:last-child { color:var(--muted); font-size:.8rem; }
+
+/* Join button */
+.btn-join { display:inline-flex; align-items:center; gap:.4rem; background:var(--blue); color:#fff; font-size:.75rem; font-weight:600; padding:.4rem .9rem; border-radius:6px; text-decoration:none; transition:background .2s; white-space:nowrap; }
+.btn-join:hover { background:#2563eb; text-decoration:none; }
+.btn-join-teams { background:#5c2d91; }
+.btn-join-teams:hover { background:#4a2474; }
+
+/* Question list */
+.q-list { list-style:none; }
+.q-list li { padding:.55rem 0; border-bottom:1px solid rgba(30,41,59,.4); font-size:.84rem; line-height:1.5; display:flex; gap:.65rem; }
+.q-list li:last-child { border-bottom:none; }
+.q-list li::before { content:"Q"; font-size:.65rem; font-weight:700; color:var(--blue); background:rgba(59,130,246,.15); border-radius:3px; padding:.1rem .3rem; flex-shrink:0; margin-top:.15rem; height:fit-content; }
+
+/* Red flag list */
+.rf-list { list-style:none; }
+.rf-list li { padding:.45rem 0; border-bottom:1px solid rgba(30,41,59,.3); font-size:.83rem; display:flex; gap:.65rem; color:var(--text); }
+.rf-list li:last-child { border-bottom:none; }
+.rf-list li::before { content:"⚠"; font-size:.75rem; color:var(--red); flex-shrink:0; margin-top:.1rem; }
+
+/* Talking point */
+.tp-block { background:rgba(16,185,129,.05); border-left:3px solid var(--green); border-radius:0 8px 8px 0; padding:.7rem 1rem; margin-bottom:.6rem; font-size:.83rem; line-height:1.6; }
+.tp-block .tp-trigger { font-size:.72rem; font-weight:600; color:var(--green); text-transform:uppercase; letter-spacing:.4px; margin-bottom:.25rem; }
+
+/* Success criteria */
+.sc-list { list-style:none; }
+.sc-list li { padding:.45rem 0; border-bottom:1px solid rgba(30,41,59,.3); font-size:.83rem; display:flex; gap:.65rem; }
+.sc-list li:last-child { border-bottom:none; }
+.sc-list li::before { content:"✓"; color:var(--green); font-weight:700; flex-shrink:0; }
+
+/* Timeline row in overview */
+.timeline-time { color:var(--blue); font-weight:600; font-size:.82rem; white-space:nowrap; }
+.timeline-overlap { color:var(--amber); font-size:.72rem; }
+
+/* Responsive */
+@media(max-width:768px) {
+  .header h1 { font-size:1.4rem; }
+  .tabs { padding:0 .25rem; }
+  .tab { padding:.65rem .65rem; font-size:.7rem; }
+  .content { padding:1rem .75rem; }
+  .two-col, .three-col { grid-template-columns:1fr; }
+  .meddpic-grid { grid-template-columns:repeat(2,1fr); }
+  .meeting-header { flex-direction:column; }
+  .stats { grid-template-columns:repeat(2,1fr); }
+}
+</style>
 </head>
 <body>
-<header class="vsp-hero">
-  <div class="vsp-container">
-    <img src="/assets/images/vsp-logo.svg" alt="VSP" class="vsp-logo">
-    <h1>Mission Control — 2026-03-30</h1>
-    <p class="vsp-subtitle">VSP Internal</p>
+
+<div class="header">
+  <div class="header-top">
+    <h1>Mission Control</h1>
   </div>
-</header>
-<main>
-  <section class="vsp-section">
-    <div class="vsp-container">
-<h1 id="todays-priorities-2026-03-30">Today’s Priorities —
-2026-03-30</h1>
-<blockquote>
-<p>Monday. Heavy calendar. Two prospect calls this week. Pipeline
-coverage is critical. Push hard.</p>
-</blockquote>
-<hr />
-<h2 id="critical-alerts">❌ CRITICAL ALERTS</h2>
-<ul>
-<li>❌ <strong>Coverage: 0.26x</strong> (target 3.0x) — $4.96M gap to
-reach coverage target</li>
-<li>❌ <strong>35 prospect folders</strong> have no Pipedrive deal —
-Sync mismatch blocks pipeline visibility</li>
-<li>⚠️ <strong>3 prospects missing MEDDPIC</strong> —
-11_Tribes_Ventures, NVIDIA, Talanton_1Flourish</li>
-<li>⚠️ <strong>2 deals missing person records</strong> — PaleoTech AI,
-Rare.org</li>
-<li>⚠️ <strong>10 deals &gt;60 days, no update</strong> — Revenue at
-risk, needs escalation</li>
-<li>⚠️ <strong>Morning Ops 27 days dormant</strong> (last ran Mar
-3)</li>
-<li>⚠️ <strong>Action items 27 days stale</strong> — 56 open items</li>
-</ul>
-<hr />
-<h2 id="top-3-priorities">TOP 3 PRIORITIES</h2>
-<p><strong>1. ⭐ Prep YourHealthPro call (10:30 AM)</strong> - Paul
-Doman, Patrick Cutler, Ed Cutler, Vlad Damian, Andrei Coman on Zoom -
-Run <code>/prep-call YourHealthPro</code> before 10 AM - MEDDPIC gaps
-need to be identified</p>
-<p><strong>2. ⭐ Prep Fugio call (tomorrow 2:00 PM)</strong> - Jason
-Yerkie, Jim Hoscheit, Paul Doman - Run <code>/prep-call Fugio</code>
-today — don’t wait - Rare.org connection worth leveraging</p>
-<p><strong>3. ❌ Pipeline coverage emergency</strong> - 0.26x vs 3.0x
-target — $4.96M gap - Need early-stage pipeline generation - Identify 5+
-new prospects today - Run outbound sequences for Weak/Unknown tier</p>
-<hr />
-<h2 id="todays-calendar">TODAY’S CALENDAR</h2>
-<p><strong>Mon 2026-03-30 — All Times Eastern</strong></p>
-<ul>
-<li><strong>6:30 AM</strong> — Tyler &lt;&gt; Christine Stand Up
-<code>[INTERNAL]</code></li>
-<li><strong>7:00 AM</strong> — Pair Programming Session
-<code>[INTERNAL]</code></li>
-<li><strong>7:45 AM</strong> — SixMap Internal quick sync
-<code>[INTERNAL]</code></li>
-<li><strong>8:00 AM</strong> — Adelina / Tyler Rubicon Chat
-<code>[INTERNAL]</code></li>
-<li><strong>9:00 AM</strong> — FDM Stand Up <code>[INTERNAL]</code></li>
-<li><strong>10:00 AM</strong> — SixMap Backlog Refinement
-<code>[INTERNAL]</code></li>
-<li><strong>10:00 AM</strong> — Tyler &amp; Matt weekly catch-up
-<code>[EXTERNAL]</code></li>
-<li><strong>10:30 AM</strong> — SixMap Stand-up
-<code>[INTERNAL]</code></li>
-<li><strong>10:30 AM</strong> — ⭐ YourHealthPro &amp; Victory Square
-<code>[PROSPECT]</code> — Paul Doman, Patrick Cutler, Ed Cutler, Vlad
-Damian, Andrei Coman Run <code>/prep-call</code> before this
-meeting</li>
-<li><strong>2:00 PM</strong> — AI Training VSP US Team
-<code>[INTERNAL]</code></li>
-<li><strong>3:00 PM</strong> — Paul / Tyler / Matt
-<code>[INTERNAL]</code></li>
-<li><strong>4:00 PM</strong> — Tyler/Paul/Matt Weir WORLD DOMINATION
-<code>[EXTERNAL]</code></li>
-</ul>
-<p><strong>Tomorrow (Tue 3/31):</strong> - <strong>2:00 PM</strong> — ⭐
-Fugio &amp; VSP Jason Yerkie, Jim Hoscheit, Paul Doman
-<code>[PROSPECT]</code> — prep today</p>
-<hr />
-<h2 id="pipeline-snapshot">PIPELINE SNAPSHOT</h2>
-<div class="vsp-table-wrap"><table class="vsp-table">
-<thead>
-<tr class="header">
-<th>Metric</th>
-<th>Value</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Total Deals</td>
-<td>38</td>
-</tr>
-<tr class="even">
-<td>Pipeline Value</td>
-<td>$2,979,247</td>
-</tr>
-<tr class="odd">
-<td>Coverage Ratio</td>
-<td>❌ 0.26x</td>
-</tr>
-<tr class="even">
-<td>Coverage Target</td>
-<td>3.0x</td>
-</tr>
-<tr class="odd">
-<td>Coverage Gap</td>
-<td>$4.96M</td>
-</tr>
-<tr class="even">
-<td>Late-Stage Conc.</td>
-<td>79.2%</td>
-</tr>
-<tr class="odd">
-<td>Revenue Target</td>
-<td>$6,700,000</td>
-</tr>
-</tbody>
-</table></div>
-<p><strong>Top Deals:</strong></p>
-<div class="vsp-table-wrap"><table class="vsp-table">
-<thead>
-<tr class="header">
-<th>Deal</th>
-<th>Value</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Brivo Rate Increase</td>
-<td>$900K</td>
-</tr>
-<tr class="even">
-<td>Brivo Rate+Team</td>
-<td>$700K</td>
-</tr>
-<tr class="odd">
-<td>ClaimInformatics SOW2</td>
-<td>$360K</td>
-</tr>
-<tr class="even">
-<td>Sixmap SOW2</td>
-<td>$271K</td>
-</tr>
-<tr class="odd">
-<td>FDM Micro Team SOW2</td>
-<td>$209K</td>
-</tr>
-</tbody>
-</table></div>
-<hr />
-<h2 id="inbox-status">INBOX STATUS</h2>
-<p><strong>4 items</strong> (0 meetings — Circleback current)</p>
-<ul>
-<li><code>TASK_ENRICH_BATCH_9_FINAL_2026-03-18.md</code></li>
-<li><code>TASK_ENRICH_BATCH_8_2026-03-17.md</code></li>
-<li><code>FDM_Product_Initiative_COMPLETE_DOCUMENTATION.md</code></li>
-<li><code>INTEL_FireRoad_JeremiahFund_HeronVentures_People.md</code></li>
-</ul>
-<p>Route FDM doc → <code>03_CLIENTS/FDM/</code>. Route Intel file →
-prospect folders. Process or archive enrich batch tasks.</p>
-<hr />
-<h2 id="meddpic-tracker">MEDDPIC TRACKER</h2>
-<p><strong>Strong (9):</strong> - ✅ Claims Informatics - ✅ Elevare Law
-- ✅ Pryze - ✅ Temple IT - ✅ E-Show - ✅ PBS - ✅ Ripple Operations -
-✅ Epicutis - ✅ Emotionally Healthy Discipleship</p>
-<p><strong>Moderate (10):</strong> - ⚠️ Connexus Capital - ⚠️ Well Being
-Systems - ⚠️ Truthly - ⚠️ AIRE Response - ⚠️ Faith Driven Entrepreneur -
-⚠️ Sovereigns Capital - ⚠️ Vico - ⚠️ Military By Owner - ⚠️ Mimic AI -
-⚠️ Brain Federal</p>
-<p><strong>Weak (5) — Needs Attention:</strong> - ❌ Luxton Capital - ❌
-Rare.org <em>(missing person record)</em> - ❌ Grizzly Growth Capital -
-❌ Epidaurus Health - ❌ Incisive Dental</p>
-<p><strong>Unknown (4) — Qualify or Archive:</strong> - ❌ ResolvIQ - ❌
-Bryson Hearne - ❌ PaleoTech AI <em>(missing person record)</em> - ❌ Ad
-Impact</p>
-<hr />
-<h2 id="activity-scorecard">ACTIVITY SCORECARD</h2>
-<div class="vsp-table-wrap"><table class="vsp-table">
-<thead>
-<tr class="header">
-<th>Pillar</th>
-<th>Actual</th>
-<th>Target</th>
-<th>%</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Networking</td>
-<td>3</td>
-<td>5</td>
-<td>⚠️ 60%</td>
-</tr>
-<tr class="even">
-<td>Prospecting</td>
-<td>14</td>
-<td>60</td>
-<td>❌ 23%</td>
-</tr>
-<tr class="odd">
-<td>Protecting</td>
-<td>2</td>
-<td>5</td>
-<td>⚠️ 40%</td>
-</tr>
-<tr class="even">
-<td>Referring</td>
-<td>3</td>
-<td>15</td>
-<td>❌ 20%</td>
-</tr>
-</tbody>
-</table></div>
-<p><em>Week of Mar 10–17. All 4 pillars behind.</em> <em>Prospecting and
-Referring are critical gaps.</em></p>
-<hr />
-<h2 id="action-items-carry-forward">ACTION ITEMS (Carry-Forward)</h2>
-<blockquote>
-<p>56 open items, 27 days stale (last: Mar 3). Top 10 most relevant for
-today:</p>
-</blockquote>
-<h3 id="meeting-prep-urgent-today">Meeting Prep (Urgent Today)</h3>
-<ul class="task-list">
-<li><label><input type="checkbox" />Run
-<code>/prep-call YourHealthPro</code> before 10:30 AM</label></li>
-<li><label><input type="checkbox" />Run <code>/prep-call Fugio</code>
-before EOD</label></li>
-</ul>
-<h3 id="revenue-at-risk-escalate-this-week">Revenue at Risk (Escalate
-This Week)</h3>
-<ul class="task-list">
-<li><label><input type="checkbox" /><strong>Brivo SOW1.17</strong>
-$900K, 46d overdue — Escalate with Paul immediately</label></li>
-<li><label><input type="checkbox" /><strong>Sixmap SOW2</strong> $271K,
-62d overdue — Ask Sergiu status in standup today</label></li>
-<li><label><input type="checkbox" /><strong>Aegle Capital</strong> $40K,
-63d overdue — Longest overdue, escalate</label></li>
-<li><label><input type="checkbox" /><strong>Ad Impact</strong> $66K, 54d
-overdue — All three deals stuck, decision needed</label></li>
-</ul>
-<h3 id="inbox-routing">INBOX Routing</h3>
-<ul class="task-list">
-<li><label><input type="checkbox" />Route FDM Product Initiative
-doc</label></li>
-<li><label><input type="checkbox" />Route FireRoad/JeremiahFund intel
-file</label></li>
-<li><label><input type="checkbox" />Process or archive Enrich Batch 8
-&amp; 9</label></li>
-</ul>
-<h3 id="ongoing-carry-forward">Ongoing Carry-Forward</h3>
-<ul class="task-list">
-<li><label><input type="checkbox" />One-pager for Amber (FDM table
-relationships)</label></li>
-<li><label><input type="checkbox" />Weekly outreach emails — 29d
-overdue</label></li>
-<li><label><input type="checkbox" />Web scraper status — Tyler committed
-delivery</label></li>
-</ul>
-<h3 id="blocked-waiting-on">Blocked (Waiting On)</h3>
-<ul class="task-list">
-<li><label><input type="checkbox" /><strong>Paul</strong> — Brivo
-SOW1.17 ($900K)</label></li>
-<li><label><input type="checkbox" /><strong>Paul/Tom</strong> — Claims
-Informatics transition</label></li>
-<li><label><input type="checkbox" /><strong>Ryan</strong> — Elevare Law
-+ Connexus contracts</label></li>
-<li><label><input type="checkbox" /><strong>Kyle</strong> — FDM bronze
-data layer</label></li>
-<li><label><input type="checkbox" /><strong>Bryson</strong> — Follow up
-post-Senegal</label></li>
-<li><label><input type="checkbox" /><strong>Rebecca (FDE)</strong> —
-Outstanding documents</label></li>
-<li><label><input type="checkbox" /><strong>Andrei Coman</strong> —
-Charter Impact presales</label></li>
-</ul>
-<hr />
-<h2 id="slack-roundup">SLACK ROUNDUP</h2>
-<h3 id="hot-channels-last-48h">Hot Channels (last 48h)</h3>
-<ul>
-<li><strong>#prospect-brain-federal</strong> — VERY HOT. MSA pending
-DocuSign ($55/hr retainer). SDD roadshow for 569 investors planned.</li>
-<li><strong>#prospect-yourhealthpro</strong> — HOT. Discovery package
-delivered 3/25. Monday call w/ MVP scope + equity convo.</li>
-<li><strong>#prospect-pryze-app</strong> — SOW finalization, pricing
-discussion ongoing. Email SOW sent 3/26.</li>
-<li><strong>#prospect-bw-cyber</strong> — CRITICAL PATH. Tyler owes AI
-security tool research (Tenable for AI) by today 3/30.</li>
-<li><strong>#prospect-epidaurus-health</strong> — SOW review. Tyler sent
-loom walkthrough, awaiting Paul review/signature.</li>
-<li><strong>#prospect-ripple</strong> — Scope shifted from training to
-org restructuring. Proposal phase.</li>
-<li><strong>#prospect-bear-analytics</strong> — Internal huddle 3/26 re:
-Claude Code in enterprise.</li>
-</ul>
-<h3 id="internal-highlights">Internal Highlights</h3>
-<ul>
-<li>No recent public activity in #rocketship-ops or VSP/FDM channels
-(last 48h)</li>
-<li>Team coordinating via prospect-specific channels</li>
-</ul>
-<h3 id="mentions-needing-attention">Mentions Needing Attention</h3>
-<ul>
-<li>Strong Marine Corps bond w/ Michael Brice (BW Cyber) driving Solomon
-Partners intro</li>
-<li>Tebow Group (PE) reaching out for in-person meeting April 20 in
-Jacksonville</li>
-</ul>
-<h3 id="quiet-prospect-channels-10-days">Quiet Prospect Channels (10+
-days)</h3>
-<ul>
-<li>#prospect-temple-it (last: Feb 2)</li>
-<li>#prospect-truthly-ai (last: Feb 6)</li>
-<li>#prospect-wellness-learning-systems (last: Feb 6)</li>
-<li>#prospect-vico (last: Feb 23)</li>
-<li>#prospect-eshow (last: Mar 13)</li>
-<li>#prospect-emotionally-healthy-discipleship (last: Mar 10)</li>
-<li>#prospect-more-real-estate-group (last: Mar 18)</li>
-<li>#prospect-epicutis (last: Mar 18)</li>
-<li>#prospect-tebow-group (last: Mar 18) ⚠️ No matching prospect folder
-— create one</li>
-<li>#prospect-fugio-rare-org (last: Mar 3) Decision expected this
-week</li>
-</ul>
-<hr />
-<p><em>Generated by Mission Control · 2026-03-30 ET</em></p>
+  <div class="subtitle">Monday, March 30, 2026 &nbsp;|&nbsp; Tyler Goble &nbsp;|&nbsp; Victory Square Partners &nbsp;|&nbsp; Eastern Time</div>
+  <div class="header-badges">
+    <span class="header-badge badge-blue">13 Meetings</span>
+    <span class="header-badge badge-green">8 Recurring</span>
+    <span class="header-badge badge-amber">5 New</span>
+    <span class="header-badge badge-red">1 Needs Full Prep</span>
+    <span class="header-badge badge-purple">6:30 AM – 5:00 PM ET</span>
+  </div>
+</div>
+
+<div class="tabs" id="tabs">
+  <div class="tab active tab-green" onclick="showTab(0)"><span class="dot dot-green"></span>Overview</div>
+  <div class="tab" onclick="showTab(1)"><span class="dot dot-green"></span>6:30a Standup</div>
+  <div class="tab" onclick="showTab(2)"><span class="dot dot-blue"></span>7:00a Pair Prog</div>
+  <div class="tab" onclick="showTab(3)"><span class="dot dot-blue"></span>7:45a SixMap Sync</div>
+  <div class="tab" onclick="showTab(4)"><span class="dot dot-blue"></span>8:00a Rubicon</div>
+  <div class="tab" onclick="showTab(5)"><span class="dot dot-blue"></span>9:00a FDM Standup</div>
+  <div class="tab" onclick="showTab(6)"><span class="dot dot-blue"></span>10:00a SixMap Backlog</div>
+  <div class="tab" onclick="showTab(7)"><span class="dot dot-blue"></span>10:00a Matt Catch Up</div>
+  <div class="tab" onclick="showTab(8)"><span class="dot dot-blue"></span>10:30a SixMap Standup</div>
+  <div class="tab tab-pulse" onclick="showTab(9)"><span class="dot dot-amber"></span>10:30a YourHealthPro ★</div>
+  <div class="tab" onclick="showTab(10)"><span class="dot dot-blue"></span>2:00p AI Training</div>
+  <div class="tab" onclick="showTab(11)"><span class="dot dot-purple"></span>3:00p AIN Huddle</div>
+  <div class="tab" onclick="showTab(12)"><span class="dot dot-green"></span>3:00p Paul/Tyler/Matt</div>
+  <div class="tab" onclick="showTab(13)"><span class="dot dot-purple"></span>4:00p World Domination</div>
+</div>
+
+<div class="content">
+
+<!-- ==================== OVERVIEW ==================== -->
+<div class="panel active" id="panel-0">
+
+<div class="stats">
+  <div class="stat"><div class="num num-blue">13</div><div class="label">Meetings Today</div></div>
+  <div class="stat"><div class="num num-green">8</div><div class="label">Recurring</div></div>
+  <div class="stat"><div class="num num-amber">5</div><div class="label">New / One-Time</div></div>
+  <div class="stat"><div class="num num-red">1</div><div class="label">Full Prep Required</div></div>
+  <div class="stat"><div class="num num-blue">10.5</div><div class="label">Hours Scheduled</div></div>
+  <div class="stat"><div class="num num-purple">3</div><div class="label">Concurrent Blocks</div></div>
+</div>
+
+<div class="alert alert-amber">
+  <strong>⚡ Heads Up — Concurrent Meetings</strong>
+  Three time blocks have simultaneous meetings: <strong>10:00 AM</strong> (SixMap Backlog + Matt Catch Up), <strong>10:30 AM</strong> (SixMap Standup + YourHealthPro), and <strong>3:00 PM</strong> (AIN Huddle + Paul/Tyler/Matt). Prioritize YourHealthPro at 10:30 AM — it is the highest-stakes meeting of the day.
+</div>
+
+<div class="alert alert-red">
+  <strong>★ Full Prep Required — YourHealthPro &amp; Victory Square (Tab 10:30a)</strong>
+  Equity negotiation follow-up with CEO Ed Cutler. MEDDPIC paper process is WEAK — no LOI, term sheet, or equity agreement. Goal: lock equity range and term sheet by end of week. See dedicated tab for full prep package.
+</div>
+
+<div class="card">
+  <h3>Day Timeline</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Time (ET)</th>
+        <th>Meeting</th>
+        <th>Type</th>
+        <th>Duration</th>
+        <th>Attendees</th>
+        <th>Category</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="timeline-time">6:30 AM</td>
+        <td><strong>Tyler &lt;&gt; Christine Standup</strong></td>
+        <td>Standup</td>
+        <td>15 min</td>
+        <td>2</td>
+        <td><span class="tag tag-green">Internal</span></td>
+        <td><span class="tag tag-dim">Recurring</span></td>
+      </tr>
+      <tr>
+        <td class="timeline-time">7:00 AM</td>
+        <td><strong>Pair Programming Session</strong></td>
+        <td>Technical</td>
+        <td>60 min</td>
+        <td>3</td>
+        <td><span class="tag tag-green">Internal</span></td>
+        <td><span class="tag tag-blue">New</span></td>
+      </tr>
+      <tr>
+        <td class="timeline-time">7:45 AM</td>
+        <td><strong>SixMap Internal Quick Sync</strong></td>
+        <td>Client Sync</td>
+        <td>30 min</td>
+        <td>9</td>
+        <td><span class="tag tag-blue">Client</span></td>
+        <td><span class="tag tag-dim">Recurring</span></td>
+      </tr>
+      <tr>
+        <td class="timeline-time">8:00 AM</td>
+        <td><strong>Adelina / Tyler Rubicon Chat</strong></td>
+        <td>Relationship</td>
+        <td>45 min</td>
+        <td>2</td>
+        <td><span class="tag tag-purple">External</span></td>
+        <td><span class="tag tag-blue">New</span></td>
+      </tr>
+      <tr>
+        <td class="timeline-time">9:00 AM</td>
+        <td><strong>FDM Stand Up</strong></td>
+        <td>Standup</td>
+        <td>15 min</td>
+        <td>6</td>
+        <td><span class="tag tag-blue">Client</span></td>
+        <td><span class="tag tag-dim">Recurring</span></td>
+      </tr>
+      <tr>
+        <td class="timeline-time">10:00 AM <span class="timeline-overlap">⚡ concurrent</span></td>
+        <td><strong>SixMap Backlog Refinement</strong></td>
+        <td>Backlog</td>
+        <td>30 min</td>
+        <td>17</td>
+        <td><span class="tag tag-blue">Client</span></td>
+        <td><span class="tag tag-dim">Recurring</span></td>
+      </tr>
+      <tr>
+        <td class="timeline-time">10:00 AM <span class="timeline-overlap">⚡ concurrent</span></td>
+        <td><strong>Tyler &amp; Matt Weekly Catch Up</strong></td>
+        <td>1:1</td>
+        <td>60 min</td>
+        <td>2</td>
+        <td><span class="tag tag-blue">Client</span></td>
+        <td><span class="tag tag-dim">Recurring</span></td>
+      </tr>
+      <tr>
+        <td class="timeline-time">10:30 AM <span class="timeline-overlap">⚡ concurrent</span></td>
+        <td><strong>SixMap Stand-up</strong></td>
+        <td>Standup</td>
+        <td>30 min</td>
+        <td>18</td>
+        <td><span class="tag tag-blue">Client</span></td>
+        <td><span class="tag tag-dim">Recurring</span></td>
+      </tr>
+      <tr style="background:rgba(245,158,11,.04);">
+        <td class="timeline-time">10:30 AM <span class="timeline-overlap">★ PREP</span></td>
+        <td><strong>YourHealthPro &amp; Victory Square</strong></td>
+        <td>Prospect / Equity</td>
+        <td>60 min</td>
+        <td>6</td>
+        <td><span class="tag tag-amber">Prospect</span></td>
+        <td><span class="tag tag-red">Full Prep</span></td>
+      </tr>
+      <tr>
+        <td class="timeline-time">2:00 PM</td>
+        <td><strong>AI Training VSP US Team</strong></td>
+        <td>Training</td>
+        <td>60 min</td>
+        <td>6</td>
+        <td><span class="tag tag-green">Internal</span></td>
+        <td><span class="tag tag-blue">New</span></td>
+      </tr>
+      <tr>
+        <td class="timeline-time">3:00 PM <span class="timeline-overlap">⚡ concurrent</span></td>
+        <td><strong>AIN Weekly Huddle (Top Five)</strong></td>
+        <td>VC Network</td>
+        <td>45 min</td>
+        <td>15</td>
+        <td><span class="tag tag-purple">External</span></td>
+        <td><span class="tag tag-dim">Recurring</span></td>
+      </tr>
+      <tr>
+        <td class="timeline-time">3:00 PM <span class="timeline-overlap">⚡ concurrent</span></td>
+        <td><strong>Paul / Tyler / Matt</strong></td>
+        <td>Internal Strategy</td>
+        <td>30 min</td>
+        <td>3</td>
+        <td><span class="tag tag-green">Internal</span></td>
+        <td><span class="tag tag-dim">Recurring</span></td>
+      </tr>
+      <tr>
+        <td class="timeline-time">4:00 PM</td>
+        <td><strong>Tyler/Paul/Matt World Domination</strong></td>
+        <td>Strategy</td>
+        <td>60 min</td>
+        <td>3</td>
+        <td><span class="tag tag-green">Internal</span></td>
+        <td><span class="tag tag-blue">New</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="two-col">
+  <div class="card">
+    <h3>Priority Order</h3>
+    <table>
+      <tr><th>#</th><th>Meeting</th><th>Why It Matters</th></tr>
+      <tr><td><strong style="color:var(--red)">1</strong></td><td>YourHealthPro (10:30a)</td><td>Equity negotiation — lock term sheet</td></tr>
+      <tr><td><strong style="color:var(--amber)">2</strong></td><td>Paul/Tyler/Matt (3:00p)</td><td>AI pod pricing + venture studio targets</td></tr>
+      <tr><td><strong style="color:var(--amber)">3</strong></td><td>World Domination (4:00p)</td><td>Sales growth strategy session</td></tr>
+      <tr><td><strong style="color:var(--blue)">4</strong></td><td>FDM Standup (9:00a)</td><td>Active client — Group Finder 2.0 burn</td></tr>
+      <tr><td><strong style="color:var(--blue)">5</strong></td><td>Matt Catch Up (10:00a)</td><td>FDM opportunities + client delivery role</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h3>Top 3 Outcomes Today</h3>
+    <div class="alert alert-amber" style="margin-bottom:.65rem">
+      <strong>Outcome 1 — YourHealthPro</strong>
+      Leave with equity % range agreed or specific next step (term sheet by Friday). Ed's MVP scope reviewed — ruthlessly cut or red flag.
     </div>
-  </section>
-</main>
-<footer class="vsp-footer">
-  <div class="vsp-container">
-    <p>Victory Square Partners — Confidential</p>
+    <div class="alert alert-blue" style="margin-bottom:.65rem">
+      <strong>Outcome 2 — Paul/Tyler/Matt</strong>
+      Confirm AI pod tier pricing. Advance Jacksonville (Apr 20) / Sarasota (Apr 21) travel prep. Validate venture studio target list.
+    </div>
+    <div class="alert alert-green">
+      <strong>Outcome 3 — FDM</strong>
+      Clarity on Group Finder 2.0 scoping decision at $13K/mo burn. Justin Claude/MCP onboarding timeline confirmed.
+    </div>
   </div>
-</footer>
+</div>
+
+</div><!-- /panel-0 -->
+
+<!-- ==================== TAB 1: STANDUP ==================== -->
+<div class="panel" id="panel-1">
+
+<div class="meeting-header">
+  <div class="meeting-time-block">
+    <div class="time">6:30</div>
+    <div class="dur">AM ET</div>
+    <div class="dur">15 min</div>
+  </div>
+  <div class="meeting-info">
+    <h2>Tyler &lt;&gt; Christine Stand Up</h2>
+    <div class="meta-row">
+      <span class="tag tag-dim">Recurring</span>
+      <span class="tag tag-green">Internal</span>
+      <span>2 attendees</span>
+      <span>·</span>
+      <span style="color:var(--dim)">Daily operational standup</span>
+    </div>
+  </div>
+</div>
+
+<div class="context-block">
+  <strong>Context:</strong> Daily operational standup covering priorities, action items, and pipeline updates. No specific recent notes on file — standard cadence call. Use this to align on YourHealthPro prep and concurrent meeting strategy for the 10:00–11:30 AM block.
+</div>
+
+<div class="section-title">Suggested Agenda</div>
+<div class="card">
+  <table class="agenda-table">
+    <tr><td>0–3 min</td><td>Quick wins / blockers from weekend</td><td>Surface anything urgent before heavy meeting day</td></tr>
+    <tr><td>3–8 min</td><td>Today's calendar conflicts</td><td>Three concurrent blocks — decide who covers what</td></tr>
+    <tr><td>8–12 min</td><td>YourHealthPro prep check</td><td>Confirm Vlad's codebase findings are ready to present</td></tr>
+    <tr><td>12–15 min</td><td>Action item alignment</td><td>Any items from Friday to close or escalate</td></tr>
+  </table>
+</div>
+
+<div class="alert alert-blue">
+  <strong>Key Discussion: Concurrent Meeting Coverage</strong>
+  At 10:00 AM and 10:30 AM there are overlapping calls. Tyler should be on YourHealthPro at 10:30 AM — Christine to cover SixMap Standup if possible. Align on this now.
+</div>
+
+</div><!-- /panel-1 -->
+
+<!-- ==================== TAB 2: PAIR PROGRAMMING ==================== -->
+<div class="panel" id="panel-2">
+
+<div class="meeting-header">
+  <div class="meeting-time-block">
+    <div class="time">7:00</div>
+    <div class="dur">AM ET</div>
+    <div class="dur">60 min</div>
+  </div>
+  <div class="meeting-info">
+    <h2>Pair Programming Session</h2>
+    <div class="meta-row">
+      <span class="tag tag-blue">New</span>
+      <span class="tag tag-green">Internal</span>
+      <span>3 attendees</span>
+      <span>·</span>
+      <span style="color:var(--dim)">Technical session — no external prep required</span>
+    </div>
+  </div>
+</div>
+
+<div class="context-block">
+  <strong>Context:</strong> Internal technical pair programming session. 3 attendees. No external preparation needed. Likely focused on AIN generative AI codebase work (Tyler's 3-month SkillBridge) or Pipedrive MCP development. No specific agenda on file.
+</div>
+
+<div class="alert alert-green">
+  <strong>No Prep Required</strong>
+  This is an internal working session. Show up and code. If connected to the AIN SkillBridge work, reference the generative AI codebase context from the 3:00 PM AIN Huddle (Tab 11).
+</div>
+
+</div><!-- /panel-2 -->
+
+<!-- ==================== TAB 3: SIXMAP QUICK SYNC ==================== -->
+<div class="panel" id="panel-3">
+
+<div class="meeting-header">
+  <div class="meeting-time-block">
+    <div class="time">7:45</div>
+    <div class="dur">AM ET</div>
+    <div class="dur">30 min</div>
+  </div>
+  <div class="meeting-info">
+    <h2>SixMap Internal Quick Sync</h2>
+    <div class="meta-row">
+      <span class="tag tag-dim">Recurring</span>
+      <span class="tag tag-blue">Client — sixmap.io</span>
+      <span>9 attendees</span>
+    </div>
+  </div>
+</div>
+
+<div class="section-title">Last Time — March 27</div>
+<div class="card">
+  <h3>Session Recap</h3>
+  <table>
+    <tr><th>Topic</th><th>Status / Notes</th></tr>
+    <tr><td>Demo day prep</td><td>Crunchbase / SERP API notebooks in progress</td></tr>
+    <tr><td>DNS issues</td><td>Tyler resolved local DNS issues — unblocked</td></tr>
+    <tr><td>Turnover docs</td><td>14 documents created for Stefana replacement</td></tr>
+    <tr><td>Scripts conversion</td><td>Scoped at ~30 min each — ready to execute</td></tr>
+  </table>
+</div>
+
+<div class="section-title">Today — Watch For</div>
+<div class="two-col">
+  <div class="alert alert-blue">
+    <strong>Demo Day Readiness</strong>
+    Status update on Crunchbase/SERP API notebooks — are they presentation-ready?
+  </div>
+  <div class="alert alert-amber">
+    <strong>Stefana Replacement</strong>
+    Turnover doc handoff progress — has the replacement been brought up to speed?
+  </div>
+</div>
+
+</div><!-- /panel-3 -->
+
+<!-- ==================== TAB 4: RUBICON ==================== -->
+<div class="panel" id="panel-4">
+
+<div class="meeting-header">
+  <div class="meeting-time-block">
+    <div class="time">8:00</div>
+    <div class="dur">AM ET</div>
+    <div class="dur">45 min</div>
+  </div>
+  <div class="meeting-info">
+    <h2>Adelina / Tyler Rubicon Chat</h2>
+    <div class="meta-row">
+      <span class="tag tag-blue">New</span>
+      <span class="tag tag-purple">External — Past Client Reconnection</span>
+      <span>2 attendees</span>
+    </div>
+  </div>
+</div>
+
+<div class="context-block">
+  <strong>About Rubicon IT:</strong> Enterprise IT asset management company with an AI-driven Advisor platform. Owner: Tyler. Past client engagement previously concluded. This call is a reconnection and relationship-nurturing conversation — not an active deal. Approach as exploratory: hear their progress, identify new opportunities, keep the relationship warm.
+</div>
+
+<div class="section-title">Suggested Approach</div>
+<div class="three-col">
+  <div class="alert alert-green">
+    <strong>Listen First</strong>
+    Ask about their progress since engagement closed. What have they built? Where are they stuck? Let them drive.
+  </div>
+  <div class="alert alert-blue">
+    <strong>Explore New Angles</strong>
+    Has their AI Advisor platform evolved? Any new pain points around AI integration, data, or scaling? VSP AI pod could be relevant.
+  </div>
+  <div class="alert alert-amber">
+    <strong>Keep Warm</strong>
+    No hard sell. The goal is to re-establish rapport and surface whether there's a natural re-engagement opportunity in Q2/Q3.
+  </div>
+</div>
+
+<div class="section-title">Talking Points</div>
+<div class="tp-block"><div class="tp-trigger">Opening</div>"Adelina, great to reconnect. I'd love to hear where things have gone with Rubicon since we last worked together — what's the team been building?"</div>
+<div class="tp-block"><div class="tp-trigger">On AI Maturity</div>"The AI landscape has shifted dramatically in the last 6 months — agentic workflows, MCP integrations, AI pods replacing traditional dev teams. Are any of those conversations happening at Rubicon?"</div>
+<div class="tp-block"><div class="tp-trigger">On New Opportunity</div>"We've been running AI Pods for clients at roughly 5x traditional engineering efficiency. If there's a backlog at Rubicon that's been sitting, it might be worth a quick scoping conversation."</div>
+
+</div><!-- /panel-4 -->
+
+<!-- ==================== TAB 5: FDM STANDUP ==================== -->
+<div class="panel" id="panel-5">
+
+<div class="meeting-header">
+  <div class="meeting-time-block">
+    <div class="time">9:00</div>
+    <div class="dur">AM ET</div>
+    <div class="dur">15 min</div>
+  </div>
+  <div class="meeting-info">
+    <h2>FDM Stand Up</h2>
+    <div class="meta-row">
+      <span class="tag tag-dim">Recurring</span>
+      <span class="tag tag-blue">Client — Faith Driven Media</span>
+      <span>6 attendees: Liviu, Tyler, Matt, Kyle, Nils, Dorel</span>
+    </div>
+  </div>
+</div>
+
+<div class="section-title">Last Time — March 26</div>
+<div class="card">
+  <h3>Status Snapshot</h3>
+  <table>
+    <tr><th>Item</th><th>Status</th><th>Notes</th></tr>
+    <tr><td>Silver layer tables</td><td><span class="tag tag-green">Done</span></td><td>11 tables built and out of QA</td></tr>
+    <tr><td>Neon MCP</td><td><span class="tag tag-green">Live</span></td><td>Silver layer connected to Neon MCP</td></tr>
+    <tr><td>Group Finder 2.0</td><td><span class="tag tag-amber">Scoping</span></td><td>$13K non-VSP monthly burn — decision pending</td></tr>
+    <tr><td>Justin onboarding</td><td><span class="tag tag-blue">Pending</span></td><td>Claude/MCP onboarding in 1–2 weeks</td></tr>
+    <tr><td>Query logging</td><td><span class="tag tag-amber">Priority</span></td><td>Active sprint item</td></tr>
+    <tr><td>Stape scoping</td><td><span class="tag tag-amber">Priority</span></td><td>Active sprint item</td></tr>
+    <tr><td>Basecamp cron</td><td><span class="tag tag-amber">Priority</span></td><td>Active sprint item</td></tr>
+    <tr><td>SWGP discovery</td><td><span class="tag tag-amber">Priority</span></td><td>Active sprint item</td></tr>
+  </table>
+</div>
+
+<div class="section-title">Today — Watch For</div>
+<div class="two-col">
+  <div class="alert alert-amber">
+    <strong>Group Finder 2.0 Decision</strong>
+    $13K/month external burn. Has the go/no-go been made? If proceeding, VSP should be positioned to own or co-own that build — opportunity for incremental revenue.
+  </div>
+  <div class="alert alert-blue">
+    <strong>Justin Onboarding Timeline</strong>
+    Confirm 1–2 week window for Claude/MCP. This is an internal multiplier — the sooner Justin is onboarded, the faster team velocity grows.
+  </div>
+</div>
+
+</div><!-- /panel-5 -->
+
+<!-- ==================== TAB 6: SIXMAP BACKLOG ==================== -->
+<div class="panel" id="panel-6">
+
+<div class="meeting-header">
+  <div class="meeting-time-block">
+    <div class="time">10:00</div>
+    <div class="dur">AM ET</div>
+    <div class="dur">30 min</div>
+  </div>
+  <div class="meeting-info">
+    <h2>SixMap Backlog Refinement</h2>
+    <div class="meta-row">
+      <span class="tag tag-dim">Recurring</span>
+      <span class="tag tag-blue">Client — sixmap.io</span>
+      <span>17 attendees</span>
+      <span style="color:var(--amber)">·</span>
+      <span style="color:var(--amber);font-size:.78rem">⚡ Concurrent with Matt Catch Up</span>
+    </div>
+  </div>
+</div>
+
+<div class="context-block">
+  <strong>Context:</strong> Weekly backlog refinement for SixMap. 17 attendees. Same sprint context as the 7:45 AM sync — demo day notebook readiness, Stefana replacement onboarding, scripts conversion (~30 min each). This runs concurrent with Tyler &amp; Matt Weekly Catch Up.
+</div>
+
+<div class="alert alert-amber">
+  <strong>Conflict — 10:00 AM Concurrent Block</strong>
+  SixMap Backlog Refinement runs at the same time as the Tyler &amp; Matt Weekly Catch Up. Determine in morning standup which takes priority. If Matt is the higher-value conversation today (FDM opportunities), delegate SixMap backlog participation if possible.
+</div>
+
+</div><!-- /panel-6 -->
+
+<!-- ==================== TAB 7: MATT CATCH UP ==================== -->
+<div class="panel" id="panel-7">
+
+<div class="meeting-header">
+  <div class="meeting-time-block">
+    <div class="time">10:00</div>
+    <div class="dur">AM ET</div>
+    <div class="dur">60 min</div>
+  </div>
+  <div class="meeting-info">
+    <h2>Tyler &amp; Matt Weekly Catch Up</h2>
+    <div class="meta-row">
+      <span class="tag tag-dim">Recurring</span>
+      <span class="tag tag-blue">Client — Matt Weir / fulcruminsights.io</span>
+      <span>2 attendees</span>
+      <span>·</span>
+      <a class="btn-join btn-join-teams" href="https://teams.microsoft.com/meet/22005551682863?p=KG2j0M5GJz1D1F9W5i" target="_blank">Join Teams</a>
+    </div>
+  </div>
+</div>
+
+<div class="section-title">Last Time — March 23</div>
+<div class="card">
+  <h3>Three Major FDM Opportunities</h3>
+  <table>
+    <tr><th>#</th><th>Opportunity</th><th>Key Detail</th><th>VSP Angle</th></tr>
+    <tr>
+      <td><strong style="color:var(--green)">1</strong></td>
+      <td><strong>Group Finder Rebuild</strong></td>
+      <td>Currently scoped at $13K/month external burn</td>
+      <td>VSP should own or co-own this build</td>
+    </tr>
+    <tr>
+      <td><strong style="color:var(--blue)">2</strong></td>
+      <td><strong>Solving World's Greatest Problems</strong></td>
+      <td>Phased build — discovery stage</td>
+      <td>AI Pod candidate; phased approach de-risks</td>
+    </tr>
+    <tr>
+      <td><strong style="color:var(--purple)">3</strong></td>
+      <td><strong>Fintech Donation Platform</strong></td>
+      <td>Reduce payment processor costs; avoid PCI by refusing credit card data</td>
+      <td>VSP has fintech bench talent</td>
+    </tr>
+  </table>
+</div>
+
+<div class="section-title">Context</div>
+<div class="two-col">
+  <div class="alert alert-blue">
+    <strong>Matt Weir Transition</strong>
+    Matt is stepping into Tyler's previous client delivery role. Today's call likely covers handoff progress and relationship continuity with FDM stakeholders.
+  </div>
+  <div class="alert alert-green">
+    <strong>In-Person &gt; Remote</strong>
+    Noted from last call: in-person meetings drive stronger relationship velocity. Jacksonville (Apr 20) and Sarasota (Apr 21) travel should be flagged as FDM-adjacent opportunities.
+  </div>
+</div>
+
+<div class="section-title">Suggested Focus Today</div>
+<div class="tp-block"><div class="tp-trigger">Group Finder</div>"Has the decision been made on Group Finder 2.0? If they're going external at $13K/month, VSP should be in that conversation — we can do it better and keep the IP relationship."</div>
+<div class="tp-block"><div class="tp-trigger">Fintech Build</div>"The fintech donation platform is a clean VSP play — we have the bench. What's the timeline for scoping? Who's the FDM economic buyer on that decision?"</div>
+
+</div><!-- /panel-7 -->
+
+<!-- ==================== TAB 8: SIXMAP STANDUP ==================== -->
+<div class="panel" id="panel-8">
+
+<div class="meeting-header">
+  <div class="meeting-time-block">
+    <div class="time">10:30</div>
+    <div class="dur">AM ET</div>
+    <div class="dur">30 min</div>
+  </div>
+  <div class="meeting-info">
+    <h2>SixMap Stand-up</h2>
+    <div class="meta-row">
+      <span class="tag tag-dim">Recurring</span>
+      <span class="tag tag-blue">Client — sixmap.io</span>
+      <span>18 attendees</span>
+      <span style="color:var(--amber)">·</span>
+      <span style="color:var(--amber);font-size:.78rem">⚡ Concurrent with YourHealthPro — DEPRIORITIZE</span>
+    </div>
+  </div>
+</div>
+
+<div class="context-block">
+  <strong>Context:</strong> Daily SixMap standup — sprint items, blockers, progress. 18 attendees. This is a recurring standup and runs directly concurrent with the YourHealthPro equity meeting.
+</div>
+
+<div class="alert alert-red">
+  <strong>Priority Conflict — Deprioritize This Meeting</strong>
+  YourHealthPro at 10:30 AM is the highest-stakes meeting of the day. Delegate SixMap standup attendance. Have Christine or another team member cover and drop a async update. The SixMap team can self-run a daily standup without Tyler.
+</div>
+
+</div><!-- /panel-8 -->
+
+<!-- ==================== TAB 9: YOURHEALTHPRO ==================== -->
+<div class="panel" id="panel-9">
+
+<div class="meeting-header" style="border-color:rgba(245,158,11,.3); background:linear-gradient(135deg,rgba(245,158,11,.06),rgba(239,68,68,.04));">
+  <div class="meeting-time-block">
+    <div class="time" style="color:var(--amber)">10:30</div>
+    <div class="dur">AM ET</div>
+    <div class="dur">60 min</div>
+  </div>
+  <div class="meeting-info">
+    <h2>YourHealthPro &amp; Victory Square <span style="color:var(--amber)">★ FULL PREP</span></h2>
+    <div class="meta-row">
+      <span class="tag tag-blue">New</span>
+      <span class="tag tag-amber">Prospect — Equity Negotiation</span>
+      <span>6 attendees</span>
+      <span>·</span>
+      <a class="btn-join" href="https://us02web.zoom.us/j/81292667661?pwd=SFbBjfEmxgcmaaw4ZSJoBiyyOdTd8y.1" target="_blank">Join Zoom</a>
+    </div>
+  </div>
+</div>
+
+<div class="alert alert-amber">
+  <strong>Meeting Context</strong>
+  Discovery call was March 25. This is the follow-up to review Ed Cutler's MVP gap analysis homework and begin equity negotiation. VSP has a moat — Paul Doman and Vlad Damian built ShiftMed, an identical marketplace model. No competing bids. Goal: lock equity range and term sheet timeline.
+</div>
+
+<div class="section-title">Attendees</div>
+<div class="card">
+  <table>
+    <thead><tr><th>Name</th><th>Title</th><th>Role in Meeting</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>Ed Cutler</strong></td>
+        <td>CEO / Founder</td>
+        <td><span class="tag tag-red">Decision-Maker</span></td>
+        <td>30 years mobile phlebotomy · ecutler@alphaphlebotomy.com</td>
+      </tr>
+      <tr>
+        <td><strong>Patrick Cutler</strong></td>
+        <td>Co-founder</td>
+        <td><span class="tag tag-amber">Ops / Technical</span></td>
+        <td>pcutler@yourhealthpro.net · Authority level unclear</td>
+      </tr>
+      <tr>
+        <td><strong>Paul Doman</strong></td>
+        <td>VSP CEO</td>
+        <td><span class="tag tag-green">Relationship Lead</span></td>
+        <td>Built ShiftMed — identical marketplace model. Credibility anchor.</td>
+      </tr>
+      <tr>
+        <td><strong>Vlad Damian</strong></td>
+        <td>SVP Engineering</td>
+        <td><span class="tag tag-blue">Technical Review</span></td>
+        <td>Reviewed codebase over weekend — delivering build vs fix recommendation</td>
+      </tr>
+      <tr>
+        <td><strong>Tyler Goble</strong></td>
+        <td>VSP</td>
+        <td><span class="tag tag-green">Account Lead</span></td>
+        <td>Driving agenda, equity structuring</td>
+      </tr>
+      <tr>
+        <td><strong>Andrei Coman</strong></td>
+        <td>VSP</td>
+        <td><span class="tag tag-dim">Possible Attendee</span></td>
+        <td>TBD presence</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="section-title">Background</div>
+<div class="context-block">
+  <strong>YourHealthPro</strong> is a DoorDash-style marketplace connecting patients with <strong>6,000+ mobile healthcare providers</strong> (phlebotomists, lab testing, vitamin IVs, telemedicine). Revenue model: <strong>15% convenience fee</strong> on B2C + B2B margins on clinical trials/genomics. Revenue near-immediate once live — manual orders already flowing.<br><br>
+  <strong>The blocker:</strong> Platform held hostage for years. No active devs. Hosted on a friend's Azure account. Prior dev shop (ClickLab) held code over billing dispute. Ed has the platform, but it's non-functional and has security vulnerabilities (broken patient registration).<br><br>
+  <strong>The VSP edge:</strong> Paul + Vlad built ShiftMed — an identical on-demand healthcare marketplace. This is the clearest possible proof of concept for why VSP should own this engagement.
+</div>
+
+<div class="section-title">MEDDPIC Status</div>
+<div class="meddpic-grid">
+  <div class="meddpic-item">
+    <div class="m-label">Identify Pain</div>
+    <div class="m-status m-strong">Strong</div>
+    <div style="font-size:.75rem;color:var(--muted);margin-top:.2rem">Platform blocked years, security vulns, broken patient reg</div>
+  </div>
+  <div class="meddpic-item">
+    <div class="m-label">Competition</div>
+    <div class="m-status m-strong">Strong</div>
+    <div style="font-size:.75rem;color:var(--muted);margin-top:.2rem">VSP moat via ShiftMed — no competing bids</div>
+  </div>
+  <div class="meddpic-item">
+    <div class="m-label">Metrics</div>
+    <div class="m-status m-moderate">Moderate</div>
+    <div style="font-size:.75rem;color:var(--muted);margin-top:.2rem">Need Year 1 revenue projection, Alpha annual revenue</div>
+  </div>
+  <div class="meddpic-item">
+    <div class="m-label">Economic Buyer</div>
+    <div class="m-status m-moderate">Moderate</div>
+    <div style="font-size:.75rem;color:var(--muted);margin-top:.2rem">Ed is sole DM — Patrick's authority unclear</div>
+  </div>
+  <div class="meddpic-item">
+    <div class="m-label">Decision Criteria</div>
+    <div class="m-status m-moderate">Moderate</div>
+    <div style="font-size:.75rem;color:var(--muted);margin-top:.2rem">Get to production, feature creep risk, Vlad's rec needed</div>
+  </div>
+  <div class="meddpic-item">
+    <div class="m-label">Decision Process</div>
+    <div class="m-status m-moderate">Moderate</div>
+    <div style="font-size:.75rem;color:var(--muted);margin-top:.2rem">Founder-to-founder fast, Ed committed MVP homework</div>
+  </div>
+  <div class="meddpic-item">
+    <div class="m-label">Champion</div>
+    <div class="m-status m-moderate">Moderate</div>
+    <div style="font-size:.75rem;color:var(--muted);margin-top:.2rem">Ed enthusiastic — focus/discipline risk</div>
+  </div>
+  <div class="meddpic-item">
+    <div class="m-label">Paper Process</div>
+    <div class="m-status m-weak">Weak</div>
+    <div style="font-size:.75rem;color:var(--muted);margin-top:.2rem">No LOI, term sheet, or equity agreement — all undefined</div>
+  </div>
+</div>
+
+<div class="section-title">Suggested Agenda</div>
+<div class="card">
+  <table class="agenda-table">
+    <thead><tr><th>Time</th><th>Topic</th><th>Goal</th></tr></thead>
+    <tbody>
+      <tr><td>0–5 min</td><td>Recap + rapport</td><td>Reconnect from discovery call — set the tone</td></tr>
+      <tr><td>5–15 min</td><td>Ed's MVP gap analysis review</td><td>Assess if scope is ruthlessly cut to true MVP</td></tr>
+      <tr><td>15–25 min</td><td>Vlad's codebase findings</td><td>Build vs fix recommendation + infrastructure assessment</td></tr>
+      <tr><td>25–40 min</td><td>Engagement structure</td><td>Equity %, vesting schedule, timeline, team composition</td></tr>
+      <tr><td>40–50 min</td><td>AI Pod sizing + timeline</td><td>Team composition, sprint plan, first milestone definition</td></tr>
+      <tr><td>50–60 min</td><td>Next steps + close</td><td>Lock specific commitments — term sheet by end of week</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="section-title">Key Questions to Ask</div>
+<ul class="q-list">
+  <li>"Walk us through what you cut from MVP — what was hardest to let go?"</li>
+  <li>"What equity percentage are you thinking for getting this to production?"</li>
+  <li>"What's the liquidity event for equity holders? Acquisition? Cash distributions?"</li>
+  <li>"What's your projected monthly transaction volume once live?"</li>
+  <li>"If we agree on terms today, how quickly can we move to signed paperwork?"</li>
+</ul>
+
+<div class="section-title">Talking Points</div>
+<div class="tp-block">
+  <div class="tp-trigger">If gap analysis is still bloated</div>
+  "Ed, we've seen this pattern before with ShiftMed. Every feature you add before launch is a feature that delays revenue. What if we committed to launching with just the core booking flow and payment — and you could be collecting revenue in 8 weeks instead of 8 months?"
+</div>
+<div class="tp-block">
+  <div class="tp-trigger">If equity offer seems low</div>
+  "We're bringing a team that's built this exact marketplace before. That de-risks your build significantly. What valuation are you using to frame the equity conversation?"
+</div>
+<div class="tp-block">
+  <div class="tp-trigger">If codebase is unsalvageable</div>
+  "Vlad's found some concerns. The good news is we've done ground-up marketplace builds — ShiftMed is proof. Let's talk about what a clean rebuild timeline looks like."
+</div>
+<div class="tp-block">
+  <div class="tp-trigger">If they ask about pricing</div>
+  "For an equity engagement, we're looking at the total value we're creating vs. the equity stake. Let's first align on what 'production' means, then we can size the equity fairly."
+</div>
+
+<div class="section-title">Red Flags</div>
+<ul class="rf-list">
+  <li>Gap analysis still bloated with post-MVP features — Ed cannot let go</li>
+  <li>Equity offer unrealistic (e.g., 2% for $200K+ of work)</li>
+  <li>Codebase unsalvageable — changes engagement model entirely</li>
+  <li>Ed resists feature cuts — engagement will be painful to manage</li>
+  <li>No clear liquidity event for equity holders</li>
+</ul>
+
+<div class="section-title">Success Criteria</div>
+<ul class="sc-list">
+  <li>Ed presents a ruthlessly cut MVP scope (&lt; 10 features)</li>
+  <li>Vlad delivers clear build vs fix recommendation</li>
+  <li>Equity range discussed — even if not finalized</li>
+  <li>Next step locked: signed term sheet by end of week</li>
+  <li>AI Pod composition agreed — size, roles, and start date</li>
+</ul>
+
+</div><!-- /panel-9 -->
+
+<!-- ==================== TAB 10: AI TRAINING ==================== -->
+<div class="panel" id="panel-10">
+
+<div class="meeting-header">
+  <div class="meeting-time-block">
+    <div class="time">2:00</div>
+    <div class="dur">PM ET</div>
+    <div class="dur">60 min</div>
+  </div>
+  <div class="meeting-info">
+    <h2>AI Training VSP US Team</h2>
+    <div class="meta-row">
+      <span class="tag tag-blue">New</span>
+      <span class="tag tag-green">Internal</span>
+      <span>6 attendees</span>
+      <span>·</span>
+      <span style="color:var(--dim)">Organized by Maria Schwendinger</span>
+      <span>·</span>
+      <a class="btn-join" href="https://us02web.zoom.us/j/89215449971?pwd=WUhMZA8G3Bntj8SLYmNWB2YQo4BeCU.1" target="_blank">Join Zoom</a>
+    </div>
+  </div>
+</div>
+
+<div class="context-block">
+  <strong>Context:</strong> Internal AI training session for the US-based VSP team. Organized by Maria Schwendinger. 6 attendees. No external preparation needed. Likely covers AI tool adoption, Claude workflows, MCP usage, or AI Pod methodology — aligned with the broader VSP AI Intensive Workshop series.
+</div>
+
+<div class="alert alert-green">
+  <strong>No External Prep Required</strong>
+  Show up as a resource. If called upon, be ready to demo Claude Code workflows, the Pipedrive MCP integration, or the rocketship skills system. This is Maria's session to run — Tyler is a participant.
+</div>
+
+</div><!-- /panel-10 -->
+
+<!-- ==================== TAB 11: AIN HUDDLE ==================== -->
+<div class="panel" id="panel-11">
+
+<div class="meeting-header">
+  <div class="meeting-time-block">
+    <div class="time">3:00</div>
+    <div class="dur">PM ET</div>
+    <div class="dur">45 min</div>
+  </div>
+  <div class="meeting-info">
+    <h2>AIN Weekly Huddle (Top Five)</h2>
+    <div class="meta-row">
+      <span class="tag tag-dim">Recurring</span>
+      <span class="tag tag-purple">External — AIN Ventures</span>
+      <span>15 attendees</span>
+      <span>·</span>
+      <span style="color:var(--dim)">Organized by Sherman Williams / Emily McMahan</span>
+      <span>·</span>
+      <a class="btn-join" href="https://us02web.zoom.us/j/84360309641?pwd=L0Q2dG94MVl3L1lhTFNZbFJRajJYZz09" target="_blank">Join Zoom</a>
+    </div>
+  </div>
+</div>
+
+<div class="section-title">Context</div>
+<div class="context-block">
+  <strong>AIN Ventures</strong> (ainventures.com) — seed-stage VC with dual-use tech focus. ~19 portfolio companies. Part of the emerging defense tech investment community alongside Veteran Ventures Capital.<br><br>
+  <strong>Tyler's SkillBridge:</strong> Tyler started a 3-month SkillBridge with AIN on <strong>March 11</strong> to work on their generative AI codebase. Today is week 3. This is the weekly sync cadence — "Top Five" format means each attendee surfaces their top 5 priorities or items.
+</div>
+
+<div class="two-col">
+  <div class="alert alert-purple">
+    <strong>SkillBridge — Week 3 of 12</strong>
+    What progress has been made on the generative AI codebase? Be ready to demo or report on the week's output. This relationship has long-term implications for VSP's defense tech network.
+  </div>
+  <div class="alert alert-blue">
+    <strong>Network Value</strong>
+    15 attendees from the AIN ecosystem = access to 19 portfolio companies and defense-adjacent investors. Top Five format — bring something concrete. Don't show up empty-handed.
+  </div>
+</div>
+
+<div class="section-title">Suggested Top Five to Bring</div>
+<div class="card">
+  <table>
+    <tr><th>#</th><th>Item</th><th>Why It Matters to AIN</th></tr>
+    <tr><td>1</td><td>Generative AI codebase progress this week</td><td>Core SkillBridge deliverable — demonstrate momentum</td></tr>
+    <tr><td>2</td><td>VSP AI Pod model (5x efficiency, $17-20K/month)</td><td>Relevant to AIN portfolio companies scaling engineering</td></tr>
+    <tr><td>3</td><td>MCP integration patterns from this week</td><td>Dual-use tech angle — MCP as infrastructure layer</td></tr>
+    <tr><td>4</td><td>Upcoming travel (Jacksonville, Sarasota, Texas)</td><td>In-person opportunities to meet AIN portfolio companies in region</td></tr>
+    <tr><td>5</td><td>Any blockers needing AIN network help</td><td>Use the network — that's why you're here</td></tr>
+  </table>
+</div>
+
+</div><!-- /panel-11 -->
+
+<!-- ==================== TAB 12: PAUL/TYLER/MATT ==================== -->
+<div class="panel" id="panel-12">
+
+<div class="meeting-header">
+  <div class="meeting-time-block">
+    <div class="time">3:00</div>
+    <div class="dur">PM ET</div>
+    <div class="dur">30 min</div>
+  </div>
+  <div class="meeting-info">
+    <h2>Paul / Tyler / Matt</h2>
+    <div class="meta-row">
+      <span class="tag tag-dim">Recurring</span>
+      <span class="tag tag-green">Internal</span>
+      <span>3 attendees: Paul Doman, Tyler, Matt</span>
+      <span>·</span>
+      <a class="btn-join" href="https://us02web.zoom.us/j/82769064074?pwd=KzjIWgN7VRwedx6LZ1lhw5TK64K8Fq.1" target="_blank">Join Zoom</a>
+    </div>
+  </div>
+</div>
+
+<div class="section-title">Last Time — March 26</div>
+<div class="card">
+  <h3>Key Decisions &amp; Context</h3>
+  <table>
+    <tr><th>Topic</th><th>Detail</th></tr>
+    <tr><td><strong>AI Pod tier sizing</strong></td><td>Small pod = 2 engineers at $20K/month. Medium = 3 engineers. 1 AI engineer ≈ 5 traditional engineers (efficiency model).</td></tr>
+    <tr><td><strong>FDM as replication model</strong></td><td>FDM at $17K/month is the benchmark template for AI Pod pricing and delivery.</td></tr>
+    <tr><td><strong>Matt Weir role</strong></td><td>Stepping into Tyler's previous client delivery role — handoff in progress.</td></tr>
+    <tr><td><strong>Venture studio targets</strong></td><td>7–8 venture studios identified as high-fit prospects for AI Pod model.</td></tr>
+    <tr><td><strong>Upcoming travel</strong></td><td>Jacksonville (Apr 20), Sarasota (Apr 21), Texas (Apr 23–24).</td></tr>
+  </table>
+</div>
+
+<div class="section-title">Today — Agenda Items</div>
+<div class="three-col">
+  <div class="alert alert-amber">
+    <strong>YourHealthPro Debrief</strong>
+    If YourHealthPro goes well at 10:30 AM, use this 3:00 PM slot to debrief with Paul and align on term sheet language before end of day.
+  </div>
+  <div class="alert alert-blue">
+    <strong>AI Pod Pricing Lock</strong>
+    Finalize tier pricing for outbound. Small at $20K, Medium at what? Define the product clearly before Jacksonville trip.
+  </div>
+  <div class="alert alert-green">
+    <strong>Travel Prep</strong>
+    Jacksonville Apr 20, Sarasota Apr 21, Texas Apr 23–24. Are meetings booked? Confirm venue, contacts, and VSP talking track for each city.
+  </div>
+</div>
+
+</div><!-- /panel-12 -->
+
+<!-- ==================== TAB 13: WORLD DOMINATION ==================== -->
+<div class="panel" id="panel-13">
+
+<div class="meeting-header">
+  <div class="meeting-time-block">
+    <div class="time">4:00</div>
+    <div class="dur">PM ET</div>
+    <div class="dur">60 min</div>
+  </div>
+  <div class="meeting-info">
+    <h2>Tyler / Paul / Matt Weir — World Domination</h2>
+    <div class="meta-row">
+      <span class="tag tag-blue">New</span>
+      <span class="tag tag-purple">Internal Strategy</span>
+      <span>3 attendees</span>
+      <span>·</span>
+      <span style="color:var(--dim)">Likely continuation of venture studio targeting and growth strategy</span>
+    </div>
+  </div>
+</div>
+
+<div class="context-block">
+  <strong>Context:</strong> Strategy session — "World Domination" framing suggests this is the big-picture growth planning session. Likely builds directly on the 3:00 PM Paul/Tyler/Matt call. No external prep needed. Expect discussion to cover venture studio outbound strategy, AI Pod positioning, regional travel targets, and longer-term 2026 revenue architecture.
+</div>
+
+<div class="section-title">Likely Topics</div>
+<div class="two-col">
+  <div class="card">
+    <h3>Growth Strategy</h3>
+    <table>
+      <tr><th>Topic</th><th>Input Needed</th></tr>
+      <tr><td>Venture studio outbound</td><td>7–8 targets — who's first, what's the pitch?</td></tr>
+      <tr><td>AI Pod productization</td><td>One-pager, pricing, case study (FDM + ShiftMed)</td></tr>
+      <tr><td>Regional market penetration</td><td>Florida + Texas — beachhead strategy</td></tr>
+      <tr><td>YourHealthPro outcome</td><td>If equity deal closes, what's the template for more?</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h3>Suggested Outputs</h3>
+    <ul class="sc-list">
+      <li>Named shortlist of top 3 venture studio outbound targets</li>
+      <li>AI Pod one-pager structure agreed (to be built before travel)</li>
+      <li>Jacksonville / Sarasota / Texas meeting roster confirmed</li>
+      <li>Q2 revenue target with YourHealthPro and FDM scenarios</li>
+      <li>Decision on Matt's transition completion milestone</li>
+    </ul>
+  </div>
+</div>
+
+<div class="alert alert-purple">
+  <strong>End-of-Day Momentum</strong>
+  This is the last meeting of the day and the highest-energy framing. Come in with the morning's wins (especially YourHealthPro) and let that fuel the strategic conversation. The "World Domination" label is intentional — don't let it become a status check. Make decisions.
+</div>
+
+</div><!-- /panel-13 -->
+
+</div><!-- /content -->
+
+<script>
+function showTab(idx) {
+  document.querySelectorAll('.tab').forEach(function(t, i) {
+    t.classList.toggle('active', i === idx);
+  });
+  document.querySelectorAll('.panel').forEach(function(p, i) {
+    p.classList.toggle('active', i === idx);
+  });
+  // Apply color class to active tab based on content
+  var activeTab = document.querySelectorAll('.tab')[idx];
+  // Re-apply color if active tab has a dot color
+  ['tab-green','tab-amber','tab-red','tab-purple','tab-blue'].forEach(function(c) {
+    if(activeTab.classList.contains(c)) {
+      // already has color class — border handled by CSS
+    }
+  });
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+</script>
+
 </body>
 </html>
