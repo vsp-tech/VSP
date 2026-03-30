@@ -1,0 +1,2541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VSP Master Calendar — Week of Mar 30, 2026</title>
+<style>
+:root {
+  --navy: #1a1a2e; --navy-mid: #16213e; --navy-light: #0f3460;
+  --gold: #f0c040; --gold-dim: #c8a030;
+  --white: #ffffff; --off-white: #e8eaf0;
+  --client: #2e6fce; --internal: #28a870; --sales: #d4900a;
+  --allhands: #7c3aed; --busy: #4a5568; --personal: #c0392b;
+  --green: #16a34a; --yellow: #ca8a04; --red: #dc2626;
+  --card-bg: #111827;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--navy); color: var(--off-white); font-family: 'Segoe UI', sans-serif; font-size: 14px; min-height: 100vh; }
+
+/* ── HEADER ── */
+.header { background: var(--navy-mid); border-bottom: 2px solid var(--gold); padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; }
+.header h1 { font-size: 20px; color: var(--gold); font-weight: 700; letter-spacing: 0.5px; }
+.header .subtitle { color: var(--off-white); opacity: 0.7; font-size: 13px; margin-top: 2px; }
+
+/* ── TABS ── */
+.tab-nav { display: flex; gap: 0; background: var(--navy-mid); border-bottom: 1px solid var(--navy-light); padding: 0 24px; }
+.tab-btn {
+  padding: 12px 22px; cursor: pointer; font-size: 13px; font-weight: 600;
+  border: 1px solid transparent; border-bottom: none;
+  background: var(--navy-mid); color: var(--gold);
+  border-color: var(--gold-dim); border-radius: 6px 6px 0 0; margin-right: 4px; margin-top: 8px;
+  transition: all 0.15s;
+}
+.tab-btn:hover { background: var(--navy-light); }
+.tab-btn.active { background: var(--gold); color: var(--navy); border-color: var(--gold); }
+.tab-pane { display: none; padding: 24px; }
+.tab-pane.active { display: block; }
+
+/* ── PLACEHOLDER PANES ── */
+.placeholder { background: var(--card-bg); border: 2px dashed var(--navy-light); border-radius: 10px; padding: 48px; text-align: center; color: var(--off-white); opacity: 0.6; font-size: 15px; }
+.placeholder strong { display: block; font-size: 18px; color: var(--gold); margin-bottom: 8px; }
+
+/* ── LEGEND ── */
+.legend { display: flex; flex-wrap: wrap; gap: 16px; background: var(--navy-mid); border-radius: 8px; padding: 14px 18px; margin-bottom: 20px; align-items: center; }
+.legend-title { color: var(--gold); font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; margin-right: 8px; }
+.legend-section { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.legend-item { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--off-white); opacity: 0.85; }
+.dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.dot-green { background: var(--green); }
+.dot-yellow { background: var(--yellow); }
+.dot-red { background: var(--red); }
+.legend-sep { width: 1px; height: 20px; background: var(--navy-light); }
+.badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; }
+.badge-esr { background: #1e40af; color: #93c5fd; }
+.badge-standup { background: #14532d; color: #86efac; }
+.badge-demo { background: #78350f; color: #fcd34d; }
+.badge-vendor { background: #134e4a; color: #5eead4; }
+.badge-internal { background: #1e3a5f; color: #7dd3fc; }
+.badge-delivery { background: #14532d; color: #86efac; }
+
+/* ── DAY HEADER ── */
+.day-header { background: linear-gradient(90deg, var(--navy-light), transparent); border-left: 4px solid var(--gold); padding: 8px 16px; margin: 20px 0 10px; border-radius: 0 6px 6px 0; }
+.day-header span { color: var(--gold); font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; }
+.day-header .day-count { color: var(--off-white); opacity: 0.5; font-size: 12px; margin-left: 10px; }
+
+/* ── MEETING CARDS ── */
+details { background: var(--card-bg); border-radius: 8px; margin-bottom: 8px; overflow: hidden; border-left: 4px solid var(--busy); }
+details.status-green { border-left-color: var(--green); }
+details.status-yellow { border-left-color: var(--yellow); }
+details.status-red { border-left-color: var(--red); }
+
+summary {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 16px; cursor: pointer; list-style: none;
+  transition: background 0.1s;
+}
+summary:hover { background: rgba(255,255,255,0.04); }
+summary::-webkit-details-marker { display: none; }
+.chevron { color: var(--gold-dim); font-size: 12px; margin-left: auto; flex-shrink: 0; transition: transform 0.2s; }
+details[open] .chevron { transform: rotate(90deg); }
+
+.status-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.status-dot.green { background: var(--green); box-shadow: 0 0 5px var(--green); }
+.status-dot.yellow { background: var(--yellow); box-shadow: 0 0 5px var(--yellow); }
+.status-dot.red { background: var(--red); box-shadow: 0 0 5px var(--red); }
+
+.meeting-time { color: var(--gold-dim); font-size: 12px; font-weight: 600; min-width: 60px; }
+.meeting-name { font-weight: 600; color: var(--white); flex: 1; }
+.meeting-sep { color: var(--navy-light); }
+.meeting-client { color: var(--off-white); opacity: 0.7; font-size: 13px; }
+
+.pills { display: flex; gap: 5px; flex-wrap: wrap; margin-left: 6px; }
+.pill { background: var(--navy-light); color: var(--off-white); font-size: 11px; padding: 2px 8px; border-radius: 10px; font-weight: 500; }
+
+/* ── EXPANDED CONTENT ── */
+.card-body { padding: 0 16px 16px; border-top: 1px solid rgba(255,255,255,0.06); }
+.card-section { margin-top: 14px; }
+.card-section-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--gold-dim); font-weight: 700; margin-bottom: 6px; }
+.card-section p { color: var(--off-white); opacity: 0.8; font-size: 13px; line-height: 1.5; }
+.people-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.people-col-header { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--off-white); opacity: 0.5; margin-bottom: 4px; }
+.people-list { font-size: 13px; color: var(--off-white); opacity: 0.85; }
+.people-list li { list-style: none; padding: 2px 0; }
+.tag-row { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin-top: 6px; }
+.issue-tag { background: #450a0a; border: 1px solid #dc2626; color: #fca5a5; font-size: 11px; padding: 2px 8px; border-radius: 10px; }
+.ok-tag { background: #052e16; border: 1px solid #16a34a; color: #86efac; font-size: 11px; padding: 2px 8px; border-radius: 10px; }
+.warn-tag { background: #422006; border: 1px solid #ca8a04; color: #fde047; font-size: 11px; padding: 2px 8px; border-radius: 10px; }
+
+  /* ===== RESET & BASE ===== */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:       #1a1a2e;
+    --navy-mid:   #16213e;
+    --navy-light: #0f3460;
+    --gold:       #f0c040;
+    --gold-dim:   #c8a030;
+    --gold-pale:  rgba(240,192,64,0.15);
+    --white:      #ffffff;
+    --off-white:  #e8eaf0;
+    --gray-light: #8892a4;
+
+    /* Meeting type colors */
+    --client:   #2e6fce;  /* blue  — external/ESR */
+    --internal: #28a870;  /* green — 1:1 / standups */
+    --sales:    #d4900a;  /* amber — SOB / pipeline */
+    --allhands: #7c3aed;  /* purple — all hands */
+    --busy:     #4a5568;  /* gray  — private */
+    --personal: #c0392b;  /* red   — OOO / personal */
+    --shared-border: #f0c040; /* gold  — shared meetings */
+
+    --cell-bg:  #111827;
+    --row-bg:   #0d1117;
+    --header-h: 90px;
+    --name-w:   130px;
+    --day-min-w: 175px;
+  }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--navy);
+    color: var(--white);
+    min-height: 100vh;
+    padding: 20px;
+    line-height: 1.4;
+  }
+
+  /* ===== PAGE HEADER ===== */
+  .page-header {
+    text-align: center;
+    padding: 28px 20px 22px;
+    background: linear-gradient(135deg, var(--navy-mid) 0%, var(--navy-light) 100%);
+    border: 1px solid rgba(240,192,64,0.3);
+    border-radius: 12px;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .page-header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  .page-header h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+  .page-header h1 span { color: var(--gold); }
+  .page-header .subtitle {
+    font-size: 0.95rem;
+    color: var(--gray-light);
+    margin-bottom: 8px;
+  }
+  .page-header .tz-note {
+    display: inline-block;
+    font-size: 0.78rem;
+    background: rgba(240,192,64,0.15);
+    border: 1px solid rgba(240,192,64,0.4);
+    color: var(--gold);
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+
+  /* ===== LEGEND ===== */
+  .legend-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 12px 16px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    margin-bottom: 16px;
+    align-items: center;
+  }
+  .legend-bar .legend-title {
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--gray-light);
+    margin-right: 4px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.75rem;
+    color: var(--off-white);
+  }
+  .legend-dot {
+    width: 10px; height: 10px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+  .legend-item.shared .legend-dot {
+    background: var(--navy-light);
+    border: 2px solid var(--gold);
+  }
+
+  /* ===== CALENDAR GRID ===== */
+  .calendar-wrap {
+    overflow-x: auto;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .calendar-grid {
+    display: grid;
+    grid-template-columns: var(--name-w) repeat(5, minmax(var(--day-min-w), 1fr));
+    min-width: 1080px;
+  }
+
+  /* Header row */
+  .col-header {
+    background: var(--navy-mid);
+    padding: 14px 10px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 0.85rem;
+    border-bottom: 2px solid var(--gold);
+    border-right: 1px solid rgba(255,255,255,0.07);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .col-header.name-col {
+    background: var(--navy);
+    border-bottom: 2px solid var(--gold);
+    font-size: 0.75rem;
+    color: var(--gray-light);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .col-header .day-name { color: var(--gold); font-size: 1rem; }
+  .col-header .day-date { color: var(--gray-light); font-size: 0.75rem; margin-top: 2px; }
+
+  /* Person rows */
+  .person-name-cell {
+    background: var(--navy-mid);
+    padding: 10px 8px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    border-right: 1px solid rgba(255,255,255,0.07);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 3px;
+  }
+  .person-name-cell .p-name {
+    font-weight: 700;
+    font-size: 0.78rem;
+    color: var(--white);
+    line-height: 1.2;
+  }
+  .person-name-cell .p-role {
+    font-size: 0.65rem;
+    color: var(--gray-light);
+    line-height: 1.2;
+  }
+  .person-name-cell .p-tz {
+    font-size: 0.6rem;
+    color: rgba(240,192,64,0.7);
+    background: rgba(240,192,64,0.08);
+    padding: 1px 5px;
+    border-radius: 10px;
+    margin-top: 2px;
+  }
+
+  .day-cell {
+    background: var(--cell-bg);
+    padding: 6px 5px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    border-right: 1px solid rgba(255,255,255,0.07);
+    vertical-align: top;
+    min-height: 60px;
+  }
+  .day-cell.ooo-day {
+    background: rgba(192,57,43,0.07);
+  }
+
+  /* OOO Banner */
+  .ooo-banner {
+    background: rgba(192,57,43,0.25);
+    border: 1px solid rgba(192,57,43,0.5);
+    border-radius: 4px;
+    padding: 4px 6px;
+    font-size: 0.68rem;
+    color: #ff8080;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .ooo-banner.good-friday {
+    background: rgba(124,58,237,0.2);
+    border-color: rgba(124,58,237,0.5);
+    color: #b88ff0;
+  }
+
+  /* ===== EVENT BLOCKS ===== */
+  .event {
+    border-radius: 5px;
+    padding: 4px 6px;
+    margin-bottom: 4px;
+    font-size: 0.68rem;
+    line-height: 1.3;
+    position: relative;
+    cursor: default;
+    transition: transform 0.15s, box-shadow 0.15s;
+    border-left: 3px solid transparent;
+  }
+  .event:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    z-index: 5;
+  }
+  .event .evt-time {
+    font-size: 0.6rem;
+    opacity: 0.75;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 1px;
+  }
+  .event .evt-title {
+    font-weight: 600;
+    display: block;
+  }
+
+  /* Type styles */
+  .event.client   { background: rgba(46,111,206,0.25);  border-left-color: var(--client);   color: #90b8f0; }
+  .event.internal { background: rgba(40,168,112,0.2);   border-left-color: var(--internal); color: #80d4a8; }
+  .event.sales    { background: rgba(212,144,10,0.2);   border-left-color: var(--sales);    color: #f0c060; }
+  .event.allhands { background: rgba(124,58,237,0.2);   border-left-color: var(--allhands); color: #c4a0f0; }
+  .event.busy     { background: rgba(74,85,104,0.3);    border-left-color: var(--busy);     color: #9099ab; }
+  .event.personal { background: rgba(192,57,43,0.2);    border-left-color: var(--personal); color: #f09090; }
+  .event.focus    { background: rgba(30,60,100,0.3);    border-left-color: #4a7ab5;         color: #80a8d8; }
+
+  /* Shared meeting — gold border highlight */
+  .event.shared {
+    border: 1.5px solid var(--gold) !important;
+    border-left-width: 3px !important;
+    box-shadow: 0 0 8px rgba(240,192,64,0.2);
+  }
+  .event.shared::after {
+    content: attr(data-badge);
+    position: absolute;
+    top: 3px;
+    right: 4px;
+    background: var(--gold);
+    color: var(--navy);
+    font-size: 0.55rem;
+    font-weight: 800;
+    padding: 1px 4px;
+    border-radius: 8px;
+    line-height: 1.4;
+    white-space: nowrap;
+  }
+
+  /* Tooltip on hover */
+  .event[data-tooltip] { position: relative; }
+  .event[data-tooltip]:hover::before {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: calc(100% + 6px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: #0d1117;
+    border: 1px solid var(--gold);
+    color: var(--off-white);
+    font-size: 0.68rem;
+    padding: 6px 10px;
+    border-radius: 6px;
+    white-space: nowrap;
+    z-index: 100;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.6);
+    pointer-events: none;
+    font-weight: 400;
+    max-width: 280px;
+    white-space: normal;
+    line-height: 1.5;
+    text-align: left;
+  }
+
+  /* ===== DEPENDENCY TABLE ===== */
+  .dep-section {
+    margin-top: 24px;
+  }
+  .dep-section h2 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--gold);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .dep-section h2::before {
+    content: '';
+    display: inline-block;
+    width: 4px; height: 18px;
+    background: var(--gold);
+    border-radius: 2px;
+  }
+  .dep-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.75rem;
+  }
+  .dep-table th {
+    background: var(--navy-mid);
+    color: var(--gold);
+    padding: 8px 10px;
+    text-align: left;
+    font-weight: 700;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid rgba(240,192,64,0.3);
+  }
+  .dep-table td {
+    padding: 7px 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    color: var(--off-white);
+    vertical-align: top;
+  }
+  .dep-table tr:hover td { background: rgba(255,255,255,0.03); }
+  .dep-table .dep-day  { color: var(--gray-light); white-space: nowrap; }
+  .dep-table .dep-time { color: var(--gold-dim); white-space: nowrap; font-family: monospace; }
+  .dep-table .dep-count {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--navy);
+    font-weight: 800;
+    font-size: 0.65rem;
+    padding: 1px 7px;
+    border-radius: 10px;
+  }
+  .dep-table .dep-people {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 3px;
+  }
+  .dep-table .dep-person {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 10px;
+    padding: 1px 8px;
+    font-size: 0.66rem;
+    color: var(--off-white);
+  }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    text-align: center;
+    padding: 16px;
+    margin-top: 20px;
+    font-size: 0.72rem;
+    color: var(--gray-light);
+    border-top: 1px solid rgba(255,255,255,0.07);
+  }
+
+  /* ===== PRINT ===== */
+  @media print {
+    body { background: white; color: black; padding: 0; }
+    .page-header { background: #1a1a2e; color: white; }
+    .calendar-wrap { overflow: visible; }
+    .calendar-grid { min-width: unset; }
+    .event[data-tooltip]:hover::before { display: none; }
+    .dep-section { page-break-before: always; }
+  }
+
+  @media (max-width: 900px) {
+    :root { --name-w: 100px; --day-min-w: 140px; }
+    .page-header h1 { font-size: 1.2rem; }
+  }
+
+/* === END CALENDAR STYLES === */
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <h1>VSP Master Calendar</h1>
+    <div class="subtitle">Week of March 30 – April 3, 2026 &nbsp;·&nbsp; Eastern Time</div>
+  </div>
+  <div style="color:var(--gold-dim);font-size:12px;">Last updated: Mon Mar 30, 2026</div>
+</div>
+
+<div class="tab-nav">
+  <button class="tab-btn" id="tab-calendar" onclick="showTab('calendar')">📅 Master Calendar</button>
+  <button class="tab-btn active" id="tab-clients" onclick="showTab('clients')">🤝 Client Facing (16)</button>
+  <button class="tab-btn" id="tab-prospects" onclick="showTab('prospects')">🎯 Prospect Facing (11)</button>
+</div>
+
+<!-- ════════════ MASTER CALENDAR TAB ════════════ -->
+<div class="tab-pane" id="pane-calendar">
+<!-- ===== LEGEND ===== -->
+<div class="legend-bar">
+  <span class="legend-title">Meeting Type:</span>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--client)"></div> Client / External / ESR</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--internal)"></div> Internal Sync / 1:1</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--sales)"></div> Sales / Pipeline</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--allhands)"></div> All-Hands / Company-Wide</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--busy)"></div> Busy / Private</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--personal)"></div> Personal / OOO</div>
+  <div class="legend-item shared"><div class="legend-dot"></div> <strong style="color:var(--gold)">Shared Meeting</strong> (gold border + badge = # attendees)</div>
+</div>
+
+<!-- ===== MAIN CALENDAR GRID ===== -->
+<div class="calendar-wrap">
+<div class="calendar-grid">
+
+  <!-- ===== HEADER ROW ===== -->
+  <div class="col-header name-col">Team Member</div>
+  <div class="col-header"><div class="day-name">Monday</div><div class="day-date">Mar 30</div></div>
+  <div class="col-header"><div class="day-name">Tuesday</div><div class="day-date">Mar 31</div></div>
+  <div class="col-header"><div class="day-name">Wednesday</div><div class="day-date">Apr 1</div></div>
+  <div class="col-header"><div class="day-name">Thursday</div><div class="day-date">Apr 2</div></div>
+  <div class="col-header"><div class="day-name">Friday</div><div class="day-date">Apr 3</div></div>
+
+  <!-- ===================================================== -->
+  <!-- ANDREI LAZA                                            -->
+  <!-- ===================================================== -->
+  <div class="person-name-cell">
+    <div class="p-name">Andrei Laza</div>
+    <div class="p-tz">EET (Bucharest)</div>
+  </div>
+
+  <!-- Laza Mon -->
+  <div class="day-cell">
+    <div class="event allhands shared" data-badge="×2" data-tooltip="Shared with: Vlad Damian">
+      <span class="evt-time">8:00 AM</span>
+      <span class="evt-title">CP &amp; DODs SDD Roll-Out</span>
+    </div>
+    <div class="event client shared" data-badge="×2" data-tooltip="Shared with: Vlad Damian">
+      <span class="evt-time">9:30 AM</span>
+      <span class="evt-title">ESR: 10Talents – VSP</span>
+    </div>
+    <div class="event internal shared" data-badge="×2" data-tooltip="Shared with: Vlad Damian">
+      <span class="evt-time">10:00 AM</span>
+      <span class="evt-title">Laza⟺Vlad SDD KickOff Template</span>
+    </div>
+    <div class="event client shared" data-badge="×2" data-tooltip="Shared with: Vlad Damian">
+      <span class="evt-time">10:30 AM</span>
+      <span class="evt-title">Rubicon + Victory Square – ESR</span>
+    </div>
+    <div class="event client shared" data-badge="×2" data-tooltip="Shared with: Vlad Damian">
+      <span class="evt-time">11:00 AM</span>
+      <span class="evt-title">Altumint + Victory Square – ESR</span>
+    </div>
+  </div>
+
+  <!-- Laza Tue -->
+  <div class="day-cell">
+    <div class="event allhands shared" data-badge="×4" data-tooltip="Shared with: Matt Walnock, Paul Doman, Vlad Damian">
+      <span class="evt-time">7:00 AM</span>
+      <span class="evt-title">Team Creation Meeting</span>
+    </div>
+    <div class="event client shared" data-badge="×2" data-tooltip="Shared with: Vlad Damian">
+      <span class="evt-time">8:00 AM</span>
+      <span class="evt-title">MZ «» VSP</span>
+    </div>
+    <div class="event sales shared" data-badge="×5" data-tooltip="Shared with: Maria Schwendinger, Matt Walnock, Paul Doman, Tim Davenport">
+      <span class="evt-time">8:30 AM</span>
+      <span class="evt-title">Sales Weekly SOB</span>
+    </div>
+    <div class="event internal shared" data-badge="×2" data-tooltip="Shared with: Vlad Damian">
+      <span class="evt-time">9:00 AM</span>
+      <span class="evt-title">10T-VSP – Travel Plans</span>
+    </div>
+    <div class="event allhands shared" data-badge="×6" data-tooltip="Shared with: Maria, Matt, Tim, Vlad, Katie (busy)">
+      <span class="evt-time">9:30 AM</span>
+      <span class="evt-title">Session After Action Report</span>
+    </div>
+    <div class="event client">
+      <span class="evt-time">10:00 AM</span>
+      <span class="evt-title">ESR: Permanent &amp; Victory Square</span>
+    </div>
+    <div class="event internal shared" data-badge="×2" data-tooltip="Shared with: Paul Doman">
+      <span class="evt-time">10:30 AM</span>
+      <span class="evt-title">Laza/Paul 1:1</span>
+    </div>
+    <div class="event client shared" data-badge="×2" data-tooltip="Shared with: Vlad Damian">
+      <span class="evt-time">11:00 AM</span>
+      <span class="evt-title">Meetingz «» VSP // Expansion</span>
+    </div>
+    <div class="event sales">
+      <span class="evt-time">11:00 AM</span>
+      <span class="evt-title">Biweekly SaaS Demo by VS</span>
+    </div>
+  </div>
+
+  <!-- Laza Wed -->
+  <div class="day-cell">
+    <div class="event client">
+      <span class="evt-time">10:00 AM</span>
+      <span class="evt-title">ESR: PerformYard ⟺ VSP</span>
+    </div>
+    <div class="event client">
+      <span class="evt-time">11:00 AM</span>
+      <span class="evt-title">ESR: Bricklayer + VSP</span>
+    </div>
+  </div>
+
+  <!-- Laza Thu -->
+  <div class="day-cell">
+    <div class="event allhands shared" data-badge="×4" data-tooltip="Shared with: Maria, Matt, Vlad">
+      <span class="evt-time">2:30 AM</span>
+      <span class="evt-title">AI Office Hours (morning)</span>
+    </div>
+    <div class="event allhands shared" data-badge="×4" data-tooltip="Shared with: Maria, Matt, Vlad">
+      <span class="evt-time">6:00 AM</span>
+      <span class="evt-title">Workshop: Navigating Change – Pt 2</span>
+    </div>
+    <div class="event allhands shared" data-badge="×5" data-tooltip="Shared with: Maria, Matt, Paul, Vlad">
+      <span class="evt-time">7:30 AM</span>
+      <span class="evt-title">All Hands Follow Up Meeting</span>
+    </div>
+    <div class="event client shared" data-badge="×2" data-tooltip="Shared with: Vlad Damian">
+      <span class="evt-time">9:00 AM</span>
+      <span class="evt-title">ESR Meetingz</span>
+    </div>
+  </div>
+
+  <!-- Laza Fri -->
+  <div class="day-cell">
+    <div class="event client">
+      <span class="evt-time">9:30 AM</span>
+      <span class="evt-title">ESR: DrayNow + Victory Square</span>
+    </div>
+  </div>
+
+  <!-- ===================================================== -->
+  <!-- KATIE CONAWAY                                          -->
+  <!-- ===================================================== -->
+  <div class="person-name-cell">
+    <div class="p-name">Katie Conaway</div>
+  </div>
+
+  <!-- Katie Mon -->
+  <div class="day-cell">
+    <div class="event busy"><span class="evt-time">7:00 AM</span><span class="evt-title">BUSY</span></div>
+    <div class="event busy"><span class="evt-time">7:00–7:30 AM</span><span class="evt-title">BUSY</span></div>
+    <div class="event busy"><span class="evt-time">7:30–8:00 AM</span><span class="evt-title">BUSY</span></div>
+    <div class="event busy"><span class="evt-time">8:00–8:30 AM</span><span class="evt-title">BUSY</span></div>
+    <div class="event busy"><span class="evt-time">11:30 AM–12:00 PM</span><span class="evt-title">BUSY</span></div>
+    <div class="event busy shared" data-badge="×2" data-tooltip="Shared with: Maria Schwendinger">
+      <span class="evt-time">12:30–1:00 PM</span>
+      <span class="evt-title">BUSY (Maria/Katie)</span>
+    </div>
+    <div class="event busy"><span class="evt-time">1:00–2:00 PM</span><span class="evt-title">BUSY</span></div>
+  </div>
+
+  <!-- Katie Tue -->
+  <div class="day-cell">
+    <div class="event busy"><span class="evt-time">7:00–8:30 AM</span><span class="evt-title">BUSY</span></div>
+    <div class="event busy"><span class="evt-time">7:30–8:00 AM</span><span class="evt-title">BUSY</span></div>
+    <div class="event busy shared" data-badge="×6" data-tooltip="Session After Action Report — Shared with: Laza, Maria, Matt, Tim, Vlad">
+      <span class="evt-time">9:30–10:30 AM</span>
+      <span class="evt-title">BUSY (Session AAR)</span>
+    </div>
+    <div class="event busy"><span class="evt-time">10:45–11:15 AM</span><span class="evt-title">BUSY</span></div>
+    <div class="event busy"><span class="evt-time">5:00–6:00 PM</span><span class="evt-title">BUSY</span></div>
+  </div>
+
+  <!-- Katie Wed -->
+  <div class="day-cell">
+    <div class="event busy"><span class="evt-time">7:30–8:30 AM</span><span class="evt-title">BUSY</span></div>
+    <div class="event busy"><span class="evt-time">8:00–8:30 AM</span><span class="evt-title">BUSY</span></div>
+    <div class="event busy"><span class="evt-time">8:30–8:45 AM</span><span class="evt-title">BUSY</span></div>
+    <div class="event busy"><span class="evt-time">9:30–11:00 AM</span><span class="evt-title">BUSY</span></div>
+    <div class="event busy"><span class="evt-time">10:00–10:30 AM</span><span class="evt-title">BUSY</span></div>
+    <div class="event busy"><span class="evt-time">11:00 AM–12:30 PM</span><span class="evt-title">BUSY</span></div>
+  </div>
+
+  <!-- Katie Thu -->
+  <div class="day-cell">
+    <div class="event busy"><span class="evt-time">7:00–7:30 AM</span><span class="evt-title">BUSY</span></div>
+    <div class="event busy"><span class="evt-time">7:30–8:30 AM</span><span class="evt-title">BUSY</span></div>
+    <div class="event busy"><span class="evt-time">12:00–4:00 PM</span><span class="evt-title">BUSY (block)</span></div>
+  </div>
+
+  <!-- Katie Fri -->
+  <div class="day-cell">
+    <div style="color:var(--gray-light);font-size:0.7rem;padding:4px;font-style:italic;">No events</div>
+  </div>
+
+  <!-- ===================================================== -->
+  <!-- MARIA SCHWENDINGER                                     -->
+  <!-- ===================================================== -->
+  <div class="person-name-cell">
+    <div class="p-name">Maria Schwendinger</div>
+  </div>
+
+  <!-- Maria Mon -->
+  <div class="day-cell">
+    <div class="event internal shared" data-badge="×2" data-tooltip="Shared with: Paul Doman">
+      <span class="evt-time">9:30 AM</span>
+      <span class="evt-title">Paul / Maria</span>
+    </div>
+    <div class="event internal shared" data-badge="×2" data-tooltip="Shared with: Katie Conaway">
+      <span class="evt-time">12:30 PM</span>
+      <span class="evt-title">Maria / Katie</span>
+    </div>
+    <div class="event internal">
+      <span class="evt-time">2:15 PM</span>
+      <span class="evt-title">Paul/Maria Take 2</span>
+    </div>
+  </div>
+
+  <!-- Maria Tue -->
+  <div class="day-cell">
+    <div class="event sales shared" data-badge="×5" data-tooltip="Shared with: Laza, Matt, Paul, Tim">
+      <span class="evt-time">8:30 AM</span>
+      <span class="evt-title">Sales Weekly SOB</span>
+    </div>
+    <div class="event allhands shared" data-badge="×6" data-tooltip="Shared with: Laza, Matt, Tim, Vlad, Katie (busy)">
+      <span class="evt-time">9:30 AM</span>
+      <span class="evt-title">Session After Action Report</span>
+    </div>
+  </div>
+
+  <!-- Maria Wed -->
+  <div class="day-cell">
+    <div class="event client">
+      <span class="evt-time">10:00 AM</span>
+      <span class="evt-title">VSP Summit &amp; Van Bram</span>
+    </div>
+  </div>
+
+  <!-- Maria Thu -->
+  <div class="day-cell">
+    <div class="event allhands shared" data-badge="×4" data-tooltip="Shared with: Laza, Matt, Vlad">
+      <span class="evt-time">2:30 AM</span>
+      <span class="evt-title">AI Office Hours (morning)</span>
+    </div>
+    <div class="event allhands shared" data-badge="×4" data-tooltip="Shared with: Laza, Matt, Vlad">
+      <span class="evt-time">6:00 AM</span>
+      <span class="evt-title">Workshop: Navigating Change – Pt 2</span>
+    </div>
+    <div class="event allhands shared" data-badge="×5" data-tooltip="Shared with: Laza, Matt, Paul, Vlad">
+      <span class="evt-time">7:30 AM</span>
+      <span class="evt-title">All Hands Follow Up Meeting</span>
+    </div>
+  </div>
+
+  <!-- Maria Fri -->
+  <div class="day-cell ooo-day">
+    <div class="ooo-banner good-friday">US Office Closed — Good Friday</div>
+    <div class="event busy"><span class="evt-time">9:30 AM</span><span class="evt-title">BUSY</span></div>
+    <div class="event internal"><span class="evt-time">11:30 AM</span><span class="evt-title">Receipt Collection</span></div>
+  </div>
+
+  <!-- ===================================================== -->
+  <!-- MARIUS BANICI                                          -->
+  <!-- ===================================================== -->
+  <div class="person-name-cell">
+    <div class="p-name">Marius Banici</div>
+    <div class="p-tz">EET (Bucharest)</div>
+  </div>
+
+  <!-- Marius Mon (all busy) -->
+  <div class="day-cell">
+    <div class="event busy"><span class="evt-time">8:00–9:30 AM</span><span class="evt-title">BUSY</span></div>
+    <div class="event busy"><span class="evt-time">10:00–10:15 AM</span><span class="evt-title">BUSY</span></div>
+    <div class="event busy"><span class="evt-time">12:00–12:30 PM</span><span class="evt-title">BUSY</span></div>
+    <div class="event busy"><span class="evt-time">2:30–3:00 PM</span><span class="evt-title">BUSY</span></div>
+    <div class="event busy"><span class="evt-time">3:00–4:30 PM</span><span class="evt-title">BUSY</span></div>
+    <div class="event busy"><span class="evt-time">3:30–4:00 PM</span><span class="evt-title">BUSY</span></div>
+  </div>
+
+  <!-- Marius Tue -->
+  <div class="day-cell">
+    <div class="event busy"><span class="evt-time">7:00–8:30 AM</span><span class="evt-title">BUSY</span></div>
+    <div class="event busy"><span class="evt-time">7:30–8:00 AM</span><span class="evt-title">BUSY</span></div>
+    <div class="event busy"><span class="evt-time">9:30–10:30 AM</span><span class="evt-title">BUSY</span></div>
+    <div class="event busy"><span class="evt-time">10:00–10:15 AM</span><span class="evt-title">BUSY</span></div>
+    <div class="event busy"><span class="evt-time">10:30–11:00 AM</span><span class="evt-title">BUSY</span></div>
+    <div class="event busy"><span class="evt-time">11:00 AM–12:00 PM</span><span class="evt-title">BUSY</span></div>
+    <div class="event busy"><span class="evt-time">11:30 AM–12:30 PM</span><span class="evt-title">BUSY</span></div>
+    <div class="event busy"><span class="evt-time">1:00–1:15 PM</span><span class="evt-title">BUSY</span></div>
+    <div class="event busy"><span class="evt-time">2:30–3:00 PM</span><span class="evt-title">BUSY</span></div>
+    <div class="event busy"><span class="evt-time">3:30–4:00 PM</span><span class="evt-title">BUSY</span></div>
+    <div class="event busy"><span class="evt-time">4:00–5:00 PM</span><span class="evt-title">BUSY</span></div>
+    <div class="event busy"><span class="evt-time">5:05–6:35 PM</span><span class="evt-title">BUSY</span></div>
+  </div>
+
+  <!-- Marius Wed -->
+  <div class="day-cell">
+    <div class="event busy"><span class="evt-time">8:00–9:00 AM</span><span class="evt-title">BUSY</span></div>
+    <div class="event busy"><span class="evt-time">9:30–11:00 AM</span><span class="evt-title">BUSY</span></div>
+    <div class="event busy"><span class="evt-time">10:00–10:15 AM</span><span class="evt-title">BUSY</span></div>
+    <div class="event busy"><span class="evt-time">11:00 AM–12:30 PM</span><span class="evt-title">BUSY</span></div>
+    <div class="event busy"><span class="evt-time">2:30–3:00 PM</span><span class="evt-title">BUSY</span></div>
+    <div class="event busy"><span class="evt-time">3:30–4:00 PM</span><span class="evt-title">BUSY</span></div>
+  </div>
+
+  <!-- Marius Thu -->
+  <div class="day-cell">
+    <div class="event busy"><span class="evt-time">6:00–7:00 AM</span><span class="evt-title">BUSY</span></div>
+    <div class="event busy"><span class="evt-time">7:30–8:30 AM</span><span class="evt-title">BUSY</span></div>
+    <div class="event busy"><span class="evt-time">9:00–10:00 AM</span><span class="evt-title">BUSY (×2)</span></div>
+    <div class="event busy"><span class="evt-time">10:00–10:15 AM</span><span class="evt-title">BUSY</span></div>
+    <div class="event busy"><span class="evt-time">11:00 AM–3:00 PM</span><span class="evt-title">BUSY (block)</span></div>
+    <div class="event busy"><span class="evt-time">2:30–4:00 PM</span><span class="evt-title">BUSY (multiple)</span></div>
+    <div class="event busy"><span class="evt-time">3:30–4:00 PM</span><span class="evt-title">BUSY</span></div>
+  </div>
+
+  <!-- Marius Fri -->
+  <div class="day-cell">
+    <div class="event busy"><span class="evt-time">6:00–7:30 AM</span><span class="evt-title">BUSY</span></div>
+    <div class="event busy"><span class="evt-time">9:00–10:00 AM</span><span class="evt-title">BUSY</span></div>
+    <div class="event busy"><span class="evt-time">2:30–4:00 PM</span><span class="evt-title">BUSY (multiple)</span></div>
+    <div class="event busy"><span class="evt-time">3:30–4:00 PM</span><span class="evt-title">BUSY</span></div>
+  </div>
+
+  <!-- ===================================================== -->
+  <!-- MATTHEW WALNOCK                                        -->
+  <!-- ===================================================== -->
+  <div class="person-name-cell">
+    <div class="p-name">Matthew Walnock</div>
+  </div>
+
+  <!-- Matt Mon -->
+  <div class="day-cell">
+    <div class="event internal"><span class="evt-time">8:00 AM</span><span class="evt-title">Anya Prep</span></div>
+    <div class="event internal"><span class="evt-time">9:00 AM</span><span class="evt-title">Matt/Does</span></div>
+    <div class="event internal"><span class="evt-time">9:45 AM</span><span class="evt-title">Socratic Env</span></div>
+    <div class="event client"><span class="evt-time">10:00 AM</span><span class="evt-title">SixMap⟺VictorySquare Backlog Refinement</span></div>
+    <div class="event client"><span class="evt-time">10:30 AM</span><span class="evt-title">SixMap⟺VictorySquare Stand-up</span></div>
+    <div class="event client shared" data-badge="×2" data-tooltip="Shared with: Paul Doman">
+      <span class="evt-time">11:30 AM</span>
+      <span class="evt-title">Softledger &amp; VSP</span>
+    </div>
+    <div class="event internal shared" data-badge="×2" data-tooltip="Shared with: Paul Doman">
+      <span class="evt-time">1:00 PM</span>
+      <span class="evt-title">Matt/Paul 1:1</span>
+    </div>
+    <div class="event internal"><span class="evt-time">1:30 PM</span><span class="evt-title">Gauntlet</span></div>
+    <div class="event internal shared" data-badge="×2" data-tooltip="Shared with: Paul Doman (+ Tyler)">
+      <span class="evt-time">3:00 PM</span>
+      <span class="evt-title">Paul/Tyler/Matt</span>
+    </div>
+    <div class="event busy"><span class="evt-time">3:30 PM</span><span class="evt-title">HOLD for Greg</span></div>
+  </div>
+
+  <!-- Matt Tue -->
+  <div class="day-cell">
+    <div class="event allhands shared" data-badge="×4" data-tooltip="Shared with: Laza, Paul, Vlad">
+      <span class="evt-time">7:00 AM</span>
+      <span class="evt-title">Team Creation Meeting</span>
+    </div>
+    <div class="event internal"><span class="evt-time">7:45 AM</span><span class="evt-title">SixMap Internal Quick Sync</span></div>
+    <div class="event sales shared" data-badge="×5" data-tooltip="Shared with: Laza, Maria, Paul, Tim">
+      <span class="evt-time">8:30 AM</span>
+      <span class="evt-title">Sales Weekly SOB</span>
+    </div>
+    <div class="event allhands shared" data-badge="×6" data-tooltip="Shared with: Laza, Maria, Tim, Vlad, Katie (busy)">
+      <span class="evt-time">9:30 AM</span>
+      <span class="evt-title">Session After Action Report</span>
+    </div>
+    <div class="event internal"><span class="evt-time">10:00 AM</span><span class="evt-title">Meet/Greet: Matt/Jon (PSU Reunion)</span></div>
+    <div class="event client"><span class="evt-time">10:30 AM</span><span class="evt-title">SixMap⟺VictorySquare Stand-up</span></div>
+    <div class="event client shared" data-badge="×2" data-tooltip="Shared with: Paul Doman">
+      <span class="evt-time">12:30 PM</span>
+      <span class="evt-title">Blueprint Equity &amp; Victory Square</span>
+    </div>
+    <div class="event focus"><span class="evt-time">2:00 PM</span><span class="evt-title">Focus</span></div>
+    <div class="event client"><span class="evt-time">3:00 PM</span><span class="evt-title">Arc 2 ⟺ VSP Sync</span></div>
+  </div>
+
+  <!-- Matt Wed -->
+  <div class="day-cell">
+    <div class="event allhands shared" data-badge="×2" data-tooltip="Shared with: Vlad Damian">
+      <span class="evt-time">7:30 AM</span>
+      <span class="evt-title">AI TF</span>
+    </div>
+    <div class="event internal"><span class="evt-time">7:45 AM</span><span class="evt-title">SixMap Internal Quick Sync</span></div>
+    <div class="event client"><span class="evt-time">8:30 AM</span><span class="evt-title">SDD for Prism PPM</span></div>
+    <div class="event internal"><span class="evt-time">9:00 AM</span><span class="evt-title">Dani ⟺ Matt Sync</span></div>
+    <div class="event internal shared" data-badge="×4" data-tooltip="Shared with: Paul, Tim, Vlad">
+      <span class="evt-time">9:30 AM</span>
+      <span class="evt-title">State of Delivery</span>
+    </div>
+    <div class="event internal shared" data-badge="×2" data-tooltip="Shared with: Vlad Damian">
+      <span class="evt-time">10:15 AM</span>
+      <span class="evt-title">MV</span>
+    </div>
+    <div class="event client"><span class="evt-time">10:30 AM</span><span class="evt-title">SixMap⟺VictorySquare Stand-up</span></div>
+    <div class="event allhands shared" data-badge="×4" data-tooltip="Shared with: Paul, Tim, Vlad">
+      <span class="evt-time">11:00 AM</span>
+      <span class="evt-title">Farm Team</span>
+    </div>
+    <div class="event client shared" data-badge="×2" data-tooltip="Shared with: Paul Doman">
+      <span class="evt-time">12:30 PM</span>
+      <span class="evt-title">Aprio &amp; VSP</span>
+    </div>
+    <div class="event focus"><span class="evt-time">2:00 PM</span><span class="evt-title">Focus</span></div>
+  </div>
+
+  <!-- Matt Thu -->
+  <div class="day-cell">
+    <div class="event allhands shared" data-badge="×4" data-tooltip="Shared with: Laza, Maria, Vlad">
+      <span class="evt-time">2:30 AM</span>
+      <span class="evt-title">AI Office Hours (morning)</span>
+    </div>
+    <div class="event allhands shared" data-badge="×4" data-tooltip="Shared with: Laza, Maria, Vlad">
+      <span class="evt-time">6:00 AM</span>
+      <span class="evt-title">Workshop: Navigating Change – Pt 2</span>
+    </div>
+    <div class="event allhands shared" data-badge="×5" data-tooltip="Shared with: Laza, Maria, Paul, Vlad">
+      <span class="evt-time">7:30 AM</span>
+      <span class="evt-title">All Hands Follow Up Meeting</span>
+    </div>
+    <div class="event internal"><span class="evt-time">7:45 AM</span><span class="evt-title">SixMap Internal Quick Sync</span></div>
+    <div class="event client"><span class="evt-time">10:00 AM</span><span class="evt-title">ESR: PrismPPM – Victory Square</span></div>
+    <div class="event client"><span class="evt-time">10:30 AM</span><span class="evt-title">SixMap⟺VictorySquare Stand-up</span></div>
+    <div class="event focus"><span class="evt-time">2:00 PM</span><span class="evt-title">Focus</span></div>
+  </div>
+
+  <!-- Matt Fri -->
+  <div class="day-cell">
+    <div class="event focus"><span class="evt-time">6:00 AM</span><span class="evt-title">Focus</span></div>
+    <div class="event internal"><span class="evt-time">7:45 AM</span><span class="evt-title">SixMap Internal Quick Sync</span></div>
+    <div class="event internal"><span class="evt-time">10:30 AM</span><span class="evt-title">Matt–Marius 1:1</span></div>
+  </div>
+
+  <!-- ===================================================== -->
+  <!-- PAUL DOMAN                                             -->
+  <!-- ===================================================== -->
+  <div class="person-name-cell">
+    <div class="p-name">Paul Doman</div>
+  </div>
+
+  <!-- Paul Mon -->
+  <div class="day-cell">
+    <div class="event internal"><span class="evt-time">8:00 AM</span><span class="evt-title">CEO-COO Weekly Sync</span></div>
+    <div class="event internal shared" data-badge="×2" data-tooltip="Shared with: Maria Schwendinger">
+      <span class="evt-time">9:30 AM</span>
+      <span class="evt-title">Paul / Maria</span>
+    </div>
+    <div class="event client shared" data-badge="×2" data-tooltip="Shared with: Vlad Damian">
+      <span class="evt-time">10:30 AM</span>
+      <span class="evt-title">YourHealthPro &amp; Victory Square</span>
+    </div>
+    <div class="event client shared" data-badge="×2" data-tooltip="Shared with: Matt Walnock">
+      <span class="evt-time">11:30 AM</span>
+      <span class="evt-title">Softledger &amp; VSP</span>
+    </div>
+    <div class="event internal"><span class="evt-time">12:00 PM</span><span class="evt-title">Finance Salaries Discussion</span></div>
+    <div class="event internal"><span class="evt-time">12:30 PM</span><span class="evt-title">Paul / Marius</span></div>
+    <div class="event internal shared" data-badge="×2" data-tooltip="Shared with: Matt Walnock">
+      <span class="evt-time">1:00 PM</span>
+      <span class="evt-title">Matt/Paul 1:1</span>
+    </div>
+    <div class="event client"><span class="evt-time">1:30 PM</span><span class="evt-title">Bear Analytics &amp; VSP</span></div>
+    <div class="event internal shared" data-badge="×2" data-tooltip="Shared with: Matt Walnock (+ Tyler)">
+      <span class="evt-time">3:00 PM</span>
+      <span class="evt-title">Paul/Tyler/Matt</span>
+    </div>
+    <div class="event allhands"><span class="evt-time">4:00 PM</span><span class="evt-title">Tyler/Paul/Matt Weir — WORLD DOMINATION</span></div>
+  </div>
+
+  <!-- Paul Tue -->
+  <div class="day-cell">
+    <div class="event allhands shared" data-badge="×4" data-tooltip="Shared with: Laza, Matt, Vlad">
+      <span class="evt-time">7:00 AM</span>
+      <span class="evt-title">Team Creation Meeting</span>
+    </div>
+    <div class="event sales shared" data-badge="×5" data-tooltip="Shared with: Laza, Maria, Matt, Tim">
+      <span class="evt-time">8:30 AM</span>
+      <span class="evt-title">Sales Weekly SOB</span>
+    </div>
+    <div class="event allhands shared" data-badge="×6" data-tooltip="Shared with: Laza, Maria, Matt, Tim, Vlad, Katie (busy)">
+      <span class="evt-time">9:30 AM</span>
+      <span class="evt-title">Session After Action Report</span>
+    </div>
+    <div class="event internal shared" data-badge="×2" data-tooltip="Shared with: Andrei Laza">
+      <span class="evt-time">10:30 AM</span>
+      <span class="evt-title">Napa Legal AI sync + Laza/Paul 1:1</span>
+    </div>
+    <div class="event client shared" data-badge="×2" data-tooltip="Shared with: Vlad Damian">
+      <span class="evt-time">11:00 AM</span>
+      <span class="evt-title">MVP</span>
+    </div>
+    <div class="event client shared" data-badge="×2" data-tooltip="Shared with: Matt Walnock">
+      <span class="evt-time">12:30 PM</span>
+      <span class="evt-title">Blueprint Equity &amp; Victory Square</span>
+    </div>
+    <div class="event internal"><span class="evt-time">1:30 PM</span><span class="evt-title">Daniel Peake &amp; Paul Doman</span></div>
+    <div class="event internal"><span class="evt-time">2:00 PM</span><span class="evt-title">Todd &amp; Paul</span></div>
+    <div class="event personal"><span class="evt-time">3:00 PM</span><span class="evt-title">Dentist</span></div>
+    <div class="event client"><span class="evt-time">4:00 PM</span><span class="evt-title">Fugio &amp; VSP</span></div>
+    <div class="event internal"><span class="evt-time">5:00 PM</span><span class="evt-title">Luke Sanborn &amp; Paul Doman</span></div>
+  </div>
+
+  <!-- Paul Wed -->
+  <div class="day-cell">
+    <div class="event internal"><span class="evt-time">8:00 AM</span><span class="evt-title">Marius/Paul: Prep for All Hands</span></div>
+    <div class="event internal"><span class="evt-time">9:00 AM</span><span class="evt-title">Krisztina/Paul 1:1</span></div>
+    <div class="event internal shared" data-badge="×4" data-tooltip="Shared with: Matt, Tim, Vlad">
+      <span class="evt-time">9:30 AM</span>
+      <span class="evt-title">State of Delivery</span>
+    </div>
+    <div class="event allhands shared" data-badge="×4" data-tooltip="Shared with: Matt, Tim, Vlad">
+      <span class="evt-time">11:00 AM</span>
+      <span class="evt-title">Paul/Tyler/Ed Paperwork + Farm Team</span>
+    </div>
+    <div class="event client shared" data-badge="×2" data-tooltip="Shared with: Matt Walnock">
+      <span class="evt-time">12:30 PM</span>
+      <span class="evt-title">Aprio &amp; VSP</span>
+    </div>
+    <div class="event internal"><span class="evt-time">1:00 PM</span><span class="evt-title">Kyle &amp; Paul</span></div>
+    <div class="event client"><span class="evt-time">1:30 PM</span><span class="evt-title">Arena CX &amp; Paul Doman</span></div>
+    <div class="event client"><span class="evt-time">2:30 PM</span><span class="evt-title">Stephanie &amp; Victory Square</span></div>
+    <div class="event internal"><span class="evt-time">4:00 PM</span><span class="evt-title">St Joseph's Mastermind</span></div>
+  </div>
+
+  <!-- Paul Thu -->
+  <div class="day-cell ooo-day">
+    <div class="ooo-banner">US Unlimited PTO</div>
+    <div class="event allhands shared" data-badge="×5" data-tooltip="Shared with: Laza, Maria, Matt, Vlad">
+      <span class="evt-time">7:30 AM</span>
+      <span class="evt-title">All Hands Follow Up Meeting</span>
+    </div>
+    <div class="event personal">
+      <span class="evt-time">8:00 AM</span>
+      <span class="evt-title">Holy Thursday</span>
+    </div>
+  </div>
+
+  <!-- Paul Fri -->
+  <div class="day-cell ooo-day">
+    <div class="ooo-banner good-friday">US Office Closed — Good Friday</div>
+    <div class="event client"><span class="evt-time">9:00 AM</span><span class="evt-title">ESR: BlackCloak + VSP</span></div>
+    <div class="event internal"><span class="evt-time">2:00 PM</span><span class="evt-title">Jeff &amp; Paul</span></div>
+  </div>
+
+  <!-- ===================================================== -->
+  <!-- TIM DAVENPORT                                          -->
+  <!-- ===================================================== -->
+  <div class="person-name-cell">
+    <div class="p-name">Tim Davenport</div>
+  </div>
+
+  <!-- Tim Mon -->
+  <div class="day-cell ooo-day">
+    <div class="ooo-banner">Spring Break — Virgin Gorda, BVI</div>
+  </div>
+
+  <!-- Tim Tue -->
+  <div class="day-cell ooo-day">
+    <div class="ooo-banner">Spring Break — Virgin Gorda, BVI</div>
+    <div class="event sales shared" data-badge="×5" data-tooltip="Shared with: Laza, Maria, Matt, Paul">
+      <span class="evt-time">8:30 AM</span>
+      <span class="evt-title">Sales Weekly SOB</span>
+    </div>
+    <div class="event allhands shared" data-badge="×6" data-tooltip="Shared with: Laza, Maria, Matt, Vlad, Katie (busy)">
+      <span class="evt-time">9:30 AM</span>
+      <span class="evt-title">Session After Action Report</span>
+    </div>
+  </div>
+
+  <!-- Tim Wed -->
+  <div class="day-cell ooo-day">
+    <div class="ooo-banner">Spring Break — Virgin Gorda, BVI</div>
+    <div class="event internal shared" data-badge="×4" data-tooltip="Shared with: Matt, Paul, Vlad">
+      <span class="evt-time">9:30 AM</span>
+      <span class="evt-title">State of Delivery</span>
+    </div>
+    <div class="event allhands shared" data-badge="×4" data-tooltip="Shared with: Matt, Paul, Vlad">
+      <span class="evt-time">11:00 AM</span>
+      <span class="evt-title">Farm Team</span>
+    </div>
+  </div>
+
+  <!-- Tim Thu -->
+  <div class="day-cell ooo-day">
+    <div class="ooo-banner">Spring Break — Virgin Gorda, BVI</div>
+    <div class="event client"><span class="evt-time">9:00 AM</span><span class="evt-title">Victory Square ⟺ Van Bram Standup</span></div>
+    <div class="event personal"><span class="evt-time">4:45 PM</span><span class="evt-title">✈ Flight UA 1445 STT→IAD</span></div>
+  </div>
+
+  <!-- Tim Fri -->
+  <div class="day-cell ooo-day">
+    <div class="ooo-banner">Spring Break — Virgin Gorda, BVI</div>
+  </div>
+
+  <!-- ===================================================== -->
+  <!-- VLAD DAMIAN                                            -->
+  <!-- ===================================================== -->
+  <div class="person-name-cell">
+    <div class="p-name">Vlad Damian</div>
+    <div class="p-tz">EET (Bucharest)</div>
+  </div>
+
+  <!-- Vlad Mon -->
+  <div class="day-cell">
+    <div class="event internal"><span class="evt-time">3:00 AM</span><span class="evt-title">Smooth Operators Weekly Sync</span></div>
+    <div class="event internal"><span class="evt-time">4:30 AM</span><span class="evt-title">Coman and Vlad</span></div>
+    <div class="event allhands shared" data-badge="×2" data-tooltip="Shared with: Andrei Laza">
+      <span class="evt-time">8:00 AM</span>
+      <span class="evt-title">CP &amp; DODs SDD Roll-Out</span>
+    </div>
+    <div class="event internal"><span class="evt-time">9:00 AM</span><span class="evt-title">Matt/Does</span></div>
+    <div class="event client shared" data-badge="×2" data-tooltip="Shared with: Andrei Laza">
+      <span class="evt-time">9:30 AM</span>
+      <span class="evt-title">ESR: 10Talents – VSP</span>
+    </div>
+    <div class="event internal shared" data-badge="×2" data-tooltip="Shared with: Andrei Laza">
+      <span class="evt-time">10:00 AM</span>
+      <span class="evt-title">Laza⟺Vlad SDD KickOff Template</span>
+    </div>
+    <div class="event client shared" data-badge="×2" data-tooltip="Shared with: Paul Doman">
+      <span class="evt-time">10:30 AM</span>
+      <span class="evt-title">YourHealthPro &amp; Victory Square + Rubicon ESR</span>
+    </div>
+    <div class="event client shared" data-badge="×2" data-tooltip="Shared with: Andrei Laza">
+      <span class="evt-time">11:00 AM</span>
+      <span class="evt-title">Altumint + Victory Square – ESR</span>
+    </div>
+  </div>
+
+  <!-- Vlad Tue -->
+  <div class="day-cell">
+    <div class="event internal"><span class="evt-time">2:30 AM</span><span class="evt-title">Vlad:Dana</span></div>
+    <div class="event internal"><span class="evt-time">4:00 AM</span><span class="evt-title">Cata Roncea Appraisal</span></div>
+    <div class="event internal"><span class="evt-time">5:00 AM</span><span class="evt-title">Vlad/Adina Invoice Review</span></div>
+    <div class="event internal"><span class="evt-time">5:45 AM</span><span class="evt-title">Resource Mgmt Meeting</span></div>
+    <div class="event allhands shared" data-badge="×4" data-tooltip="Shared with: Laza, Matt, Paul">
+      <span class="evt-time">7:00 AM</span>
+      <span class="evt-title">Team Creation Meeting</span>
+    </div>
+    <div class="event client shared" data-badge="×2" data-tooltip="Shared with: Andrei Laza">
+      <span class="evt-time">8:00 AM</span>
+      <span class="evt-title">MZ «» VSP</span>
+    </div>
+    <div class="event internal shared" data-badge="×2" data-tooltip="Shared with: Andrei Laza">
+      <span class="evt-time">9:00 AM</span>
+      <span class="evt-title">10T-VSP – Travel Plans</span>
+    </div>
+    <div class="event allhands shared" data-badge="×6" data-tooltip="Shared with: Laza, Maria, Matt, Tim, Katie (busy)">
+      <span class="evt-time">9:30 AM</span>
+      <span class="evt-title">Session After Action Report</span>
+    </div>
+    <div class="event client shared" data-badge="×2" data-tooltip="Shared with: Paul Doman">
+      <span class="evt-time">11:00 AM</span>
+      <span class="evt-title">MVP + Meetingz «» VSP // Expansion</span>
+    </div>
+  </div>
+
+  <!-- Vlad Wed -->
+  <div class="day-cell">
+    <div class="event internal"><span class="evt-time">2:30 AM</span><span class="evt-title">[Delivery] Hands On</span></div>
+    <div class="event internal"><span class="evt-time">3:30 AM</span><span class="evt-title">Vlad / Cristian</span></div>
+    <div class="event internal"><span class="evt-time">4:00 AM</span><span class="evt-title">Vlad / Dorin</span></div>
+    <div class="event internal"><span class="evt-time">5:30 AM</span><span class="evt-title">Ad-Hoc Performance Review</span></div>
+    <div class="event allhands"><span class="evt-time">6:00 AM</span><span class="evt-title">SDD Transformers</span></div>
+    <div class="event allhands shared" data-badge="×2" data-tooltip="Shared with: Matt Walnock">
+      <span class="evt-time">7:30 AM</span>
+      <span class="evt-title">AI TF</span>
+    </div>
+    <div class="event internal shared" data-badge="×4" data-tooltip="Shared with: Matt, Paul, Tim">
+      <span class="evt-time">9:30 AM</span>
+      <span class="evt-title">State of Delivery</span>
+    </div>
+    <div class="event internal shared" data-badge="×2" data-tooltip="Shared with: Matt Walnock">
+      <span class="evt-time">10:15 AM</span>
+      <span class="evt-title">MV</span>
+    </div>
+    <div class="event allhands shared" data-badge="×4" data-tooltip="Shared with: Matt, Paul, Tim">
+      <span class="evt-time">11:00 AM</span>
+      <span class="evt-title">Farm Team</span>
+    </div>
+  </div>
+
+  <!-- Vlad Thu -->
+  <div class="day-cell">
+    <div class="event allhands shared" data-badge="×4" data-tooltip="Shared with: Laza, Maria, Matt + Vlad-Marius catch-up">
+      <span class="evt-time">2:30 AM</span>
+      <span class="evt-title">AI Office Hours + Vlad-Marius Catch-Up</span>
+    </div>
+    <div class="event internal"><span class="evt-time">5:00 AM</span><span class="evt-title">Ade/Vlad</span></div>
+    <div class="event allhands shared" data-badge="×4" data-tooltip="Shared with: Laza, Maria, Matt">
+      <span class="evt-time">6:00 AM</span>
+      <span class="evt-title">Workshop: Navigating Change – Pt 2</span>
+    </div>
+    <div class="event allhands shared" data-badge="×5" data-tooltip="Shared with: Laza, Maria, Matt, Paul">
+      <span class="evt-time">7:30 AM</span>
+      <span class="evt-title">All Hands Follow Up Meeting</span>
+    </div>
+    <div class="event client shared" data-badge="×2" data-tooltip="Shared with: Andrei Laza">
+      <span class="evt-time">9:00 AM</span>
+      <span class="evt-title">ESR Meetingz</span>
+    </div>
+    <div class="event internal"><span class="evt-time">10:30 AM</span><span class="evt-title">Vlad/Matt Weekly Sync</span></div>
+  </div>
+
+  <!-- Vlad Fri -->
+  <div class="day-cell">
+    <div class="event internal"><span class="evt-time">2:30 AM</span><span class="evt-title">Engineering Mgmt Weekly</span></div>
+    <div class="event internal"><span class="evt-time">4:15 AM</span><span class="evt-title">1:1 Vlad/Catalin</span></div>
+    <div class="event allhands"><span class="evt-time">6:00 AM</span><span class="evt-title">Monthly Transformers Meeting</span></div>
+    <div class="event internal"><span class="evt-time">7:00 AM</span><span class="evt-title">Steve/Vlad</span></div>
+    <div class="event internal"><span class="evt-time">7:30 AM</span><span class="evt-title">Vlad/Narcis</span></div>
+    <div class="event client shared" data-badge="×2" data-tooltip="Shared with: Paul Doman">
+      <span class="evt-time">9:00 AM</span>
+      <span class="evt-title">ESR: BlackCloak + VSP</span>
+    </div>
+    <div class="event internal"><span class="evt-time">10:00 AM</span><span class="evt-title">New Link/Vlad Flora</span></div>
+  </div>
+
+</div><!-- end calendar-grid -->
+</div><!-- end calendar-wrap -->
+
+<!-- ===== DEPENDENCY LEGEND TABLE ===== -->
+<div class="dep-section">
+  <h2>Shared Meeting Dependency Map</h2>
+  <div style="overflow-x:auto;">
+  <table class="dep-table">
+    <thead>
+      <tr>
+        <th style="width:60px">#</th>
+        <th style="width:70px">Day</th>
+        <th style="width:80px">Time (ET)</th>
+        <th>Meeting</th>
+        <th style="width:60px">Count</th>
+        <th>Participants</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td class="dep-day">Mon 3/30</td>
+        <td class="dep-time">8:00 AM</td>
+        <td>CP &amp; DODs SDD Roll-Out</td>
+        <td><span class="dep-count">×2</span></td>
+        <td><div class="dep-people"><span class="dep-person">Andrei Laza</span><span class="dep-person">Vlad Damian</span></div></td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td class="dep-day">Mon 3/30</td>
+        <td class="dep-time">9:30 AM</td>
+        <td>Paul / Maria</td>
+        <td><span class="dep-count">×2</span></td>
+        <td><div class="dep-people"><span class="dep-person">Paul Doman</span><span class="dep-person">Maria Schwendinger</span></div></td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td class="dep-day">Mon 3/30</td>
+        <td class="dep-time">9:30 AM</td>
+        <td>ESR: 10Talents – VSP</td>
+        <td><span class="dep-count">×2</span></td>
+        <td><div class="dep-people"><span class="dep-person">Andrei Laza</span><span class="dep-person">Vlad Damian</span></div></td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td class="dep-day">Mon 3/30</td>
+        <td class="dep-time">10:00 AM</td>
+        <td>Laza⟺Vlad SDD KickOff Template</td>
+        <td><span class="dep-count">×2</span></td>
+        <td><div class="dep-people"><span class="dep-person">Andrei Laza</span><span class="dep-person">Vlad Damian</span></div></td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td class="dep-day">Mon 3/30</td>
+        <td class="dep-time">10:30 AM</td>
+        <td>YourHealthPro &amp; Victory Square</td>
+        <td><span class="dep-count">×2</span></td>
+        <td><div class="dep-people"><span class="dep-person">Paul Doman</span><span class="dep-person">Vlad Damian</span></div></td>
+      </tr>
+      <tr>
+        <td>6</td>
+        <td class="dep-day">Mon 3/30</td>
+        <td class="dep-time">10:30 AM</td>
+        <td>Rubicon + Victory Square – ESR</td>
+        <td><span class="dep-count">×2</span></td>
+        <td><div class="dep-people"><span class="dep-person">Andrei Laza</span><span class="dep-person">Vlad Damian</span></div></td>
+      </tr>
+      <tr>
+        <td>7</td>
+        <td class="dep-day">Mon 3/30</td>
+        <td class="dep-time">11:00 AM</td>
+        <td>Altumint + Victory Square – ESR</td>
+        <td><span class="dep-count">×2</span></td>
+        <td><div class="dep-people"><span class="dep-person">Andrei Laza</span><span class="dep-person">Vlad Damian</span></div></td>
+      </tr>
+      <tr>
+        <td>8</td>
+        <td class="dep-day">Mon 3/30</td>
+        <td class="dep-time">11:30 AM</td>
+        <td>Softledger &amp; VSP</td>
+        <td><span class="dep-count">×2</span></td>
+        <td><div class="dep-people"><span class="dep-person">Paul Doman</span><span class="dep-person">Matt Walnock</span></div></td>
+      </tr>
+      <tr>
+        <td>9</td>
+        <td class="dep-day">Mon 3/30</td>
+        <td class="dep-time">12:30 PM</td>
+        <td>Maria / Katie</td>
+        <td><span class="dep-count">×2</span></td>
+        <td><div class="dep-people"><span class="dep-person">Maria Schwendinger</span><span class="dep-person">Katie Conaway</span></div></td>
+      </tr>
+      <tr>
+        <td>10</td>
+        <td class="dep-day">Mon 3/30</td>
+        <td class="dep-time">1:00 PM</td>
+        <td>Matt/Paul 1:1</td>
+        <td><span class="dep-count">×2</span></td>
+        <td><div class="dep-people"><span class="dep-person">Paul Doman</span><span class="dep-person">Matt Walnock</span></div></td>
+      </tr>
+      <tr>
+        <td>11</td>
+        <td class="dep-day">Mon 3/30</td>
+        <td class="dep-time">3:00 PM</td>
+        <td>Paul/Tyler/Matt</td>
+        <td><span class="dep-count">×2+</span></td>
+        <td><div class="dep-people"><span class="dep-person">Paul Doman</span><span class="dep-person">Matt Walnock</span><span class="dep-person">Tyler (external)</span></div></td>
+      </tr>
+      <tr>
+        <td>12</td>
+        <td class="dep-day">Tue 3/31</td>
+        <td class="dep-time">7:00 AM</td>
+        <td>Team Creation Meeting</td>
+        <td><span class="dep-count">×4</span></td>
+        <td><div class="dep-people"><span class="dep-person">Andrei Laza</span><span class="dep-person">Matt Walnock</span><span class="dep-person">Paul Doman</span><span class="dep-person">Vlad Damian</span></div></td>
+      </tr>
+      <tr>
+        <td>13</td>
+        <td class="dep-day">Tue 3/31</td>
+        <td class="dep-time">8:00 AM</td>
+        <td>MZ «» VSP</td>
+        <td><span class="dep-count">×2</span></td>
+        <td><div class="dep-people"><span class="dep-person">Andrei Laza</span><span class="dep-person">Vlad Damian</span></div></td>
+      </tr>
+      <tr>
+        <td>14</td>
+        <td class="dep-day">Tue 3/31</td>
+        <td class="dep-time">8:30 AM</td>
+        <td>Sales Weekly SOB</td>
+        <td><span class="dep-count">×5</span></td>
+        <td><div class="dep-people"><span class="dep-person">Andrei Laza</span><span class="dep-person">Maria Schwendinger</span><span class="dep-person">Matt Walnock</span><span class="dep-person">Paul Doman</span><span class="dep-person">Tim Davenport</span></div></td>
+      </tr>
+      <tr>
+        <td>15</td>
+        <td class="dep-day">Tue 3/31</td>
+        <td class="dep-time">9:00 AM</td>
+        <td>10T-VSP – Travel Plans</td>
+        <td><span class="dep-count">×2</span></td>
+        <td><div class="dep-people"><span class="dep-person">Andrei Laza</span><span class="dep-person">Vlad Damian</span></div></td>
+      </tr>
+      <tr>
+        <td>16</td>
+        <td class="dep-day">Tue 3/31</td>
+        <td class="dep-time">9:30 AM</td>
+        <td>Session After Action Report</td>
+        <td><span class="dep-count">×6</span></td>
+        <td><div class="dep-people"><span class="dep-person">Andrei Laza</span><span class="dep-person">Maria Schwendinger</span><span class="dep-person">Matt Walnock</span><span class="dep-person">Tim Davenport</span><span class="dep-person">Vlad Damian</span><span class="dep-person">Katie (busy)</span></div></td>
+      </tr>
+      <tr>
+        <td>17</td>
+        <td class="dep-day">Tue 3/31</td>
+        <td class="dep-time">10:30 AM</td>
+        <td>Laza/Paul 1:1</td>
+        <td><span class="dep-count">×2</span></td>
+        <td><div class="dep-people"><span class="dep-person">Andrei Laza</span><span class="dep-person">Paul Doman</span></div></td>
+      </tr>
+      <tr>
+        <td>18</td>
+        <td class="dep-day">Tue 3/31</td>
+        <td class="dep-time">11:00 AM</td>
+        <td>MVP / Meetingz «» VSP</td>
+        <td><span class="dep-count">×3</span></td>
+        <td><div class="dep-people"><span class="dep-person">Andrei Laza</span><span class="dep-person">Paul Doman</span><span class="dep-person">Vlad Damian</span></div></td>
+      </tr>
+      <tr>
+        <td>19</td>
+        <td class="dep-day">Tue 3/31</td>
+        <td class="dep-time">12:30 PM</td>
+        <td>Blueprint Equity &amp; Victory Square</td>
+        <td><span class="dep-count">×2</span></td>
+        <td><div class="dep-people"><span class="dep-person">Paul Doman</span><span class="dep-person">Matt Walnock</span></div></td>
+      </tr>
+      <tr>
+        <td>20</td>
+        <td class="dep-day">Wed 4/1</td>
+        <td class="dep-time">7:30 AM</td>
+        <td>AI TF</td>
+        <td><span class="dep-count">×2</span></td>
+        <td><div class="dep-people"><span class="dep-person">Matt Walnock</span><span class="dep-person">Vlad Damian</span></div></td>
+      </tr>
+      <tr>
+        <td>21</td>
+        <td class="dep-day">Wed 4/1</td>
+        <td class="dep-time">9:30 AM</td>
+        <td>State of Delivery</td>
+        <td><span class="dep-count">×4</span></td>
+        <td><div class="dep-people"><span class="dep-person">Paul Doman</span><span class="dep-person">Matt Walnock</span><span class="dep-person">Tim Davenport</span><span class="dep-person">Vlad Damian</span></div></td>
+      </tr>
+      <tr>
+        <td>22</td>
+        <td class="dep-day">Wed 4/1</td>
+        <td class="dep-time">10:15 AM</td>
+        <td>MV</td>
+        <td><span class="dep-count">×2</span></td>
+        <td><div class="dep-people"><span class="dep-person">Matt Walnock</span><span class="dep-person">Vlad Damian</span></div></td>
+      </tr>
+      <tr>
+        <td>23</td>
+        <td class="dep-day">Wed 4/1</td>
+        <td class="dep-time">11:00 AM</td>
+        <td>Farm Team</td>
+        <td><span class="dep-count">×4</span></td>
+        <td><div class="dep-people"><span class="dep-person">Paul Doman</span><span class="dep-person">Matt Walnock</span><span class="dep-person">Tim Davenport</span><span class="dep-person">Vlad Damian</span></div></td>
+      </tr>
+      <tr>
+        <td>24</td>
+        <td class="dep-day">Wed 4/1</td>
+        <td class="dep-time">12:30 PM</td>
+        <td>Aprio &amp; VSP</td>
+        <td><span class="dep-count">×2</span></td>
+        <td><div class="dep-people"><span class="dep-person">Paul Doman</span><span class="dep-person">Matt Walnock</span></div></td>
+      </tr>
+      <tr>
+        <td>25</td>
+        <td class="dep-day">Thu 4/2</td>
+        <td class="dep-time">2:30 AM</td>
+        <td>AI Office Hours (morning)</td>
+        <td><span class="dep-count">×4</span></td>
+        <td><div class="dep-people"><span class="dep-person">Andrei Laza</span><span class="dep-person">Maria Schwendinger</span><span class="dep-person">Matt Walnock</span><span class="dep-person">Vlad Damian</span></div></td>
+      </tr>
+      <tr>
+        <td>26</td>
+        <td class="dep-day">Thu 4/2</td>
+        <td class="dep-time">6:00 AM</td>
+        <td>Workshop: Navigating Change – Pt 2</td>
+        <td><span class="dep-count">×4</span></td>
+        <td><div class="dep-people"><span class="dep-person">Andrei Laza</span><span class="dep-person">Maria Schwendinger</span><span class="dep-person">Matt Walnock</span><span class="dep-person">Vlad Damian</span></div></td>
+      </tr>
+      <tr>
+        <td>27</td>
+        <td class="dep-day">Thu 4/2</td>
+        <td class="dep-time">7:30 AM</td>
+        <td>All Hands Follow Up Meeting</td>
+        <td><span class="dep-count">×5</span></td>
+        <td><div class="dep-people"><span class="dep-person">Andrei Laza</span><span class="dep-person">Maria Schwendinger</span><span class="dep-person">Matt Walnock</span><span class="dep-person">Paul Doman</span><span class="dep-person">Vlad Damian</span></div></td>
+      </tr>
+      <tr>
+        <td>28</td>
+        <td class="dep-day">Thu 4/2</td>
+        <td class="dep-time">9:00 AM</td>
+        <td>ESR Meetingz</td>
+        <td><span class="dep-count">×2</span></td>
+        <td><div class="dep-people"><span class="dep-person">Andrei Laza</span><span class="dep-person">Vlad Damian</span></div></td>
+      </tr>
+      <tr>
+        <td>29</td>
+        <td class="dep-day">Fri 4/3</td>
+        <td class="dep-time">9:00 AM</td>
+        <td>ESR: BlackCloak + VSP</td>
+        <td><span class="dep-count">×2</span></td>
+        <td><div class="dep-people"><span class="dep-person">Paul Doman</span><span class="dep-person">Vlad Damian</span></div></td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<!-- ===== KEY INSIGHTS PANEL ===== -->
+<div class="dep-section" style="margin-top:20px;">
+  <h2>Key Scheduling Insights</h2>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;">
+
+    <div style="background:rgba(124,58,237,0.12);border:1px solid rgba(124,58,237,0.3);border-radius:8px;padding:14px;">
+      <div style="color:#c4a0f0;font-weight:700;font-size:0.82rem;margin-bottom:6px;">Thu Apr 2 — Company All-Hands Day</div>
+      <div style="font-size:0.75rem;color:var(--off-white);line-height:1.6;">
+        5 people share <strong>3 back-to-back sessions</strong>: AI Office Hours (2:30 AM ET), Workshop (6:00 AM ET), All Hands Follow-Up (7:30 AM ET). Laza, Maria, Matt, and Vlad all attend all three. Paul joins at 7:30 AM. Paul is on PTO rest of day.
+      </div>
+    </div>
+
+    <div style="background:rgba(212,144,10,0.12);border:1px solid rgba(212,144,10,0.3);border-radius:8px;padding:14px;">
+      <div style="color:#f0c060;font-weight:700;font-size:0.82rem;margin-bottom:6px;">Tue Mar 31 — Heaviest Shared Load</div>
+      <div style="font-size:0.75rem;color:var(--off-white);line-height:1.6;">
+        5 shared meetings in one morning: Team Creation (7 AM, ×4), Sales SOB (8:30, ×5), Session AAR (9:30, ×6), 10T Travel (9, ×2), MZ VSP (8, ×2). Session After Action Report has the highest attendance — <strong>6 of 8 team members</strong>.
+      </div>
+    </div>
+
+    <div style="background:rgba(192,57,43,0.12);border:1px solid rgba(192,57,43,0.3);border-radius:8px;padding:14px;">
+      <div style="color:#f09090;font-weight:700;font-size:0.82rem;margin-bottom:6px;">Fri Apr 3 — Reduced Capacity</div>
+      <div style="font-size:0.75rem;color:var(--off-white);line-height:1.6;">
+        <strong>US Office Closed</strong> (Good Friday). Paul and Maria have limited availability. Tim returning from Virgin Gorda. Vlad (Bucharest) carries the heaviest Fri load with 10 meetings including ESR: BlackCloak shared with Paul.
+      </div>
+    </div>
+
+    <div style="background:rgba(46,111,206,0.12);border:1px solid rgba(46,111,206,0.3);border-radius:8px;padding:14px;">
+      <div style="color:#90b8f0;font-weight:700;font-size:0.82rem;margin-bottom:6px;">Laza ↔ Vlad — 6 Shared Meetings Mon</div>
+      <div style="font-size:0.75rem;color:var(--off-white);line-height:1.6;">
+        Monday is the most locked day for the Bucharest duo: SDD Roll-Out, 10Talents ESR, SDD KickOff Template, Rubicon ESR, Altumint ESR — all back-to-back from 8 AM to 11 AM ET. Coordination is tight; no buffer.
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="footer">
+  Generated: March 30, 2026 &nbsp;|&nbsp; VSP Sales Operations &nbsp;|&nbsp; All times Eastern (ET) &nbsp;|&nbsp; Bucharest = ET + 6h (EDT active)
+</div>
+</div>
+
+<!-- ════════════ CLIENT FACING TAB ════════════ -->
+<div class="tab-pane active" id="pane-clients">
+
+  <!-- LEGEND -->
+  <div class="legend">
+    <span class="legend-title">Legend</span>
+    <div class="legend-section">
+      <div class="legend-item"><div class="dot dot-green"></div> Active / On Track</div>
+      <div class="legend-item"><div class="dot dot-yellow"></div> Needs Attention / Reactivating</div>
+      <div class="legend-item"><div class="dot dot-red"></div> Dormant / No Data</div>
+    </div>
+    <div class="legend-sep"></div>
+    <div class="legend-section">
+      <span class="badge badge-esr">ESR</span><span style="font-size:12px;opacity:.7">Exec Status Review</span>
+      <span class="badge badge-standup">Standup</span>
+      <span class="badge badge-demo">Demo</span>
+      <span class="badge badge-vendor">Vendor</span>
+      <span class="badge badge-internal">Internal</span>
+    </div>
+  </div>
+
+  <!-- ── MONDAY Mar 30 ── -->
+  <div class="day-header"><span>Monday, Mar 30</span><span class="day-count">7 meetings</span></div>
+
+  <!-- 1. 10Talents ESR -->
+  <details class="status-yellow">
+    <summary>
+      <div class="status-dot yellow"></div>
+      <span class="meeting-time">9:30 AM</span>
+      <span class="meeting-name">ESR: 10Talents - VSP</span>
+      <span class="meeting-sep">—</span>
+      <span class="meeting-client">10Talents</span>
+      <span class="badge badge-esr">ESR</span>
+      <div class="pills"><span class="pill">Laza</span><span class="pill">Vlad</span></div>
+      <span class="chevron">▶</span>
+    </summary>
+    <div class="card-body">
+      <div class="card-section">
+        <div class="card-section-title">Overview</div>
+        <p>Fund of funds manager (PE/hedge fund). HQ Foxborough, MA. Past client with recent Snowmass 2026 event involvement.</p>
+      </div>
+      <div class="card-section">
+        <div class="card-section-title">Engagement</div>
+        <p>Status ambiguous — event connection suggests warmth but active engagement unclear. ESR to clarify next steps.</p>
+      </div>
+      <div class="card-section">
+        <div class="card-section-title">People</div>
+        <div class="people-grid">
+          <div><div class="people-col-header">VSP</div><ul class="people-list"><li>Laza</li><li>Vlad</li></ul></div>
+          <div><div class="people-col-header">Client</div><ul class="people-list"><li>TBD</li></ul></div>
+        </div>
+      </div>
+      <div class="card-section">
+        <div class="card-section-title">Issues</div>
+        <div class="tag-row"><span class="warn-tag">Reactivation unclear</span><span class="warn-tag">Snowmass 2026 hook needed</span></div>
+      </div>
+    </div>
+  </details>
+
+  <!-- 2. SDD KickOff (Internal) -->
+  <details class="status-green">
+    <summary>
+      <div class="status-dot green"></div>
+      <span class="meeting-time">10:00 AM</span>
+      <span class="meeting-name">Laza &lt;&gt; Vlad — SDD KickOff</span>
+      <span class="meeting-sep">—</span>
+      <span class="meeting-client">Internal</span>
+      <span class="badge badge-internal">Internal</span>
+      <div class="pills"><span class="pill">Laza</span><span class="pill">Vlad</span></div>
+      <span class="chevron">▶</span>
+    </summary>
+    <div class="card-body">
+      <div class="card-section">
+        <div class="card-section-title">Overview</div>
+        <p>Internal SDD (Software Delivery Design) rollout planning session between delivery leads.</p>
+      </div>
+      <div class="card-section">
+        <div class="card-section-title">Purpose</div>
+        <p>Template alignment, workstream kickoff, team coordination prior to client SDD rollouts.</p>
+      </div>
+      <div class="card-section">
+        <div class="card-section-title">Issues</div>
+        <div class="tag-row"><span class="ok-tag">No blockers</span></div>
+      </div>
+    </div>
+  </details>
+
+  <!-- 3. Rubicon ESR -->
+  <details class="status-yellow">
+    <summary>
+      <div class="status-dot yellow"></div>
+      <span class="meeting-time">10:30 AM</span>
+      <span class="meeting-name">Rubicon ESR</span>
+      <span class="meeting-sep">—</span>
+      <span class="meeting-client">Rubicon</span>
+      <span class="badge badge-esr">ESR</span>
+      <div class="pills"><span class="pill">Laza</span><span class="pill">Vlad</span></div>
+      <span class="chevron">▶</span>
+    </summary>
+    <div class="card-body">
+      <div class="card-section">
+        <div class="card-section-title">Overview</div>
+        <p>Enterprise tech asset management with AI "Advisor" platform. Past client.</p>
+      </div>
+      <div class="card-section">
+        <div class="card-section-title">Engagement</div>
+        <p>Mar 27 call with Tyler/Adelina. Reactivation status unclear — ESR to determine path forward.</p>
+      </div>
+      <div class="card-section">
+        <div class="card-section-title">Issues</div>
+        <div class="tag-row"><span class="warn-tag">Reactivation TBD</span><span class="warn-tag">Last active: Mar 27</span></div>
+      </div>
+    </div>
+  </details>
+
+  <!-- 4. SixMap Backlog Refinement -->
+  <details class="status-green">
+    <summary>
+      <div class="status-dot green"></div>
+      <span class="meeting-time">10:00 AM</span>
+      <span class="meeting-name">SixMap Backlog Refinement</span>
+      <span class="meeting-sep">—</span>
+      <span class="meeting-client">SixMap</span>
+      <span class="badge badge-delivery">Delivery</span>
+      <div class="pills"><span class="pill">Matt</span></div>
+      <span class="chevron">▶</span>
+    </summary>
+    <div class="card-body">
+      <div class="card-section">
+        <div class="card-section-title">Overview</div>
+        <p>AI subsidiary discovery platform. ACTIVE SOW $204–271K through Jun 2026. 6-person team. CEO: Jason Kaplan.</p>
+      </div>
+      <div class="card-section">
+        <div class="card-section-title">Current Sprint</div>
+        <p>Wikipedia data source integration, Aurora Postgres migration underway.</p>
+      </div>
+      <div class="card-section">
+        <div class="card-section-title">Issues</div>
+        <div class="tag-row"><span class="issue-tag">DGX Spark SSH access blocked</span><span class="issue-tag">Certificate provider delay</span></div>
+      </div>
+    </div>
+  </details>
+
+  <!-- 5. SixMap Stand-up -->
+  <details class="status-green">
+    <summary>
+      <div class="status-dot green"></div>
+      <span class="meeting-time">10:30 AM</span>
+      <span class="meeting-name">SixMap Stand-up</span>
+      <span class="meeting-sep">—</span>
+      <span class="meeting-client">SixMap</span>
+      <span class="badge badge-standup">Standup</span>
+      <div class="pills"><span class="pill">Matt</span></div>
+      <span class="chevron">▶</span>
+    </summary>
+    <div class="card-body">
+      <div class="card-section">
+        <div class="card-section-title">Overview</div>
+        <p>Daily delivery standup. Same engagement as Backlog Refinement — $204–271K SOW, Jun 2026.</p>
+      </div>
+      <div class="card-section">
+        <div class="card-section-title">Issues</div>
+        <div class="tag-row"><span class="issue-tag">DGX Spark SSH access</span><span class="issue-tag">Certificate delay</span></div>
+      </div>
+    </div>
+  </details>
+
+  <!-- 6. Altumint ESR -->
+  <details class="status-green">
+    <summary>
+      <div class="status-dot green"></div>
+      <span class="meeting-time">11:00 AM</span>
+      <span class="meeting-name">Altumint ESR</span>
+      <span class="meeting-sep">—</span>
+      <span class="meeting-client">Altumint</span>
+      <span class="badge badge-esr">ESR</span>
+      <div class="pills"><span class="pill">Laza</span><span class="pill">Vlad</span></div>
+      <span class="chevron">▶</span>
+    </summary>
+    <div class="card-body">
+      <div class="card-section">
+        <div class="card-section-title">Overview</div>
+        <p>AI traffic enforcement company. Past client label but actively engaged — Mar 27 call with Krisztina/Tyler.</p>
+      </div>
+      <div class="card-section">
+        <div class="card-section-title">Engagement</div>
+        <p>Recent contact. Status upgraded from dormant — treat as actively engaged for this ESR.</p>
+      </div>
+      <div class="card-section">
+        <div class="card-section-title">People</div>
+        <div class="people-grid">
+          <div><div class="people-col-header">VSP</div><ul class="people-list"><li>Laza</li><li>Vlad</li></ul></div>
+          <div><div class="people-col-header">Client</div><ul class="people-list"><li>Krisztina</li></ul></div>
+        </div>
+      </div>
+      <div class="card-section">
+        <div class="card-section-title">Issues</div>
+        <div class="tag-row"><span class="ok-tag">Actively engaged</span></div>
+      </div>
+    </div>
+  </details>
+
+  <!-- 7. Softledger & VSP (Vendor) -->
+  <details class="status-green">
+    <summary>
+      <div class="status-dot green"></div>
+      <span class="meeting-time">11:30 AM</span>
+      <span class="meeting-name">Softledger &amp; VSP</span>
+      <span class="meeting-sep">—</span>
+      <span class="meeting-client">Softledger (Vendor)</span>
+      <span class="badge badge-vendor">Vendor</span>
+      <div class="pills"><span class="pill">Paul</span><span class="pill">Matt</span></div>
+      <span class="chevron">▶</span>
+    </summary>
+    <div class="card-body">
+      <div class="card-section">
+        <div class="card-section-title">Overview</div>
+        <p>Cloud accounting platform. <strong>VSP is the customer</strong> — this is an invoice management vendor meeting, not a client engagement.</p>
+      </div>
+      <div class="card-section">
+        <div class="card-section-title">Purpose</div>
+        <p>Operational billing/accounting sync. No sales action required.</p>
+      </div>
+      <div class="card-section">
+        <div class="card-section-title">Issues</div>
+        <div class="tag-row"><span class="ok-tag">Routine ops</span></div>
+      </div>
+    </div>
+  </details>
+
+  <!-- ── TUESDAY Mar 31 ── -->
+  <div class="day-header"><span>Tuesday, Mar 31</span><span class="day-count">6 meetings</span></div>
+
+  <!-- 8. MZ <> VSP (Connexus) -->
+  <details class="status-yellow">
+    <summary>
+      <div class="status-dot yellow"></div>
+      <span class="meeting-time">8:00 AM</span>
+      <span class="meeting-name">MZ &laquo;&raquo; VSP</span>
+      <span class="meeting-sep">—</span>
+      <span class="meeting-client">Connexus</span>
+      <span class="badge badge-esr">ESR</span>
+      <div class="pills"><span class="pill">Laza</span><span class="pill">Vlad</span></div>
+      <span class="chevron">▶</span>
+    </summary>
+    <div class="card-body">
+      <div class="card-section">
+        <div class="card-section-title">Overview</div>
+        <p>Connexus — blockchain/DeFi RWA (real world assets) protocol. Past client, minimal recent communications.</p>
+      </div>
+      <div class="card-section">
+        <div class="card-section-title">Issues</div>
+        <div class="tag-row"><span class="warn-tag">Minimal recent comms</span><span class="warn-tag">Engagement status unclear</span></div>
+      </div>
+    </div>
+  </details>
+
+  <!-- 9. 10T Travel Plans -->
+  <details class="status-yellow">
+    <summary>
+      <div class="status-dot yellow"></div>
+      <span class="meeting-time">9:00 AM</span>
+      <span class="meeting-name">10T-VSP Travel Plans</span>
+      <span class="meeting-sep">—</span>
+      <span class="meeting-client">10Talents</span>
+      <span class="badge badge-esr">ESR</span>
+      <div class="pills"><span class="pill">Laza</span><span class="pill">Vlad</span></div>
+      <span class="chevron">▶</span>
+    </summary>
+    <div class="card-body">
+      <div class="card-section">
+        <div class="card-section-title">Overview</div>
+        <p>Travel coordination for upcoming event with 10Talents team.</p>
+      </div>
+      <div class="card-section">
+        <div class="card-section-title">Issues</div>
+        <div class="tag-row"><span class="warn-tag">Logistics TBD</span></div>
+      </div>
+    </div>
+  </details>
+
+  <!-- 10. ESR: Permanent -->
+  <details class="status-red">
+    <summary>
+      <div class="status-dot red"></div>
+      <span class="meeting-time">10:00 AM</span>
+      <span class="meeting-name">ESR: Permanent</span>
+      <span class="meeting-sep">—</span>
+      <span class="meeting-client">Permanent</span>
+      <span class="badge badge-esr">ESR</span>
+      <div class="pills"><span class="pill">Laza</span></div>
+      <span class="chevron">▶</span>
+    </summary>
+    <div class="card-body">
+      <div class="card-section">
+        <div class="card-section-title">Overview</div>
+        <p>Nonprofit focused on digital preservation. No recent activity since Mar 1.</p>
+      </div>
+      <div class="card-section">
+        <div class="card-section-title">Issues</div>
+        <div class="tag-row"><span class="issue-tag">Dormant since Mar 1</span><span class="issue-tag">No recent comms</span></div>
+      </div>
+    </div>
+  </details>
+
+  <!-- 11. AdImpact Demo -->
+  <details class="status-yellow">
+    <summary>
+      <div class="status-dot yellow"></div>
+      <span class="meeting-time">11:00 AM</span>
+      <span class="meeting-name">AdImpact SaaS Demo</span>
+      <span class="meeting-sep">—</span>
+      <span class="meeting-client">AdImpact</span>
+      <span class="badge badge-demo">Demo</span>
+      <div class="pills"><span class="pill">Laza</span></div>
+      <span class="chevron">▶</span>
+    </summary>
+    <div class="card-body">
+      <div class="card-section">
+        <div class="card-section-title">Overview</div>
+        <p>Political ad intelligence platform. Biweekly demo cadence. Past client with active Slack presence.</p>
+      </div>
+      <div class="card-section">
+        <div class="card-section-title">Issues</div>
+        <div class="tag-row"><span class="ok-tag">Active Slack</span><span class="warn-tag">Reactivation path unclear</span></div>
+      </div>
+    </div>
+  </details>
+
+  <!-- 12. Meetingz Expansion (Connexus) -->
+  <details class="status-yellow">
+    <summary>
+      <div class="status-dot yellow"></div>
+      <span class="meeting-time">11:00 AM</span>
+      <span class="meeting-name">Meetingz Expansion</span>
+      <span class="meeting-sep">—</span>
+      <span class="meeting-client">Connexus</span>
+      <span class="badge badge-esr">ESR</span>
+      <div class="pills"><span class="pill">Laza</span><span class="pill">Vlad</span></div>
+      <span class="chevron">▶</span>
+    </summary>
+    <div class="card-body">
+      <div class="card-section">
+        <div class="card-section-title">Overview</div>
+        <p>Same entity as Connexus (MZ &laquo;&raquo; VSP). Expansion scope discussion for DeFi/RWA work.</p>
+      </div>
+      <div class="card-section">
+        <div class="card-section-title">Issues</div>
+        <div class="tag-row"><span class="warn-tag">Duplicate entity check needed</span></div>
+      </div>
+    </div>
+  </details>
+
+  <!-- 13. Blueprint Equity -->
+  <details class="status-red">
+    <summary>
+      <div class="status-dot red"></div>
+      <span class="meeting-time">12:30 PM</span>
+      <span class="meeting-name">Blueprint Equity</span>
+      <span class="meeting-sep">—</span>
+      <span class="meeting-client">Blueprint Equity</span>
+      <span class="badge badge-esr">ESR</span>
+      <div class="pills"><span class="pill">Paul</span><span class="pill">Matt</span></div>
+      <span class="chevron">▶</span>
+    </summary>
+    <div class="card-body">
+      <div class="card-section">
+        <div class="card-section-title">Overview</div>
+        <p><strong>NOT IN SYSTEM.</strong> No folder, no emails, no Slack presence. Zero context available.</p>
+      </div>
+      <div class="card-section">
+        <div class="card-section-title">Issues</div>
+        <div class="tag-row"><span class="issue-tag">No CRM record</span><span class="issue-tag">No folder</span><span class="issue-tag">No Slack</span><span class="issue-tag">Unknown origin</span></div>
+      </div>
+    </div>
+  </details>
+
+  <!-- ── WEDNESDAY Apr 1 ── -->
+  <div class="day-header"><span>Wednesday, Apr 1</span><span class="day-count">3 meetings</span></div>
+
+  <!-- 14. Van Bram Summit -->
+  <details class="status-yellow">
+    <summary>
+      <div class="status-dot yellow"></div>
+      <span class="meeting-time">10:00 AM</span>
+      <span class="meeting-name">Van Bram Summit</span>
+      <span class="meeting-sep">—</span>
+      <span class="meeting-client">Van Bram</span>
+      <span class="badge badge-esr">ESR</span>
+      <div class="pills"><span class="pill">Maria</span></div>
+      <span class="chevron">▶</span>
+    </summary>
+    <div class="card-body">
+      <div class="card-section">
+        <div class="card-section-title">Overview</div>
+        <p>No VSP folder exists. Tim has a Thursday standup as well. Unknown entity — needs documentation and CRM record creation.</p>
+      </div>
+      <div class="card-section">
+        <div class="card-section-title">Issues</div>
+        <div class="tag-row"><span class="issue-tag">No folder</span><span class="warn-tag">Thu standup cadence with Tim</span><span class="warn-tag">Needs intake</span></div>
+      </div>
+    </div>
+  </details>
+
+  <!-- PerformYard ESR -->
+  <details class="status-red">
+    <summary>
+      <div class="status-dot red"></div>
+      <span class="meeting-time">10:00 AM</span>
+      <span class="meeting-name">ESR: PerformYard</span>
+      <span class="meeting-sep">—</span>
+      <span class="meeting-client">PerformYard</span>
+      <span class="badge badge-esr">ESR</span>
+      <div class="pills"><span class="pill">Laza</span></div>
+      <span class="chevron">▶</span>
+    </summary>
+    <div class="card-body">
+      <div class="card-section">
+        <div class="card-section-title">Overview</div>
+        <p>HR performance management platform. $95M funded. Past client, currently dormant.</p>
+      </div>
+      <div class="card-section">
+        <div class="card-section-title">Issues</div>
+        <div class="tag-row"><span class="issue-tag">Dormant</span><span class="issue-tag">No recent activity</span></div>
+      </div>
+    </div>
+  </details>
+
+  <!-- Bricklayer ESR -->
+  <details class="status-red">
+    <summary>
+      <div class="status-dot red"></div>
+      <span class="meeting-time">11:00 AM</span>
+      <span class="meeting-name">ESR: Bricklayer</span>
+      <span class="meeting-sep">—</span>
+      <span class="meeting-client">Bricklayer</span>
+      <span class="badge badge-esr">ESR</span>
+      <div class="pills"><span class="pill">Laza</span></div>
+      <span class="chevron">▶</span>
+    </summary>
+    <div class="card-body">
+      <div class="card-section">
+        <div class="card-section-title">Overview</div>
+        <p>Agentic cybersecurity SOC platform. $7.5M funded. Past client, no recent activity.</p>
+      </div>
+      <div class="card-section">
+        <div class="card-section-title">Issues</div>
+        <div class="tag-row"><span class="issue-tag">Dormant</span><span class="issue-tag">No recent activity</span></div>
+      </div>
+    </div>
+  </details>
+
+  <!-- ── THURSDAY Apr 2 ── -->
+  <div class="day-header"><span>Thursday, Apr 2</span><span class="day-count">1 meeting</span></div>
+
+  <!-- 15. PrismPPM -->
+  <details class="status-red">
+    <summary>
+      <div class="status-dot red"></div>
+      <span class="meeting-time">10:00 AM</span>
+      <span class="meeting-name">ESR: PrismPPM</span>
+      <span class="meeting-sep">—</span>
+      <span class="meeting-client">PrismPPM</span>
+      <span class="badge badge-esr">ESR</span>
+      <div class="pills"><span class="pill">Matt</span></div>
+      <span class="chevron">▶</span>
+    </summary>
+    <div class="card-body">
+      <div class="card-section">
+        <div class="card-section-title">Overview</div>
+        <p>Enterprise project portfolio management (fmr. WorkOtter). Gartner-recognized vendor. Past client, no recent activity.</p>
+      </div>
+      <div class="card-section">
+        <div class="card-section-title">Issues</div>
+        <div class="tag-row"><span class="issue-tag">Dormant</span><span class="issue-tag">No recent activity</span></div>
+      </div>
+    </div>
+  </details>
+
+  <!-- ── FRIDAY Apr 3 ── -->
+  <div class="day-header"><span>Friday, Apr 3</span><span class="day-count">3 meetings</span></div>
+
+  <!-- 16. BlackCloak ESR -->
+  <details class="status-yellow">
+    <summary>
+      <div class="status-dot yellow"></div>
+      <span class="meeting-time">9:00 AM</span>
+      <span class="meeting-name">ESR: BlackCloak</span>
+      <span class="meeting-sep">—</span>
+      <span class="meeting-client">BlackCloak</span>
+      <span class="badge badge-esr">ESR</span>
+      <div class="pills"><span class="pill">Paul</span><span class="pill">Vlad</span></div>
+      <span class="chevron">▶</span>
+    </summary>
+    <div class="card-body">
+      <div class="card-section">
+        <div class="card-section-title">Overview</div>
+        <p>Digital executive protection cybersecurity. Past client. Vlad has weekly sync with Matt Covington ongoing.</p>
+      </div>
+      <div class="card-section">
+        <div class="card-section-title">People</div>
+        <div class="people-grid">
+          <div><div class="people-col-header">VSP</div><ul class="people-list"><li>Paul</li><li>Vlad</li></ul></div>
+          <div><div class="people-col-header">Client</div><ul class="people-list"><li>Matt Covington</li></ul></div>
+        </div>
+      </div>
+      <div class="card-section">
+        <div class="card-section-title">Issues</div>
+        <div class="tag-row"><span class="ok-tag">Weekly Vlad ↔ Matt sync active</span><span class="warn-tag">Formal ESR needed</span></div>
+      </div>
+    </div>
+  </details>
+
+  <!-- DrayNow ESR -->
+  <details class="status-yellow">
+    <summary>
+      <div class="status-dot yellow"></div>
+      <span class="meeting-time">9:30 AM</span>
+      <span class="meeting-name">ESR: DrayNow</span>
+      <span class="meeting-sep">—</span>
+      <span class="meeting-client">DrayNow</span>
+      <span class="badge badge-esr">ESR</span>
+      <div class="pills"><span class="pill">Laza</span></div>
+      <span class="chevron">▶</span>
+    </summary>
+    <div class="card-body">
+      <div class="card-section">
+        <div class="card-section-title">Overview</div>
+        <p>Intermodal logistics marketplace. Active Slack engineering channel with PR activity (6000+ series).</p>
+      </div>
+      <div class="card-section">
+        <div class="card-section-title">Issues</div>
+        <div class="tag-row"><span class="ok-tag">Active Slack engineering</span><span class="warn-tag">ESR scope TBD</span></div>
+      </div>
+    </div>
+  </details>
+
+</div>
+<!-- end #pane-clients -->
+
+<!-- ════════════ PROSPECT FACING TAB ════════════ -->
+<div class="tab-pane" id="pane-prospects">
+  <!-- LEGEND -->
+  <div class="legend">
+    <span class="legend-title">Legend</span>
+    <div class="legend-section">
+      <div class="legend-item"><div class="dot dot-green"></div> HOT — Active deal, imminent close</div>
+      <div class="legend-item"><div class="dot dot-yellow"></div> WARM / Decision Pending</div>
+      <div class="legend-item"><div class="dot dot-red"></div> UNKNOWN — No data in system</div>
+    </div>
+    <div class="legend-sep"></div>
+    <div class="legend-section">
+      <span class="badge" style="background:#14532d;color:#86efac;">PAPERWORK WED</span>
+      <span class="badge" style="background:#7c3aed;color:#e9d5ff;">DECISION THIS WEEK</span>
+      <span class="badge" style="background:#1e40af;color:#93c5fd;">Discovery</span>
+      <span class="badge" style="background:#78350f;color:#fcd34d;">Proposal</span>
+    </div>
+  </div>
+
+  <!-- MONDAY Mar 30 -->
+  <div class="day-header"><span>Monday, Mar 30</span><span class="day-count">2 prospect meetings</span></div>
+
+  <!-- 1. YourHealthPro -->
+  <details class="status-green" open>
+    <summary>
+      <div class="status-dot green"></div>
+      <span class="meeting-time">10:30 AM</span>
+      <span class="meeting-name">YourHealthPro &amp; Victory Square</span>
+      <span class="meeting-sep">—</span>
+      <span class="meeting-client">Ed Cutler (CEO)</span>
+      <span class="badge" style="background:#14532d;color:#86efac;">PAPERWORK WED</span>
+      <div class="pills"><span class="pill">Paul</span><span class="pill">Vlad</span></div>
+      <span class="chevron">&#9658;</span>
+    </summary>
+    <div class="card-body">
+      <div class="card-section">
+        <div class="card-section-title">Overview</div>
+        <p>DoorDash-style marketplace for mobile healthcare — phlebotomy, lab testing, IV therapy. Parent: Alpha Phlebotomy Group (30 yrs, 6K phlebotomists, all 50 states). Founder: Ed Cutler.</p>
+      </div>
+      <div class="card-section">
+        <div class="card-section-title">Deal Structure</div>
+        <p><strong>EQUITY</strong> — VSP builds platform for equity stake. Revenue near-immediate (existing manual demand). Phase Zero: 11-17 man-days for scoping.</p>
+      </div>
+      <div class="card-section">
+        <div class="card-section-title">MEDDPIC</div>
+        <div class="tag-row">
+          <span class="ok-tag">Metrics: Strong (1,700 providers, 100K patients, 9 clients)</span>
+          <span class="ok-tag">Economic Buyer: Strong (Ed sole DM)</span>
+          <span class="ok-tag">Pain: Strong+ (platform BLOCKED)</span>
+          <span class="ok-tag">Champion: Strong (Ed coachable)</span>
+          <span class="ok-tag">Competition: Favorable</span>
+        </div>
+      </div>
+      <div class="card-section">
+        <div class="card-section-title">Technical Risk</div>
+        <div class="tag-row">
+          <span class="issue-tag">Angular 5 (EOL 2018)</span>
+          <span class="issue-tag">37 HIPAA findings (15 CRITICAL)</span>
+          <span class="issue-tag">MD5 passwords</span>
+          <span class="issue-tag">Default OTP bypass (902389)</span>
+          <span class="issue-tag">No CI/CD</span>
+          <span class="issue-tag">Credentials in GitHub</span>
+        </div>
+      </div>
+      <div class="card-section">
+        <div class="card-section-title">Action Items</div>
+        <p>Ed: update env links, add Firebase creds, share Tukan API. Tyler: prep paperwork for Wed. Vlad: refine Phase Zero plan.</p>
+      </div>
+      <div class="card-section">
+        <div class="card-section-title">Next Step</div>
+        <p><strong>Wed Apr 1 @ 11 AM</strong> — Paperwork / equity terms (Paul + Tyler + Ed)</p>
+      </div>
+      <div class="card-section">
+        <div class="card-section-title">People</div>
+        <div class="people-grid">
+          <div>
+            <div class="people-col-header">VSP</div>
+            <ul class="people-list">
+              <li>Paul Doman (relationship)</li>
+              <li>Vlad Damian (tech lead, ShiftMed exp.)</li>
+              <li>Tyler Goble (sales ops)</li>
+            </ul>
+          </div>
+          <div>
+            <div class="people-col-header">Prospect</div>
+            <ul class="people-list">
+              <li>Ed Cutler — CEO (ecutler@alphaphlebotomy.com)</li>
+              <li>Patrick Cutler (co-founder)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <!-- 2. Bear Analytics -->
+  <details class="status-yellow">
+    <summary>
+      <div class="status-dot yellow"></div>
+      <span class="meeting-time">1:30 PM</span>
+      <span class="meeting-name">Bear Analytics &amp; VSP</span>
+      <span class="meeting-sep">—</span>
+      <span class="meeting-client">Joe Colangelo (co-founder)</span>
+      <span class="badge" style="background:#1e40af;color:#93c5fd;">Discovery</span>
+      <div class="pills"><span class="pill">Paul</span></div>
+      <span class="chevron">&#9658;</span>
+    </summary>
+    <div class="card-body">
+      <div class="card-section">
+        <div class="card-section-title">Overview</div>
+        <p>Data analytics / location intelligence firm. Co-founder Joe Colangelo. Mar 26 discovery call — Vlad demoed agentic AI live, Joe brought full engineering team (Sasha Tedikov, Iryna Sharai). Signal: serious interest.</p>
+      </div>
+      <div class="card-section">
+        <div class="card-section-title">Action Items</div>
+        <div class="tag-row"><span class="warn-tag">URGENT: Verify pricing/timeline sent Fri 3/27</span></div>
+        <p style="margin-top:8px;font-size:13px;opacity:.8;">Propose SDD workshop + 2-week pilot.</p>
+      </div>
+      <div class="card-section">
+        <div class="card-section-title">People</div>
+        <div class="people-grid">
+          <div><div class="people-col-header">VSP</div><ul class="people-list"><li>Paul Doman</li></ul></div>
+          <div>
+            <div class="people-col-header">Prospect</div>
+            <ul class="people-list">
+              <li>Joe Colangelo (co-founder, budget authority)</li>
+              <li>Sasha Tedikov (eng)</li>
+              <li>Iryna Sharai (eng)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <!-- TUESDAY Mar 31 -->
+  <div class="day-header"><span>Tuesday, Mar 31</span><span class="day-count">6 prospect meetings</span></div>
+
+  <!-- 3. Napa Legal AI -->
+  <details class="status-yellow">
+    <summary>
+      <div class="status-dot yellow"></div>
+      <span class="meeting-time">10:30 AM</span>
+      <span class="meeting-name">Napa Legal AI Sync</span>
+      <span class="meeting-sep">—</span>
+      <span class="meeting-client">Napa Legal</span>
+      <span class="badge" style="background:#1e40af;color:#93c5fd;">Check-in</span>
+      <div class="pills"><span class="pill">Paul</span></div>
+      <span class="chevron">&#9658;</span>
+    </summary>
+    <div class="card-body">
+      <div class="card-section">
+        <div class="card-section-title">Overview</div>
+        <p>Legal AI platform. Has 03_CLIENTS/Napa_Legal folder — may be active client or expansion discussion. No recent comms found in system.</p>
+      </div>
+      <div class="card-section">
+        <div class="card-section-title">Issues</div>
+        <div class="tag-row"><span class="warn-tag">No recent comms found</span><span class="warn-tag">Clarify client vs. prospect status</span></div>
+      </div>
+    </div>
+  </details>
+
+  <!-- 4. Daniel Peake -->
+  <details class="status-red">
+    <summary>
+      <div class="status-dot red"></div>
+      <span class="meeting-time">1:30 PM</span>
+      <span class="meeting-name">Daniel Peake &amp; Paul Doman</span>
+      <span class="meeting-sep">—</span>
+      <span class="meeting-client">Daniel Peake</span>
+      <div class="pills"><span class="pill">Paul</span></div>
+      <span class="chevron">&#9658;</span>
+    </summary>
+    <div class="card-body">
+      <div class="card-section">
+        <div class="card-section-title">Status</div>
+        <p>No data in any system — no folder, no CRM record, no Slack, no email. Needs clarification from Paul on context and origin.</p>
+      </div>
+      <div class="card-section">
+        <div class="card-section-title">Issues</div>
+        <div class="tag-row"><span class="issue-tag">No CRM record</span><span class="issue-tag">No folder</span><span class="issue-tag">Unknown context</span></div>
+      </div>
+    </div>
+  </details>
+
+  <!-- 5. Todd & Paul -->
+  <details class="status-red">
+    <summary>
+      <div class="status-dot red"></div>
+      <span class="meeting-time">2:00 PM</span>
+      <span class="meeting-name">Todd &amp; Paul</span>
+      <span class="meeting-sep">—</span>
+      <span class="meeting-client">Todd (unknown)</span>
+      <div class="pills"><span class="pill">Paul</span></div>
+      <span class="chevron">&#9658;</span>
+    </summary>
+    <div class="card-body">
+      <div class="card-section">
+        <div class="card-section-title">Status</div>
+        <p>No data in any system. Last name unknown. Needs clarification from Paul.</p>
+      </div>
+      <div class="card-section">
+        <div class="card-section-title">Issues</div>
+        <div class="tag-row"><span class="issue-tag">No CRM record</span><span class="issue-tag">No folder</span><span class="issue-tag">Identity unknown</span></div>
+      </div>
+    </div>
+  </details>
+
+  <!-- 6. Arc 2 -->
+  <details class="status-red">
+    <summary>
+      <div class="status-dot red"></div>
+      <span class="meeting-time">3:00 PM</span>
+      <span class="meeting-name">Arc 2 &lt;&gt; VSP Sync</span>
+      <span class="meeting-sep">—</span>
+      <span class="meeting-client">Arc 2</span>
+      <div class="pills"><span class="pill">Matt</span></div>
+      <span class="chevron">&#9658;</span>
+    </summary>
+    <div class="card-body">
+      <div class="card-section">
+        <div class="card-section-title">Status</div>
+        <p>No folder found. No Slack or Gmail presence. Unknown engagement — needs intake.</p>
+      </div>
+      <div class="card-section">
+        <div class="card-section-title">Issues</div>
+        <div class="tag-row"><span class="issue-tag">No folder</span><span class="issue-tag">No CRM record</span><span class="issue-tag">Unknown origin</span></div>
+      </div>
+    </div>
+  </details>
+
+  <!-- 7. Fugio / Rare.org -->
+  <details class="status-yellow">
+    <summary>
+      <div class="status-dot yellow"></div>
+      <span class="meeting-time">4:00 PM</span>
+      <span class="meeting-name">Fugio &amp; VSP (Rare.org RFP)</span>
+      <span class="meeting-sep">—</span>
+      <span class="meeting-client">Rare.org via Fugio Partners</span>
+      <span class="badge" style="background:#7c3aed;color:#e9d5ff;">DECISION THIS WEEK</span>
+      <div class="pills"><span class="pill">Paul</span></div>
+      <span class="chevron">&#9658;</span>
+    </summary>
+    <div class="card-body">
+      <div class="card-section">
+        <div class="card-section-title">Overview</div>
+        <p>Rare.org — environmental conservation nonprofit, $40M budget, 250 employees, 10 countries. Joint bid with Fugio Partners (Jason Yerkie, Jim Hoscheit). Pipedrive Deal #88. Proposal submitted Mar 9. Interviews Mar 23. Decision due NOW.</p>
+      </div>
+      <div class="card-section">
+        <div class="card-section-title">Win Probability</div>
+        <p>~10% (conservative)</p>
+      </div>
+      <div class="card-section">
+        <div class="card-section-title">Red Flags</div>
+        <div class="tag-row">
+          <span class="issue-tag">CFO who initiated project LEFT</span>
+          <span class="issue-tag">Economic buyer unknown</span>
+          <span class="issue-tag">No confirmed internal champion</span>
+        </div>
+      </div>
+      <div class="card-section">
+        <div class="card-section-title">Action Items</div>
+        <p>Get RFP outcome. If won: path to SOW. If lost: feedback + who won.</p>
+      </div>
+      <div class="card-section">
+        <div class="card-section-title">People</div>
+        <div class="people-grid">
+          <div>
+            <div class="people-col-header">Partner (Fugio)</div>
+            <ul class="people-list"><li>Jason Yerkie</li><li>Jim Hoscheit</li></ul>
+          </div>
+          <div>
+            <div class="people-col-header">Prospect (Rare.org)</div>
+            <ul class="people-list">
+              <li>Renee Baiorunos Carstensen (Chief of Staff)</li>
+              <li>Ron Thomas (VP Technology)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <!-- 8. Luke Sanborn -->
+  <details class="status-red">
+    <summary>
+      <div class="status-dot red"></div>
+      <span class="meeting-time">5:00 PM</span>
+      <span class="meeting-name">Luke Sanborn &amp; Paul Doman</span>
+      <span class="meeting-sep">—</span>
+      <span class="meeting-client">Luke Sanborn</span>
+      <div class="pills"><span class="pill">Paul</span></div>
+      <span class="chevron">&#9658;</span>
+    </summary>
+    <div class="card-body">
+      <div class="card-section">
+        <div class="card-section-title">Status</div>
+        <p>No data in any system. Needs clarification from Paul on context and company.</p>
+      </div>
+      <div class="card-section">
+        <div class="card-section-title">Issues</div>
+        <div class="tag-row"><span class="issue-tag">No CRM record</span><span class="issue-tag">No folder</span><span class="issue-tag">Unknown context</span></div>
+      </div>
+    </div>
+  </details>
+
+  <!-- WEDNESDAY Apr 1 -->
+  <div class="day-header"><span>Wednesday, Apr 1</span><span class="day-count">4 prospect meetings</span></div>
+
+  <!-- 9. YHP Paperwork -->
+  <details class="status-green">
+    <summary>
+      <div class="status-dot green"></div>
+      <span class="meeting-time">11:00 AM</span>
+      <span class="meeting-name">Paul / Tyler / Ed — Paperwork Discussion</span>
+      <span class="meeting-sep">—</span>
+      <span class="meeting-client">YourHealthPro (Ed Cutler)</span>
+      <span class="badge" style="background:#14532d;color:#86efac;">EQUITY TERMS</span>
+      <div class="pills"><span class="pill">Paul</span><span class="pill">Tyler</span></div>
+      <span class="chevron">&#9658;</span>
+    </summary>
+    <div class="card-body">
+      <div class="card-section">
+        <div class="card-section-title">Overview</div>
+        <p>Follow-up from Mon discovery. Equity terms and Phase Zero SOW discussion with Ed Cutler.</p>
+      </div>
+      <div class="card-section">
+        <div class="card-section-title">Agenda</div>
+        <p>Equity %, vesting schedule, liquidity event definition, Phase Zero SOW terms, acceptance criteria.</p>
+      </div>
+      <div class="card-section">
+        <div class="card-section-title">Open Questions</div>
+        <div class="tag-row">
+          <span class="warn-tag">What equity % will Ed offer?</span>
+          <span class="warn-tag">Does Ed have legal counsel?</span>
+          <span class="warn-tag">What is the liquidity event?</span>
+          <span class="warn-tag">Existing equity obligations?</span>
+        </div>
+      </div>
+      <div class="card-section">
+        <div class="card-section-title">People</div>
+        <div class="people-grid">
+          <div><div class="people-col-header">VSP</div><ul class="people-list"><li>Paul Doman</li><li>Tyler Goble</li></ul></div>
+          <div><div class="people-col-header">Prospect</div><ul class="people-list"><li>Ed Cutler (CEO)</li></ul></div>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <!-- 10. Aprio -->
+  <details class="status-red">
+    <summary>
+      <div class="status-dot red"></div>
+      <span class="meeting-time">12:30 PM</span>
+      <span class="meeting-name">Aprio &amp; VSP</span>
+      <span class="meeting-sep">—</span>
+      <span class="meeting-client">Aprio (mid-market accounting)</span>
+      <span class="badge" style="background:#1e40af;color:#93c5fd;">First Meeting</span>
+      <div class="pills"><span class="pill">Paul</span><span class="pill">Matt</span></div>
+      <span class="chevron">&#9658;</span>
+    </summary>
+    <div class="card-body">
+      <div class="card-section">
+        <div class="card-section-title">Overview</div>
+        <p>Mid-market accounting and advisory firm. HQ Atlanta. 1,900+ staff. Founded 1952. 20+ M&amp;A transactions. No prior contact — first meeting. Could be partnership or referred business.</p>
+      </div>
+      <div class="card-section">
+        <div class="card-section-title">Issues</div>
+        <div class="tag-row"><span class="issue-tag">No CRM record</span><span class="issue-tag">No prior contact</span><span class="warn-tag">Clarify referral source</span></div>
+      </div>
+    </div>
+  </details>
+
+  <!-- 11. Arena CX -->
+  <details class="status-yellow">
+    <summary>
+      <div class="status-dot yellow"></div>
+      <span class="meeting-time">1:30 PM</span>
+      <span class="meeting-name">Arena CX &amp; Paul Doman</span>
+      <span class="meeting-sep">—</span>
+      <span class="meeting-client">ArenaCX (CX marketplace)</span>
+      <span class="badge" style="background:#1e40af;color:#93c5fd;">Discovery</span>
+      <div class="pills"><span class="pill">Paul</span></div>
+      <span class="chevron">&#9658;</span>
+    </summary>
+    <div class="card-body">
+      <div class="card-section">
+        <div class="card-section-title">Overview</div>
+        <p>ArenaCX — CX marketplace connecting enterprises with vetted BPOs. HQ Raleigh, NC. Zendesk partner. Warm referral from Phil Jung (Sovereign's Capital) — referred VSP as "faith-aligned dev shop." Sovereign's saw 3,000 companies last year, invested in 14.</p>
+      </div>
+      <div class="card-section">
+        <div class="card-section-title">Action Items</div>
+        <p>Paul: prep faith-alignment angle. Post-call: create prospect folder, send case study to Phil.</p>
+      </div>
+    </div>
+  </details>
+
+  <!-- 12. Stephanie Young -->
+  <details class="status-yellow">
+    <summary>
+      <div class="status-dot yellow"></div>
+      <span class="meeting-time">2:30 PM</span>
+      <span class="meeting-name">Stephanie &amp; Victory Square</span>
+      <span class="meeting-sep">—</span>
+      <span class="meeting-client">Stephanie Young, PhD</span>
+      <div class="pills"><span class="pill">Paul</span><span class="pill">Tyler</span></div>
+      <span class="chevron">&#9658;</span>
+    </summary>
+    <div class="card-body">
+      <div class="card-section">
+        <div class="card-section-title">Status</div>
+        <p>Email confirmations Mar 30. Zoom meeting confirmed. No context on company or purpose — needs pre-call research.</p>
+      </div>
+      <div class="card-section">
+        <div class="card-section-title">Issues</div>
+        <div class="tag-row"><span class="warn-tag">No company context</span><span class="warn-tag">No folder</span><span class="warn-tag">Research needed before call</span></div>
+      </div>
+    </div>
+  </details>
+
+  <!-- FRIDAY Apr 3 -->
+  <div class="day-header"><span>Friday, Apr 3</span><span class="day-count">1 prospect meeting</span></div>
+
+  <!-- 13. Jeff & Paul -->
+  <details class="status-red">
+    <summary>
+      <div class="status-dot red"></div>
+      <span class="meeting-time">2:00 PM</span>
+      <span class="meeting-name">Jeff &amp; Paul</span>
+      <span class="meeting-sep">—</span>
+      <span class="meeting-client">Jeff (unknown)</span>
+      <div class="pills"><span class="pill">Paul</span></div>
+      <span class="chevron">&#9658;</span>
+    </summary>
+    <div class="card-body">
+      <div class="card-section">
+        <div class="card-section-title">Status</div>
+        <p>No data in any system. Last name and company unknown. Needs clarification from Paul.</p>
+      </div>
+      <div class="card-section">
+        <div class="card-section-title">Issues</div>
+        <div class="tag-row"><span class="issue-tag">No CRM record</span><span class="issue-tag">No folder</span><span class="issue-tag">Identity unknown</span></div>
+      </div>
+    </div>
+  </details>
+
+</div>
+
+<script>
+  function showTab(tab) {
+    document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('pane-' + tab).classList.add('active');
+    document.getElementById('tab-' + tab).classList.add('active');
+    location.hash = tab;
+  }
+
+  // Hash-based navigation on load
+  (function() {
+    const hash = location.hash.replace('#', '');
+    if (['calendar','clients','prospects'].includes(hash)) showTab(hash);
+  })();
+</script>
+</body>
+</html>
