@@ -3,196 +3,749 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="/assets/css/vsp-theme.css">
-<title>Mission Control — Morning Brief — VSP Internal</title>
+<title>Mission Control — March 31, 2026 | VSP</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0e17;
+  --card: #141925;
+  --card-hover: #1a2133;
+  --border: #1e293b;
+  --green: #10b981;
+  --blue: #3b82f6;
+  --amber: #f59e0b;
+  --red: #ef4444;
+  --purple: #8b5cf6;
+  --text: #e2e8f0;
+  --muted: #94a3b8;
+  --dim: #64748b;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Inter',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+a { color:var(--blue); text-decoration:none; }
+a:hover { text-decoration:underline; }
+
+/* Header */
+.header { background:linear-gradient(135deg,#0f1629 0%,#0d1a2e 50%,#0f1629 100%); border-bottom:1px solid var(--border); padding:2rem 2rem 1.5rem; text-align:center; }
+.header-top { display:flex; align-items:center; justify-content:center; gap:1rem; margin-bottom:.4rem; }
+.header h1 { font-size:2rem; font-weight:800; background:linear-gradient(135deg,var(--blue),var(--purple)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.header .subtitle { color:var(--muted); font-size:.88rem; }
+.header-badges { display:flex; flex-wrap:wrap; gap:.5rem; justify-content:center; margin-top:.75rem; }
+.header-badge { display:inline-block; font-size:.72rem; font-weight:600; padding:.2rem .65rem; border-radius:999px; }
+.badge-blue { background:rgba(59,130,246,.12); color:var(--blue); border:1px solid rgba(59,130,246,.25); }
+.badge-green { background:rgba(16,185,129,.12); color:var(--green); border:1px solid rgba(16,185,129,.25); }
+.badge-amber { background:rgba(245,158,11,.12); color:var(--amber); border:1px solid rgba(245,158,11,.25); }
+.badge-red { background:rgba(239,68,68,.12); color:var(--red); border:1px solid rgba(239,68,68,.25); }
+.badge-purple { background:rgba(139,92,246,.12); color:var(--purple); border:1px solid rgba(139,92,246,.25); }
+
+/* Dot indicators */
+.dot { display:inline-block; width:7px; height:7px; border-radius:50%; flex-shrink:0; margin-right:4px; vertical-align:middle; position:relative; top:-1px; }
+.dot-green { background:var(--green); }
+.dot-blue { background:var(--blue); }
+.dot-amber { background:var(--amber); }
+.dot-red { background:var(--red); }
+.dot-purple { background:var(--purple); }
+
+/* Pulse animation */
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(239,68,68,.6); }
+  70% { box-shadow: 0 0 0 6px rgba(239,68,68,0); }
+  100% { box-shadow: 0 0 0 0 rgba(239,68,68,0); }
+}
+.tab-pulse .dot { animation: pulse 1.8s infinite; }
+
+/* Tabs */
+.tabs { display:flex; flex-wrap:wrap; gap:0; background:var(--card); border-bottom:2px solid var(--border); padding:0 .75rem; overflow-x:auto; position:sticky; top:0; z-index:100; }
+.tab { display:flex; align-items:center; gap:4px; padding:.8rem .95rem; font-size:.74rem; font-weight:500; color:var(--muted); cursor:pointer; border-bottom:2px solid transparent; margin-bottom:-2px; transition:all .2s; white-space:nowrap; }
+.tab:hover { color:var(--text); background:rgba(255,255,255,.03); }
+.tab.active { color:var(--text); border-bottom-color:var(--blue); font-weight:600; }
+.tab.active.tab-green { color:var(--green); border-bottom-color:var(--green); }
+.tab.active.tab-amber { color:var(--amber); border-bottom-color:var(--amber); }
+.tab.active.tab-red { color:var(--red); border-bottom-color:var(--red); }
+.tab.active.tab-purple { color:var(--purple); border-bottom-color:var(--purple); }
+.tab.active.tab-blue { color:var(--blue); border-bottom-color:var(--blue); }
+
+/* Content */
+.content { max-width:1200px; margin:0 auto; padding:2rem 1.5rem; }
+.panel { display:none; }
+.panel.active { display:block; }
+
+/* Cards */
+.card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:1.5rem; margin-bottom:1.25rem; }
+.card:hover { border-color:rgba(59,130,246,.2); }
+.card h3 { font-size:.95rem; font-weight:600; margin-bottom:.85rem; color:var(--green); display:flex; align-items:center; gap:.5rem; }
+.card h4 { font-size:.85rem; font-weight:600; margin-bottom:.5rem; color:var(--text); }
+
+/* Tables */
+table { width:100%; border-collapse:collapse; font-size:.82rem; }
+th { text-align:left; padding:.55rem .75rem; background:rgba(59,130,246,.07); color:var(--blue); font-weight:600; font-size:.72rem; text-transform:uppercase; letter-spacing:.5px; border-bottom:1px solid var(--border); }
+td { padding:.55rem .75rem; border-bottom:1px solid rgba(30,41,59,.5); color:var(--text); vertical-align:top; }
+tr:last-child td { border-bottom:none; }
+tr:hover td { background:rgba(255,255,255,.02); }
+
+/* Tags */
+.tag { display:inline-block; padding:.15rem .5rem; border-radius:4px; font-size:.7rem; font-weight:500; margin:.1rem; white-space:nowrap; }
+.tag-green { background:rgba(16,185,129,.15); color:var(--green); border:1px solid rgba(16,185,129,.2); }
+.tag-blue { background:rgba(59,130,246,.15); color:var(--blue); border:1px solid rgba(59,130,246,.2); }
+.tag-amber { background:rgba(245,158,11,.15); color:var(--amber); border:1px solid rgba(245,158,11,.2); }
+.tag-purple { background:rgba(139,92,246,.15); color:var(--purple); border:1px solid rgba(139,92,246,.2); }
+.tag-red { background:rgba(239,68,68,.15); color:var(--red); border:1px solid rgba(239,68,68,.2); }
+.tag-dim { background:rgba(100,116,139,.15); color:var(--dim); border:1px solid rgba(100,116,139,.2); }
+
+/* Stats Grid */
+.stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:1rem; margin-bottom:1.5rem; }
+.stat { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:1.2rem; text-align:center; }
+.stat .num { font-size:2rem; font-weight:700; line-height:1.1; }
+.stat .num-blue { background:linear-gradient(135deg,var(--blue),var(--purple)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.stat .num-green { background:linear-gradient(135deg,var(--green),var(--blue)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.stat .num-amber { color:var(--amber); }
+.stat .num-red { color:var(--red); }
+.stat .label { font-size:.7rem; color:var(--muted); margin-top:.3rem; text-transform:uppercase; letter-spacing:.5px; }
+
+/* Meeting card (per-tab) */
+.meeting-header { display:flex; align-items:flex-start; gap:1rem; padding:1.25rem 1.5rem; background:linear-gradient(135deg,rgba(59,130,246,.04),rgba(139,92,246,.04)); border:1px solid var(--border); border-radius:12px; margin-bottom:1.25rem; }
+.meeting-time-block { text-align:center; flex-shrink:0; width:72px; }
+.meeting-time-block .time { font-size:1.1rem; font-weight:700; color:var(--blue); line-height:1.1; }
+.meeting-time-block .dur { font-size:.68rem; color:var(--dim); margin-top:.2rem; }
+.meeting-info { flex:1; }
+.meeting-info h2 { font-size:1.15rem; font-weight:700; margin-bottom:.35rem; }
+.meeting-info .meta-row { display:flex; flex-wrap:wrap; gap:.4rem; align-items:center; font-size:.78rem; color:var(--muted); }
+
+/* Section divider */
+.section-title { font-size:.75rem; font-weight:600; color:var(--dim); text-transform:uppercase; letter-spacing:1px; margin:1.75rem 0 .65rem; padding-bottom:.35rem; border-bottom:1px solid var(--border); }
+
+/* Two-col grid */
+.two-col { display:grid; grid-template-columns:1fr 1fr; gap:1.25rem; }
+.three-col { display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem; }
+
+/* Context block */
+.context-block { background:rgba(59,130,246,.05); border:1px solid rgba(59,130,246,.15); border-radius:8px; padding:1rem 1.25rem; font-size:.83rem; line-height:1.7; color:var(--text); margin-bottom:1rem; }
+.context-block strong { color:var(--blue); }
+
+/* Alert blocks */
+.alert { border-radius:8px; padding:.9rem 1.1rem; margin-bottom:.85rem; font-size:.83rem; line-height:1.65; }
+.alert strong { display:block; margin-bottom:.2rem; font-size:.8rem; text-transform:uppercase; letter-spacing:.4px; }
+.alert-amber { background:rgba(245,158,11,.07); border:1px solid rgba(245,158,11,.25); color:var(--text); }
+.alert-amber strong { color:var(--amber); }
+.alert-red { background:rgba(239,68,68,.07); border:1px solid rgba(239,68,68,.25); color:var(--text); }
+.alert-red strong { color:var(--red); }
+.alert-green { background:rgba(16,185,129,.07); border:1px solid rgba(16,185,129,.25); color:var(--text); }
+.alert-green strong { color:var(--green); }
+.alert-blue { background:rgba(59,130,246,.07); border:1px solid rgba(59,130,246,.25); color:var(--text); }
+.alert-blue strong { color:var(--blue); }
+.alert-purple { background:rgba(139,92,246,.07); border:1px solid rgba(139,92,246,.25); color:var(--text); }
+.alert-purple strong { color:var(--purple); }
+
+/* MEDDPIC score row */
+.meddpic-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:.75rem; }
+.meddpic-item { background:var(--card); border:1px solid var(--border); border-radius:8px; padding:.8rem 1rem; }
+.meddpic-item .m-label { font-size:.68rem; text-transform:uppercase; letter-spacing:.5px; color:var(--dim); margin-bottom:.3rem; }
+.meddpic-item .m-status { font-size:.82rem; font-weight:600; }
+.m-strong { color:var(--green); }
+.m-moderate { color:var(--amber); }
+.m-weak { color:var(--red); }
+.m-unknown { color:var(--dim); }
+
+/* Agenda table */
+.agenda-table td:first-child { width:90px; color:var(--dim); font-size:.78rem; white-space:nowrap; }
+.agenda-table td:nth-child(2) { font-weight:500; }
+.agenda-table td:last-child { color:var(--muted); font-size:.8rem; }
+
+/* Timeline row in overview */
+.timeline-time { color:var(--blue); font-weight:600; font-size:.82rem; white-space:nowrap; }
+.timeline-overlap { color:var(--amber); font-size:.72rem; }
+
+/* Responsive */
+@media(max-width:768px) {
+  .header h1 { font-size:1.4rem; }
+  .tabs { padding:0 .25rem; }
+  .tab { padding:.65rem .65rem; font-size:.7rem; }
+  .content { padding:1rem .75rem; }
+  .two-col, .three-col { grid-template-columns:1fr; }
+  .meddpic-grid { grid-template-columns:repeat(2,1fr); }
+  .meeting-header { flex-direction:column; }
+  .stats { grid-template-columns:repeat(2,1fr); }
+}
+</style>
 </head>
 <body>
-<header class="vsp-hero">
-  <div class="vsp-container">
-    <img src="/assets/images/vsp-logo.svg" alt="VSP" class="vsp-logo">
-    <h1>Mission Control — Morning Brief</h1>
-    <p class="vsp-subtitle">VSP Internal</p>
+
+<div class="header">
+  <div class="header-top">
+    <h1>Mission Control</h1>
   </div>
-</header>
-<main>
-  <section class="vsp-section">
-    <div class="vsp-container">
-<p><strong>Tuesday, March 31, 2026</strong> | Generated 6:00 AM ET</p>
-<hr />
-<h2 id="critical-alerts">🚨 Critical Alerts</h2>
-<ul>
-<li>❌ <strong>Pipeline coverage 0.26x</strong> (target 3.0x) — CRITICAL</li>
-<li>⚠️ <strong>56 open action items</strong> — CURRENT.md stale since Mar 3</li>
-<li>⚠️ <strong>Morning ops hasn't run in 27 days</strong></li>
-<li>🔴 <strong>BW Cyber: Tenable for AI research deadline PASSED</strong> (was Mar 30) — Tyler leaves for vacation Apr 4</li>
-<li>🔴 <strong>Fugio/Rare.org: Decision was due week of Mar 30</strong> — 28 days channel silence, no update</li>
-</ul>
-<hr />
-<h2 id="top-3-priorities">🎯 Top 3 Priorities</h2>
-<ol type="1">
-<li><strong>BW Cyber vacation coverage</strong> — Matt needs to deliver Tenable research to Michael Brice TODAY (deadline passed). Tyler tagged Matt/Vlad/Andrei at 5:41 AM — Matt has not acknowledged.</li>
-<li><strong>YourHealthPro paperwork discussion TOMORROW 11:00 AM</strong> with Ed Cutler — confirm prep is ready. Review estimate shared in Slack, confirm SOW terms.</li>
-<li><strong>Fugio/Rare.org</strong> — Decision was due this week, 28 days of channel silence. Must check in before vacation.</li>
-</ol>
-<hr />
-<h2 id="todays-calendar-all-et">📅 Today's Calendar (All ET)</h2>
-<ul>
-<li>🕡 <strong>6:30 AM</strong> — Tyler &lt;&gt; Christine Stand Up <code>[INTERNAL]</code></li>
-<li>🕖 <strong>7:00 AM</strong> — Pair Programming Session <code>[INTERNAL]</code></li>
-<li>🕖 <strong>7:45 AM</strong> — SixMap Internal Quick Sync <code>[CLIENT]</code></li>
-<li>🕣 <strong>8:30 AM</strong> — Sales Weekly SOB <code>[INTERNAL]</code></li>
-<li>🕘 <strong>9:00 AM</strong> — FDM Stand Up <code>[CLIENT]</code></li>
-<li>🕥 <strong>10:30 AM</strong> — SixMap &lt;&gt; VictorySquare Stand-up <code>[CLIENT]</code></li>
-<li>🕐 <strong>1:00 PM</strong> — Weekly Deal Review (Academy/AI Ventures) <code>[EXTERNAL]</code></li>
-<li>🕓 <strong>4:00 PM</strong> — Fugio &amp; VSP <code>[EXTERNAL]</code> — ⚠️ Decision was due this week. Push for commitment.</li>
-</ul>
-<hr />
-<h2 id="tomorrow-apr-1">📅 Tomorrow (Apr 1)</h2>
-<ul>
-<li>🕙 <strong>11:00 AM</strong> — Paul/Tyler/Ed Paperwork Discussion <code>[PROSPECT — Alpha Phlebotomy/YourHealthPro]</code>
-<ul>
-<li>Prep: Review estimate shared in Slack, confirm SOW terms</li>
-</ul></li>
-<li>🕑 <strong>2:30 PM</strong> — Stephanie &amp; Victory Square <code>[EXTERNAL]</code></li>
-</ul>
-<hr />
-<h2 id="pipeline-snapshot">💼 Pipeline Snapshot</h2>
-<div class="vsp-table-wrap"><table class="vsp-table">
-<thead>
-<tr class="header">
-<th>Stage</th>
-<th>Deals</th>
-<th>Value</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Total</td>
-<td>34</td>
-<td>$2,899,247</td>
-</tr>
-<tr class="even">
-<td>Stuck 14d+</td>
-<td>None</td>
-<td>—</td>
-</tr>
-<tr class="odd">
-<td>Coverage</td>
-<td>0.26x</td>
-<td>❌ Target: 3.0x</td>
-</tr>
-</tbody>
-</table></div>
-<hr />
-<h2 id="inbox-status">📥 Inbox Status</h2>
-<p><strong>4 items pending + 14 new meeting transcripts in <code>00_INBOX/MEETINGS/</code></strong></p>
-<ul>
-<li><code>FDM_Product_Initiative_COMPLETE_DOCUMENTATION.md</code></li>
-<li><code>INTEL_FireRoad_JeremiahFund_HeronVentures_People.md</code></li>
-<li><code>TASK_ENRICH_BATCH_8_2026-03-17.md</code></li>
-<li><code>TASK_ENRICH_BATCH_9_FINAL_2026-03-18.md</code></li>
-</ul>
-<hr />
-<h2 id="meddpic-tracker-top-10-weakest-first">🔬 MEDDPIC Tracker — Top 10 (Weakest First)</h2>
-<ul>
-<li>🔴 <strong>ResolvIQ</strong> — Unknown across all elements. Next: initial qualification</li>
-<li>🔴 <strong>Incisive Dental</strong> — Unknown across all elements. Next: initial qualification</li>
-<li>🔴 <strong>Bryson Hearne</strong> — Unknown across all elements. Next: initial qualification</li>
-<li>🟠 <strong>Epidaurus Health</strong> — Weak. Weakest: Economic Buyer. Next: identify decision maker</li>
-<li>🟠 <strong>Luxton Capital</strong> — Weak. Weakest: Champion. Next: find internal advocate</li>
-<li>🟠 <strong>Sovereigns Capital</strong> — Weak. Weakest: Metrics. Next: define success criteria <em>(materials 22+ days overdue)</em></li>
-<li>🟠 <strong>Rare.org</strong> — Weak. Weakest: Decision Process. Next: map buying process</li>
-<li>🟠 <strong>Grizzly Growth Capital</strong> — Weak. Weakest: Pain. Next: deeper discovery</li>
-<li>🟡 <strong>Vico</strong> — Moderate. Weakest: Paper Process. Next: understand procurement</li>
-<li>🟡 <strong>Military By Owner</strong> — Moderate. Weakest: Competition. Next: competitive landscape</li>
-</ul>
-<hr />
-<h2 id="activity-scorecard">📊 Activity Scorecard</h2>
-<p><em>Data from week of Mar 10–17 — dashboard stale</em></p>
-<div class="vsp-table-wrap"><table class="vsp-table">
-<thead>
-<tr class="header">
-<th>Pillar</th>
-<th>Target</th>
-<th>Actual</th>
-<th>Status</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Networking</td>
-<td>5</td>
-<td>3</td>
-<td>⚠️</td>
-</tr>
-<tr class="even">
-<td>Prospecting</td>
-<td>60</td>
-<td>14</td>
-<td>❌</td>
-</tr>
-<tr class="odd">
-<td>Protecting</td>
-<td>5</td>
-<td>2</td>
-<td>⚠️</td>
-</tr>
-<tr class="even">
-<td>Referring</td>
-<td>15</td>
-<td>3</td>
-<td>❌</td>
-</tr>
-</tbody>
-</table></div>
-<hr />
-<h2 id="action-items-carry-forward">✅ Action Items — Carry-Forward</h2>
-<p><strong>56 open items.</strong> Critical highlights:</p>
-<ul>
-<li>🔴 <strong>Brivo SOW1.17</strong> — $900K, 46+ days overdue</li>
-<li>🔴 <strong>SixMap SOW2</strong> — $271K, 62+ days overdue</li>
-<li>⚠️ Multiple deals 29–63 days overdue</li>
-</ul>
-<hr />
-<h2 id="slack-roundup">💬 Slack Roundup</h2>
-<h3 id="hot-channels-last-48h">Hot Channels (Last 48h)</h3>
-<ul>
-<li>🟢 <strong>#prospect-yourhealthpro</strong> — Estimate shared, Wednesday 11 AM call confirmed with Ed Cutler &amp; Paul. Could close fast.</li>
-<li>🔴 <strong>#prospect-bw-cyber</strong> — Tyler posted 5:41 AM tagging Matt/Vlad/Andrei for vacation coverage. Deadline PASSED (Mar 30). Matt hasn't acknowledged.</li>
-<li>🟡 <strong>#prospect-elevare-law</strong> — Matt posted: Erin has a proposal ready. Asked Paul for next steps. No reply yet.</li>
-</ul>
-<h3 id="internal-highlights">Internal Highlights</h3>
-<ul>
-<li><strong>#rocketship-ops</strong> — Pipeline coverage flagged at 0.26x (Mar 28). Sovereigns Capital materials 22+ days overdue.</li>
-<li><strong>#external-fdm-vsp</strong> — Ionut deploying across 7 WordPress sites. Tyler instructed Neon MCP deploy to Kyle/Nils.</li>
-<li><strong>#external-fdm-dev</strong> — LiteLLM security alert resolved for VSP/FDM scope.</li>
-<li><strong>Contract Review Tracker</strong> — Maria tagged Tyler on a contract draft needing review.</li>
-<li><strong>#external-fdm-vsp-dashboarding</strong> — FDM contact asked for dashboard feedback Mar 23, Tyler acknowledged but never followed up (8 days stale). ⚠️</li>
-</ul>
-<h3 id="quiet-prospect-channels">Quiet Prospect Channels</h3>
-<ul>
-<li>⚠️ #prospect-more-real-estate-group (13d)</li>
-<li>⚠️ #prospect-epicutis (13d)</li>
-<li>⚠️ #prospect-tebow-group (13d — Apr 20 in-person not confirmed)</li>
-<li>⚠️ #prospect-eshow (18d)</li>
-<li>⚠️ #prospect-luxtoncapital (17d)</li>
-<li>⚠️ #prospect-emotionally-healthy-discipleship (21d)</li>
-<li>🔴 #prospect-charter-impact (33d)</li>
-<li>🔴 #prospect-vico (36d)</li>
-<li>🔴 #prospect-truthly-ai (53d)</li>
-<li>🔴 #prospect-arc-integrated (57d)</li>
-<li>🔴 #prospect-temple-it (57d)</li>
-<li>🔴 #prospect-paleotechai (129d)</li>
-</ul>
-<hr />
-<p><em>Generated by Mission Control — 2026-03-31 6:00 AM ET</em></p>
-    </div>
-  </section>
-</main>
-<footer class="vsp-footer">
-  <div class="vsp-container">
-    <p>Victory Square Partners — Confidential</p>
+  <div class="subtitle">Tuesday, March 31, 2026 &nbsp;|&nbsp; Tyler Goble &nbsp;|&nbsp; Victory Square Partners &nbsp;|&nbsp; Eastern Time</div>
+  <div class="header-badges">
+    <span class="header-badge badge-blue">8 Meetings Today</span>
+    <span class="header-badge badge-green">34 Open Deals</span>
+    <span class="header-badge badge-amber">$2.9M Pipeline</span>
+    <span class="header-badge badge-red">0.26x Coverage</span>
+    <span class="header-badge badge-purple">6:30 AM – 5:00 PM ET</span>
   </div>
-</footer>
+</div>
+
+<div class="tabs" id="tabs">
+  <div class="tab active tab-green" onclick="showTab(0)"><span class="dot dot-green"></span>Overview</div>
+  <div class="tab tab-pulse tab-red" onclick="showTab(1)"><span class="dot dot-red"></span>Pipeline &amp; Health</div>
+  <div class="tab tab-purple" onclick="showTab(2)"><span class="dot dot-purple"></span>Slack Roundup</div>
+  <div class="tab tab-blue" onclick="showTab(3)"><span class="dot dot-blue"></span>Inbox &amp; Actions</div>
+</div>
+
+<div class="content">
+
+<!-- ==================== OVERVIEW ==================== -->
+<div class="panel active" id="panel-0">
+
+<div class="stats">
+  <div class="stat"><div class="num num-blue">8</div><div class="label">Meetings Today</div></div>
+  <div class="stat"><div class="num num-green">34</div><div class="label">Open Deals</div></div>
+  <div class="stat"><div class="num num-amber">$2.9M</div><div class="label">Pipeline Value</div></div>
+  <div class="stat"><div class="num num-red">0.26x</div><div class="label">Coverage Ratio</div></div>
+  <div class="stat"><div class="num num-red">56</div><div class="label">Open Actions</div></div>
+  <div class="stat"><div class="num num-red">4/4</div><div class="label">Pillars Behind</div></div>
+</div>
+
+<div class="alert alert-red">
+  <strong>🔴 BW Cyber — Deadline PASSED</strong>
+  Tenable for AI research was due Mar 30. Tyler leaves for vacation Apr 4. Tyler tagged Matt/Vlad/Andrei at 5:41 AM — Matt has not acknowledged. Matt must deliver research to Michael Brice TODAY.
+</div>
+
+<div class="alert alert-red">
+  <strong>🔴 Fugio / Rare.org — Decision Overdue</strong>
+  Decision was due week of Mar 30. 28 days of channel silence. Today at 4:00 PM there is a call with Fugio &amp; VSP — push for commitment or walk-away clarity before vacation.
+</div>
+
+<div class="alert alert-amber">
+  <strong>⚠️ Pipeline Coverage Critical — 0.26x</strong>
+  Target is 3.0x. Current pipeline of $2.9M covers only 0.26x quota. This is the single largest structural risk to the quarter. See Pipeline &amp; Health tab for full detail.
+</div>
+
+<div class="alert alert-amber">
+  <strong>⚠️ Morning Ops 27 Days Stale</strong>
+  Automated morning ops have not run in 27 days. CURRENT.md has 56 open action items, stale since Mar 3. Activity dashboard data is from week of Mar 10–17.
+</div>
+
+<div class="card">
+  <h3>Day Timeline — Today (Mar 31)</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Time (ET)</th>
+        <th>Meeting</th>
+        <th>Type</th>
+        <th>Category</th>
+        <th>Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="timeline-time">6:30 AM</td>
+        <td><strong>Tyler &lt;&gt; Christine Stand Up</strong></td>
+        <td>Standup</td>
+        <td><span class="tag tag-green">Internal</span></td>
+        <td>Daily sync</td>
+      </tr>
+      <tr>
+        <td class="timeline-time">7:00 AM</td>
+        <td><strong>Pair Programming Session</strong></td>
+        <td>Technical</td>
+        <td><span class="tag tag-green">Internal</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td class="timeline-time">7:45 AM</td>
+        <td><strong>SixMap Internal Quick Sync</strong></td>
+        <td>Client Sync</td>
+        <td><span class="tag tag-blue">Client</span></td>
+        <td>Recurring</td>
+      </tr>
+      <tr>
+        <td class="timeline-time">8:30 AM</td>
+        <td><strong>Sales Weekly SOB</strong></td>
+        <td>Sales Review</td>
+        <td><span class="tag tag-green">Internal</span></td>
+        <td>State of Business review</td>
+      </tr>
+      <tr>
+        <td class="timeline-time">9:00 AM</td>
+        <td><strong>FDM Stand Up</strong></td>
+        <td>Standup</td>
+        <td><span class="tag tag-blue">Client</span></td>
+        <td>Recurring</td>
+      </tr>
+      <tr>
+        <td class="timeline-time">10:30 AM</td>
+        <td><strong>SixMap &lt;&gt; VictorySquare Stand-up</strong></td>
+        <td>Standup</td>
+        <td><span class="tag tag-blue">Client</span></td>
+        <td>Recurring</td>
+      </tr>
+      <tr>
+        <td class="timeline-time">1:00 PM</td>
+        <td><strong>Weekly Deal Review (Academy/AI Ventures)</strong></td>
+        <td>Deal Review</td>
+        <td><span class="tag tag-purple">External</span></td>
+        <td></td>
+      </tr>
+      <tr style="background:rgba(239,68,68,.04);">
+        <td class="timeline-time">4:00 PM</td>
+        <td><strong>Fugio &amp; VSP</strong></td>
+        <td>Prospect</td>
+        <td><span class="tag tag-red">Urgent</span></td>
+        <td>⚠️ Decision was due this week. Push for commitment.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="card">
+  <h3>Tomorrow (Apr 1)</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Time (ET)</th>
+        <th>Meeting</th>
+        <th>Category</th>
+        <th>Prep</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="background:rgba(16,185,129,.03);">
+        <td class="timeline-time">11:00 AM</td>
+        <td><strong>Paul / Tyler / Ed Paperwork Discussion</strong><br><span style="color:var(--muted);font-size:.78rem;">Alpha Phlebotomy / YourHealthPro</span></td>
+        <td><span class="tag tag-amber">Prospect</span></td>
+        <td>Review estimate shared in Slack, confirm SOW terms</td>
+      </tr>
+      <tr>
+        <td class="timeline-time">2:30 PM</td>
+        <td><strong>Stephanie &amp; Victory Square</strong></td>
+        <td><span class="tag tag-purple">External</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="two-col">
+  <div class="card">
+    <h3>Top 3 Priorities</h3>
+    <table>
+      <tr><th>#</th><th>Priority</th><th>Why</th></tr>
+      <tr>
+        <td><strong style="color:var(--red)">1</strong></td>
+        <td>BW Cyber vacation coverage</td>
+        <td>Matt must deliver Tenable research to Michael Brice today. Deadline passed.</td>
+      </tr>
+      <tr>
+        <td><strong style="color:var(--amber)">2</strong></td>
+        <td>YourHealthPro paperwork (tomorrow 11 AM)</td>
+        <td>Ed Cutler call — confirm SOW terms, review estimate from Slack.</td>
+      </tr>
+      <tr>
+        <td><strong style="color:var(--amber)">3</strong></td>
+        <td>Fugio / Rare.org (today 4 PM)</td>
+        <td>28 days silence. Decision was due. Must resolve before vacation Apr 4.</td>
+      </tr>
+    </table>
+  </div>
+  <div class="card">
+    <h3>Top 3 Outcomes Needed Today</h3>
+    <table>
+      <tr><th>#</th><th>Outcome</th><th>Owner</th></tr>
+      <tr>
+        <td><strong style="color:var(--red)">1</strong></td>
+        <td>Matt acknowledges BW Cyber + commits to delivering Tenable research</td>
+        <td>Tyler → Matt</td>
+      </tr>
+      <tr>
+        <td><strong style="color:var(--amber)">2</strong></td>
+        <td>Fugio: yes/no/when — clear decision from 4 PM call</td>
+        <td>Tyler</td>
+      </tr>
+      <tr>
+        <td><strong style="color:var(--amber)">3</strong></td>
+        <td>YHP paperwork confirmed — SOW terms locked for tomorrow</td>
+        <td>Tyler + Paul</td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+</div><!-- /panel-0 -->
+
+<!-- ==================== PIPELINE & HEALTH ==================== -->
+<div class="panel" id="panel-1">
+
+<div class="alert alert-red">
+  <strong>🔴 Critical: Pipeline Coverage 0.26x (Target: 3.0x)</strong>
+  $2,899,247 across 34 deals. At current coverage, the quarter target is severely at risk. Immediate pipeline-building must be the #1 structural priority after vacation. No stuck deals detected by Pipedrive, but Brivo ($900K) and SixMap ($271K) SOWs are overdue by 46+ and 62+ days respectively.
+</div>
+
+<div class="card">
+  <h3>Pipeline Snapshot</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Metric</th>
+        <th>Value</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Total Open Deals</td>
+        <td><strong>34</strong></td>
+        <td><span class="tag tag-amber">Active</span></td>
+      </tr>
+      <tr>
+        <td>Total Pipeline Value</td>
+        <td><strong>$2,899,247</strong></td>
+        <td><span class="tag tag-amber">Below Target</span></td>
+      </tr>
+      <tr>
+        <td>Stuck 14d+</td>
+        <td>None detected</td>
+        <td><span class="tag tag-green">Clean</span></td>
+      </tr>
+      <tr>
+        <td>Coverage Ratio</td>
+        <td><strong style="color:var(--red)">0.26x</strong></td>
+        <td><span class="tag tag-red">Critical — Target 3.0x</span></td>
+      </tr>
+      <tr>
+        <td>Brivo SOW1.17</td>
+        <td>$900,000 — 46+ days overdue</td>
+        <td><span class="tag tag-red">Overdue</span></td>
+      </tr>
+      <tr>
+        <td>SixMap SOW2</td>
+        <td>$271,000 — 62+ days overdue</td>
+        <td><span class="tag tag-red">Overdue</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="section-title">MEDDPIC Tracker — Top 10 Prospects (Weakest First)</div>
+
+<div class="meddpic-grid">
+  <div class="meddpic-item">
+    <div class="m-label"><span class="dot dot-red"></span>ResolvIQ</div>
+    <div class="m-status m-unknown">Unknown — All Elements</div>
+    <div style="font-size:.75rem;color:var(--dim);margin-top:.3rem;">Next: Initial qualification call</div>
+  </div>
+  <div class="meddpic-item">
+    <div class="m-label"><span class="dot dot-red"></span>Incisive Dental</div>
+    <div class="m-status m-unknown">Unknown — All Elements</div>
+    <div style="font-size:.75rem;color:var(--dim);margin-top:.3rem;">Next: Initial qualification call</div>
+  </div>
+  <div class="meddpic-item">
+    <div class="m-label"><span class="dot dot-red"></span>Bryson Hearne</div>
+    <div class="m-status m-unknown">Unknown — All Elements</div>
+    <div style="font-size:.75rem;color:var(--dim);margin-top:.3rem;">Next: Initial qualification call</div>
+  </div>
+  <div class="meddpic-item">
+    <div class="m-label"><span class="dot dot-amber"></span>Epidaurus Health</div>
+    <div class="m-status m-weak">Weak — Economic Buyer unknown</div>
+    <div style="font-size:.75rem;color:var(--dim);margin-top:.3rem;">Next: Identify decision maker</div>
+  </div>
+  <div class="meddpic-item">
+    <div class="m-label"><span class="dot dot-amber"></span>Luxton Capital</div>
+    <div class="m-status m-weak">Weak — No Champion</div>
+    <div style="font-size:.75rem;color:var(--dim);margin-top:.3rem;">Next: Find internal advocate</div>
+  </div>
+  <div class="meddpic-item">
+    <div class="m-label"><span class="dot dot-amber"></span>Sovereigns Capital</div>
+    <div class="m-status m-weak">Weak — Metrics undefined</div>
+    <div style="font-size:.75rem;color:var(--dim);margin-top:.3rem;">⚠️ Materials 22+ days overdue</div>
+  </div>
+  <div class="meddpic-item">
+    <div class="m-label"><span class="dot dot-amber"></span>Rare.org (Fugio)</div>
+    <div class="m-status m-weak">Weak — Decision Process unclear</div>
+    <div style="font-size:.75rem;color:var(--dim);margin-top:.3rem;">Next: Map buying process — 4 PM call TODAY</div>
+  </div>
+  <div class="meddpic-item">
+    <div class="m-label"><span class="dot dot-amber"></span>Grizzly Growth Capital</div>
+    <div class="m-status m-weak">Weak — Pain not identified</div>
+    <div style="font-size:.75rem;color:var(--dim);margin-top:.3rem;">Next: Deeper discovery</div>
+  </div>
+  <div class="meddpic-item">
+    <div class="m-label"><span class="dot dot-blue"></span>Vico</div>
+    <div class="m-status m-moderate">Moderate — Paper Process weak</div>
+    <div style="font-size:.75rem;color:var(--dim);margin-top:.3rem;">Next: Understand procurement (36d silent)</div>
+  </div>
+  <div class="meddpic-item">
+    <div class="m-label"><span class="dot dot-blue"></span>Military By Owner</div>
+    <div class="m-status m-moderate">Moderate — Competition unknown</div>
+    <div style="font-size:.75rem;color:var(--dim);margin-top:.3rem;">Next: Competitive landscape research</div>
+  </div>
+</div>
+
+<div class="section-title" style="margin-top:1.5rem;">Pipedrive Health Check</div>
+
+<div class="alert alert-red">
+  <strong>🔴 Critical: Coverage Ratio 0.26x</strong>
+  Pipeline at $2.9M vs target. Immediate new business generation required post-vacation.
+</div>
+
+<div class="alert alert-amber">
+  <strong>⚠️ Brivo SOW1.17 — $900K — 46+ Days Overdue</strong>
+  This deal has been stalled for over 6 weeks. Risk of losing momentum. Needs executive escalation.
+</div>
+
+<div class="alert alert-amber">
+  <strong>⚠️ SixMap SOW2 — $271K — 62+ Days Overdue</strong>
+  Longest-running overdue SOW in pipeline. 62+ days is a serious stall. Requires direct follow-up this week.
+</div>
+
+<div class="alert alert-amber">
+  <strong>⚠️ Sovereigns Capital — Materials 22+ Days Overdue</strong>
+  MEDDPIC metrics remain undefined. Materials were due weeks ago. Contact must be re-engaged before this deal goes cold.
+</div>
+
+<div class="alert alert-amber">
+  <strong>⚠️ Activity Scorecard — All 4 Pillars Behind Target</strong>
+  Data from week of Mar 10–17 (stale). Networking 3/5, Prospecting 14/60, Protecting 2/5, Referring 3/15. Dashboard has not been updated in 3 weeks.
+</div>
+
+</div><!-- /panel-1 -->
+
+<!-- ==================== SLACK ROUNDUP ==================== -->
+<div class="panel" id="panel-2">
+
+<div class="section-title">Hot Channels (Last 48h)</div>
+
+<div class="alert alert-green">
+  <strong>🟢 #prospect-yourhealthpro</strong>
+  Estimate shared in Slack. Wednesday 11 AM call confirmed with Ed Cutler &amp; Paul. YHP has momentum — could close fast. Confirm SOW terms before that call.
+</div>
+
+<div class="alert alert-red">
+  <strong>🔴 #prospect-bw-cyber</strong>
+  Tyler posted at 5:41 AM tagging Matt, Vlad, and Andrei for vacation coverage. Tenable for AI research deadline PASSED (was Mar 30). Matt has not acknowledged. Tyler leaves Apr 4 — this must resolve today.
+</div>
+
+<div class="alert alert-amber">
+  <strong>🟡 #prospect-elevare-law</strong>
+  Matt posted: Erin has a proposal ready. Asked Paul for next steps. No reply yet from Paul.
+</div>
+
+<div class="section-title">Internal Highlights</div>
+
+<div class="card">
+  <h4>#rocketship-ops</h4>
+  <p style="font-size:.83rem;color:var(--muted);">Pipeline coverage flagged at 0.26x on Mar 28. Sovereigns Capital materials noted as 22+ days overdue.</p>
+</div>
+
+<div class="card">
+  <h4>#external-fdm-vsp</h4>
+  <p style="font-size:.83rem;color:var(--muted);">Ionut deploying across 7 WordPress sites. Tyler instructed Neon MCP deploy to Kyle/Nils.</p>
+</div>
+
+<div class="card">
+  <h4>#external-fdm-dev</h4>
+  <p style="font-size:.83rem;color:var(--muted);">LiteLLM security alert resolved for VSP/FDM scope. No action needed.</p>
+</div>
+
+<div class="card">
+  <h4>Contract Review Tracker</h4>
+  <p style="font-size:.83rem;color:var(--muted);">Maria tagged Tyler on a contract draft needing review. <span style="color:var(--amber);">⚠️ Pending Tyler review.</span></p>
+</div>
+
+<div class="alert alert-amber">
+  <strong>⚠️ #external-fdm-vsp-dashboarding — 8 Days Stale</strong>
+  FDM contact asked for dashboard feedback on Mar 23. Tyler acknowledged but never followed up. Now 8 days without a response — needs reply this week.
+</div>
+
+<div class="section-title">Quiet Prospect Channels</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Channel</th>
+      <th>Days Silent</th>
+      <th>Risk</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>#prospect-more-real-estate-group</td><td>13d</td><td><span class="tag tag-amber">Watch</span></td></tr>
+    <tr><td>#prospect-epicutis</td><td>13d</td><td><span class="tag tag-amber">Watch</span></td></tr>
+    <tr><td>#prospect-tebow-group</td><td>13d</td><td><span class="tag tag-amber">Apr 20 in-person not confirmed</span></td></tr>
+    <tr><td>#prospect-luxtoncapital</td><td>17d</td><td><span class="tag tag-amber">Watch</span></td></tr>
+    <tr><td>#prospect-eshow</td><td>18d</td><td><span class="tag tag-amber">Watch</span></td></tr>
+    <tr><td>#prospect-emotionally-healthy-discipleship</td><td>21d</td><td><span class="tag tag-amber">Watch</span></td></tr>
+    <tr><td>#prospect-charter-impact</td><td>33d</td><td><span class="tag tag-red">At Risk</span></td></tr>
+    <tr><td>#prospect-vico</td><td>36d</td><td><span class="tag tag-red">At Risk</span></td></tr>
+    <tr><td>#prospect-truthly-ai</td><td>53d</td><td><span class="tag tag-red">At Risk</span></td></tr>
+    <tr><td>#prospect-arc-integrated</td><td>57d</td><td><span class="tag tag-red">At Risk</span></td></tr>
+    <tr><td>#prospect-temple-it</td><td>57d</td><td><span class="tag tag-red">At Risk</span></td></tr>
+    <tr><td>#prospect-paleotechai</td><td>129d</td><td><span class="tag tag-red">Likely Dead</span></td></tr>
+  </tbody>
+</table>
+
+</div><!-- /panel-2 -->
+
+<!-- ==================== INBOX & ACTIONS ==================== -->
+<div class="panel" id="panel-3">
+
+<div class="section-title">Inbox Status</div>
+
+<div class="alert alert-blue">
+  <strong>📥 4 Pending Items + 14 New Meeting Transcripts in 00_INBOX/MEETINGS/</strong>
+  Inbox Zero target: end of today. 14 meeting transcripts need classification and routing via /process-call.
+</div>
+
+<div class="card">
+  <h3>Pending Inbox Items</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>File</th>
+        <th>Type</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>FDM_Product_Initiative_COMPLETE_DOCUMENTATION.md</code></td>
+        <td><span class="tag tag-blue">Client Doc</span></td>
+        <td>Route to 03_CLIENTS/FDM/</td>
+      </tr>
+      <tr>
+        <td><code>INTEL_FireRoad_JeremiahFund_HeronVentures_People.md</code></td>
+        <td><span class="tag tag-purple">Intel</span></td>
+        <td>Review and classify</td>
+      </tr>
+      <tr>
+        <td><code>TASK_ENRICH_BATCH_8_2026-03-17.md</code></td>
+        <td><span class="tag tag-amber">Task</span></td>
+        <td>Run /contact-enrich or archive</td>
+      </tr>
+      <tr>
+        <td><code>TASK_ENRICH_BATCH_9_FINAL_2026-03-18.md</code></td>
+        <td><span class="tag tag-amber">Task</span></td>
+        <td>Run /contact-enrich or archive</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="section-title">Action Items — Carry-Forward (56 Open)</div>
+
+<div class="alert alert-red">
+  <strong>🔴 Brivo SOW1.17 — $900K — 46+ Days Overdue</strong>
+  Highest-value overdue action in pipeline. Must be escalated or re-engaged this week.
+</div>
+
+<div class="alert alert-red">
+  <strong>🔴 SixMap SOW2 — $271K — 62+ Days Overdue</strong>
+  Longest-running stall. 62 days is beyond normal tolerance. Decision needed: push or deprioritize.
+</div>
+
+<div class="alert alert-amber">
+  <strong>⚠️ Multiple Deals 29–63 Days Overdue</strong>
+  CURRENT.md has 56 open items, last updated Mar 3. A full triage is needed post-vacation. Do not let stale actions accumulate further.
+</div>
+
+<div class="section-title">Recommendations</div>
+
+<div class="card">
+  <h3>Action Plan for Today</h3>
+  <table>
+    <tr><th>#</th><th>Action</th><th>By When</th></tr>
+    <tr>
+      <td><strong style="color:var(--red)">1</strong></td>
+      <td>Confirm Matt acknowledges BW Cyber + will deliver Tenable research to Michael Brice</td>
+      <td>This morning</td>
+    </tr>
+    <tr>
+      <td><strong style="color:var(--red)">2</strong></td>
+      <td>Fugio 4 PM — push for a clear yes/no/when. Do not leave without a decision.</td>
+      <td>4:00 PM</td>
+    </tr>
+    <tr>
+      <td><strong style="color:var(--amber)">3</strong></td>
+      <td>Confirm YHP SOW terms with Paul — ready for Ed Cutler call tomorrow 11 AM</td>
+      <td>EOD</td>
+    </tr>
+    <tr>
+      <td><strong style="color:var(--amber)">4</strong></td>
+      <td>Reply to FDM dashboarding channel (8 days stale)</td>
+      <td>EOD</td>
+    </tr>
+    <tr>
+      <td><strong style="color:var(--blue)">5</strong></td>
+      <td>Review Maria's contract draft in Contract Review Tracker</td>
+      <td>EOD</td>
+    </tr>
+    <tr>
+      <td><strong style="color:var(--dim)">6</strong></td>
+      <td>Queue 14 meeting transcripts for /process-call when bandwidth allows</td>
+      <td>Post-vacation or delegate</td>
+    </tr>
+  </table>
+</div>
+
+<div class="card">
+  <h3>Activity Scorecard — Week of Mar 10–17 (Stale)</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Pillar</th>
+        <th>Target</th>
+        <th>Actual</th>
+        <th>Gap</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Networking</td>
+        <td>5</td>
+        <td>3</td>
+        <td>-2</td>
+        <td><span class="tag tag-amber">⚠️ Behind</span></td>
+      </tr>
+      <tr>
+        <td>Prospecting</td>
+        <td>60</td>
+        <td>14</td>
+        <td>-46</td>
+        <td><span class="tag tag-red">❌ Critical</span></td>
+      </tr>
+      <tr>
+        <td>Protecting</td>
+        <td>5</td>
+        <td>2</td>
+        <td>-3</td>
+        <td><span class="tag tag-amber">⚠️ Behind</span></td>
+      </tr>
+      <tr>
+        <td>Referring</td>
+        <td>15</td>
+        <td>3</td>
+        <td>-12</td>
+        <td><span class="tag tag-red">❌ Critical</span></td>
+      </tr>
+    </tbody>
+  </table>
+  <p style="font-size:.75rem;color:var(--dim);margin-top:.75rem;">⚠️ Data from week of Mar 10–17. Dashboard has not been updated in 3 weeks. Run /activity-scorecard to refresh.</p>
+</div>
+
+</div><!-- /panel-3 -->
+
+</div><!-- /content -->
+
+<script>
+function showTab(n) {
+  var panels = document.querySelectorAll('.panel');
+  var tabs = document.querySelectorAll('.tab');
+  panels.forEach(function(p){ p.classList.remove('active'); });
+  tabs.forEach(function(t){ t.classList.remove('active'); });
+  document.getElementById('panel-' + n).classList.add('active');
+  tabs[n].classList.add('active');
+}
+</script>
+
 </body>
 </html>
