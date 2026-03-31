@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Pod Pricing Model — VSP Internal</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e17;
+    --surface: #111827;
+    --surface-2: #1a2332;
+    --border: #1e293b;
+    --text: #e2e8f0;
+    --text-dim: #94a3b8;
+    --text-muted: #64748b;
+    --blue: #3b82f6;
+    --gold: #f59e0b;
+    --green: #10b981;
+    --red: #ef4444;
+    --white: #f8fafc;
+    --purple: #8b5cf6;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  .header {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    border-bottom: 3px solid var(--green);
+    padding: 32px 40px 0;
+  }
+  .header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+  }
+  .header h1 { font-size: 28px; font-weight: 800; color: var(--white); }
+  .header .subtitle { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .badge-internal {
+    background: rgba(139, 92, 246, 0.15);
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    color: var(--purple);
+  }
+
+  .tabs { display: flex; gap: 0; overflow-x: auto; }
+  .tab {
+    padding: 12px 24px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+    border: none;
+    background: none;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -3px;
+    transition: all 0.2s;
+    font-family: inherit;
+    white-space: nowrap;
+  }
+  .tab:hover { color: var(--text-dim); }
+  .tab.active { color: var(--green); border-bottom-color: var(--green); }
+
+  .content { max-width: 1000px; margin: 0 auto; padding: 32px 40px 60px; }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  h2 {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--white);
+    margin: 32px 0 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  h2:first-child { margin-top: 0; }
+  h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+    margin: 24px 0 12px;
+  }
+  h4 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-dim);
+    margin: 20px 0 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  p { margin: 0 0 12px; font-size: 14px; }
+  ul, ol { margin: 0 0 16px 20px; font-size: 14px; }
+  li { margin-bottom: 6px; }
+  strong { color: var(--white); }
+  em { color: var(--text-dim); font-style: italic; }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .card h3 { margin-top: 0; }
+
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+  }
+  .stat-card .value {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--green);
+    display: block;
+  }
+  .stat-card .label {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0 24px;
+    font-size: 13px;
+  }
+  th {
+    text-align: left;
+    padding: 10px 14px;
+    background: var(--surface-2);
+    color: var(--text-dim);
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid var(--border);
+  }
+  td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  tr:last-child td { border-bottom: none; }
+
+  .rating {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+  .rating-confirmed { background: rgba(16,185,129,0.15); color: var(--green); }
+  .rating-emerging { background: rgba(245,158,11,0.15); color: var(--gold); }
+  .rating-disputed { background: rgba(239,68,68,0.15); color: var(--red); }
+
+  .quote {
+    border-left: 3px solid var(--green);
+    padding: 12px 20px;
+    margin: 16px 0;
+    background: var(--surface-2);
+    border-radius: 0 8px 8px 0;
+    font-style: italic;
+    color: var(--text-dim);
+    font-size: 14px;
+  }
+  .quote .attr { display: block; margin-top: 8px; font-style: normal; font-size: 12px; color: var(--text-muted); }
+
+  .callout {
+    padding: 16px 20px;
+    border-radius: 8px;
+    margin: 16px 0;
+    font-size: 14px;
+  }
+  .callout-warn {
+    background: rgba(239,68,68,0.1);
+    border: 1px solid rgba(239,68,68,0.25);
+  }
+  .callout-info {
+    background: rgba(59,130,246,0.1);
+    border: 1px solid rgba(59,130,246,0.25);
+  }
+  .callout-success {
+    background: rgba(16,185,129,0.1);
+    border: 1px solid rgba(16,185,129,0.25);
+  }
+
+  .source-link {
+    color: var(--blue);
+    text-decoration: none;
+    font-size: 12px;
+  }
+  .source-link:hover { text-decoration: underline; }
+  .sources { margin-top: 12px; }
+  .sources a { display: block; margin-bottom: 4px; }
+
+  .footer {
+    text-align: center;
+    padding: 24px;
+    color: var(--text-muted);
+    font-size: 12px;
+    border-top: 1px solid var(--border);
+    margin-top: 40px;
+  }
+
+  @media (max-width: 768px) {
+    .header { padding: 20px 20px 0; }
+    .content { padding: 20px 20px 40px; }
+    .header-top { flex-direction: column; gap: 12px; }
+    .stat-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <div>
+      <h1>AI Pod Pricing Model</h1>
+      <div class="subtitle">Victory Square Partners — Internal Strategy Document &bull; 2026-03-31 &bull; Source: SOB Call + Market Research</div>
+    </div>
+    <div class="badge badge-internal">INTERNAL</div>
+  </div>
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('evidence')">Market Evidence</button>
+    <button class="tab" onclick="switchTab('strategy')">Pricing Strategy</button>
+    <button class="tab" onclick="switchTab('competitive')">Competitive Intel</button>
+    <button class="tab" onclick="switchTab('contract')">Contract Rules</button>
+    <button class="tab" onclick="switchTab('open')">Open Questions</button>
+  </div>
+</div>
+
+<div class="content">
+
+<!-- ==================== TAB: MARKET EVIDENCE ==================== -->
+<div id="evidence" class="tab-panel active">
+
+<h2>Market Evidence Catalog</h2>
+<p>Claims rated: <span class="rating rating-confirmed">Confirmed</span> (multiple sources) &nbsp; <span class="rating rating-emerging">Emerging</span> (1–2 sources) &nbsp; <span class="rating rating-disputed">Disputed</span> (contradictory evidence)</p>
+
+<!-- Globant -->
+<div class="card">
+  <h3>A. Globant AI Pods — The Most Direct Comparable <span class="rating rating-confirmed">Confirmed</span></h3>
+  <p>Globant launched "AI Pods" in <strong>June 2025</strong> — described as "the first subscription model for AI-powered engineering." Almost exactly the VSP model, at enterprise scale.</p>
+  <ul>
+    <li>Clients subscribe monthly per AI Pod</li>
+    <li>Pricing is <strong>token-based and metered</strong>, not per-head — <strong>~$20,000/month</strong> for 100M AI tokens, with overages billed</li>
+    <li>Traditional "Agile Pods" (5–7 person squads) started at ~$20,000/month at mid-$40s/hr blended</li>
+    <li>Powered by GEAI (model-agnostic) plus CODA agents for SDLC automation</li>
+    <li>Bain predicts <strong>20–30% renewal price compression</strong> as clients bake productivity gains into expectations</li>
+  </ul>
+  <div class="quote">"Services as software — continuous, intelligent, and aligned to outcomes, not effort."<span class="attr">— Martin Migoya, CEO, Globant</span></div>
+  <div class="quote">"We are at the forefront of a massive change for our sector."<span class="attr">— Diego Tartara, CTO, Globant</span></div>
+  <div class="callout callout-success"><strong>Why it matters:</strong> Globant validates the subscription/pod model at a $20K/month anchor. VSP Tier 1 ($15K) sits just below — the nimble boutique alternative without enterprise overhead. VSP's FTE-equivalency framing is simpler and more client-intuitive than token metering.</div>
+  <div class="sources">
+    <a class="source-link" href="https://www.globant.com/ai-pods" target="_blank">Globant AI Pods official page</a>
+    <a class="source-link" href="https://www.prnewswire.com/news-releases/globant-reimagines-traditional-it-services-with-ai-pods-the-first-subscription-model-for-ai-powered-engineering-302474354.html" target="_blank">Globant press release, June 2025</a>
+    <a class="source-link" href="https://www.bain.com/insights/ai-pods-as-a-service-modular-scalable-and-built-for-speed/" target="_blank">Bain &amp; Company analysis</a>
+  </div>
+</div>
+
+<!-- Efficiency Paradox -->
+<div class="card">
+  <h3>B. The AI Efficiency Paradox — Central Pricing Tension <span class="rating rating-disputed">Disputed</span></h3>
+  <p><strong>The core debate:</strong> If AI makes engineers more productive, charge less (same output, fewer hours) or more (premium for speed)?</p>
+
+  <h4>What the data actually shows</h4>
+  <table>
+    <tr><th>Study</th><th>Sample</th><th>Finding</th></tr>
+    <tr>
+      <td><strong>METR RCT</strong> (July 2025)</td>
+      <td>16 experienced devs, 246 real tasks, Cursor Pro + Claude 3.5/3.7</td>
+      <td>Developers <strong style="color:var(--red)">19% slower</strong> with AI. Believed they were 20% faster — a 40-point perception gap.</td>
+    </tr>
+    <tr>
+      <td><strong>DX Longitudinal</strong> (400 companies)</td>
+      <td>Nov 2024–Feb 2026</td>
+      <td>AI usage +65%, PR throughput only <strong>+9.97%</strong>. Most orgs land in 8–12% range.</td>
+    </tr>
+    <tr>
+      <td><strong>BCG Study</strong> (758 consultants)</td>
+      <td>Knowledge work tasks (not SWE)</td>
+      <td>12.2% more tasks, <strong>25.1% faster</strong>, 40%+ higher quality</td>
+    </tr>
+    <tr>
+      <td><strong>Infosys</strong> (300+ AI agents)</td>
+      <td>Enterprise production</td>
+      <td><strong>5–15% productivity gains</strong></td>
+    </tr>
+    <tr>
+      <td><strong>GitHub Copilot</strong> marketing</td>
+      <td>Controlled demos</td>
+      <td>Claimed 2–3x. <strong>Does not hold up</strong> in longitudinal studies.</td>
+    </tr>
+  </table>
+
+  <div class="quote">"The easy tasks are a little easier. The tedious tasks are a little less annoying. A four-day task might take three. But that doesn't mean I'm shipping 3x more PRs."<span class="attr">— Senior developer, DX study</span></div>
+
+  <p><strong>Law firm parallel:</strong> GenAI adoption surged to 79% in 2025 — the billable hour never collapsed. Firms used AI to protect margins while raising prices on human-centric tasks. The "efficiency dividend" went entirely to the firms.</p>
+
+  <div class="callout callout-warn"><strong>Critical insight:</strong> VSP should NOT lean on "AI makes our engineers 3–5x more productive." The honest framing: <em>AI changes the mix of what humans do and agents do, enabling a lean pod to deliver what a larger team used to. The value is architectural, not a raw speed multiplier.</em></div>
+
+  <div class="sources">
+    <a class="source-link" href="https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/" target="_blank">METR RCT study, July 2025</a>
+    <a class="source-link" href="https://getdx.com/blog/ai-productivity-gains-are-10-percent-not-10x/" target="_blank">DX longitudinal study — "10%, not 10x"</a>
+  </div>
+</div>
+
+<!-- Consulting Giants -->
+<div class="card">
+  <h3>C. Consulting Giants — Pricing Restructuring <span class="rating rating-confirmed">Confirmed</span></h3>
+
+  <h4>Accenture</h4>
+  <ul>
+    <li><strong>$2.7B</strong> in generative AI revenue, <strong>$5.9B</strong> in AI bookings (12mo ending Aug 2025) — near-doubling YoY</li>
+    <li><strong>$40B+</strong> in labor-hours-based revenue at risk of repricing</li>
+    <li>Cut 19,000 jobs in 2023 while claiming AI creates jobs — capturing savings as margin</li>
+    <li>30,000 professionals training on Claude Code (Accenture Anthropic Business Group)</li>
+  </ul>
+  <div class="quote">"If AI tools increase developer productivity by 40%, Accenture needs 24 engineers to deliver the same work — representing a 40% reduction in the billable-hours base."<span class="attr">— Accenture internal analysis</span></div>
+
+  <h4>McKinsey</h4>
+  <ul>
+    <li>Operates <strong>20,000 AI agents</strong> alongside 40,000 human employees</li>
+    <li>Only ~25% of fees globally linked to outcomes as of late 2025</li>
+    <li>"Double-digit gains in throughput per consultant" → profit per partner, not client savings</li>
+  </ul>
+
+  <h4>BCG</h4>
+  <ul>
+    <li><strong>$2.7B</strong> annual AI revenue = 20% of total revenue</li>
+    <li>AI delivered 12.2% more tasks, 25.1% faster, 40%+ quality — not passed as fee reductions</li>
+  </ul>
+
+  <h4>Indian IT Outsourcers (VSP's contrast case)</h4>
+  <table>
+    <tr><th>Firm</th><th>Headcount Impact</th><th>Pricing Pressure</th></tr>
+    <tr><td>TCS</td><td>Cut 12,000+ jobs (2% workforce) in 2025</td><td>$100M in AI deals w/ "AI-infused productivity" requirement</td></tr>
+    <tr><td>Wipro</td><td>25,200 job reductions since 2023</td><td>Clients demanding <strong>20–30% price reductions</strong></td></tr>
+    <tr><td>Infosys</td><td>Revenue growth, no proportionate headcount</td><td>5–15% productivity from 300+ agents</td></tr>
+    <tr><td>EPAM</td><td>Shifting to outcome-based</td><td>Margins compressed to 15.0–15.3%</td></tr>
+  </table>
+
+  <div class="callout callout-success"><strong>VSP's advantage:</strong> The big firms are making the same transition from a position of $65B revenue and 750,000 people. VSP can adopt the new model cleanly, without legacy T&amp;M contracts to unwind. The incumbents are dragging a battleship to make a U-turn.</div>
+
+  <div class="sources">
+    <a class="source-link" href="https://pitchgrade.com/research/accenture-ai-margin-pressure" target="_blank">Accenture AI Margin Pressure analysis</a>
+    <a class="source-link" href="https://www.forrester.com/blogs/the-ai-effect-what-q2-2025-technology-services-earnings-mean-for-technology-executives/" target="_blank">Forrester Q2 2025 Technology Services Earnings</a>
+    <a class="source-link" href="https://medium.com/predict/industry-shakeup-why-mckinsey-is-moving-to-performance-based-fees-ee24abcc6ff8" target="_blank">McKinsey performance-based fees</a>
+    <a class="source-link" href="https://www.storyboard18.com/how-it-works/tcs-infosys-wipro-and-hcl-tech-headcount-reduces-by-over-42000-in-two-years-77264.htm" target="_blank">TCS/Wipro/Infosys headcount reductions</a>
+  </div>
+</div>
+
+<!-- Forrester / Gartner -->
+<div class="card">
+  <h3>D. Buyer Expectations — Forrester &amp; Gartner <span class="rating rating-confirmed">Confirmed</span></h3>
+
+  <div class="stat-grid">
+    <div class="stat-card"><span class="value">45%</span><span class="label">Expanding performance-based pricing</span></div>
+    <div class="stat-card"><span class="value">46%</span><span class="label">Increasing fixed-price contracts</span></div>
+    <div class="stat-card"><span class="value">50%</span><span class="label">Cite AI as most critical tech for services</span></div>
+    <div class="stat-card"><span class="value">$2T</span><span class="label">Projected tech services spend by 2028</span></div>
+  </div>
+
+  <ul>
+    <li>Buyers increasingly demand <em>"results — not just people"</em></li>
+    <li>Gartner: 90% of B2B purchases handled by AI agents within 3 years</li>
+    <li>40% of enterprise apps will feature task-specific AI agents by end of 2026 (vs. &lt;5% in 2025)</li>
+  </ul>
+
+  <div class="callout callout-info"><strong>VSP timing:</strong> Mid-market clients are just learning the vocabulary. VSP arriving with a fixed-price, outcome-framed pod model is <em>earlier</em> than most of the market.</div>
+
+  <div class="sources">
+    <a class="source-link" href="https://www.forrester.com/blogs/the-state-of-services-2025-co-innovation-and-performance-pricing-set-the-bar/" target="_blank">Forrester State of Services 2025</a>
+    <a class="source-link" href="https://www.gartner.com/en/documents/7302730" target="_blank">Gartner IT Sourcing Predicts 2026</a>
+  </div>
+</div>
+
+<!-- AI FTE Models -->
+<div class="card">
+  <h3>E. The "AI FTE" Pricing Model — Comparable Frameworks <span class="rating rating-emerging">Emerging</span></h3>
+
+  <h4>Spiral Scout (John Griffin, CEO)</h4>
+  <ul>
+    <li>Prices AI workers at <strong>~1/3 the cost of a human employee</strong></li>
+    <li>AI SDR priced at <strong>$750/month</strong>, managing 2,000 customer interactions (vs. $7K–$10K/month human SDR)</li>
+    <li>AI SDRs process <strong>6x the volume</strong> of accounts vs. human SDRs</li>
+  </ul>
+
+  <h4>SDaaS Market (Software Development as a Service)</h4>
+  <table>
+    <tr><th>Provider</th><th>Model</th><th>Price Range</th></tr>
+    <tr><td>DevSquad</td><td>Fixed monthly per developer</td><td>$100–$150/hr per dev</td></tr>
+    <tr><td>Toptal</td><td>Per-developer hourly</td><td>$60–$200/hr</td></tr>
+    <tr><td>Globant AI Pods</td><td>Token subscription</td><td>~$20K/month</td></tr>
+  </table>
+
+  <div class="callout callout-info"><strong>Two framings, different buyers:</strong> Spiral Scout prices <em>down</em> (AI as cheap labor replacement). VSP prices <em>up</em> (concentrated high-output capacity). VSP wins with buyers who understand leverage; Spiral Scout wins with cost-cutting procurement.</div>
+
+  <div class="sources">
+    <a class="source-link" href="https://spiralscout.com/blog/transforming-ai-monetization" target="_blank">Spiral Scout AI FTE article</a>
+  </div>
+</div>
+
+<!-- Margin Reality -->
+<div class="card">
+  <h3>F. Margin Reality — Who Keeps the Gains? <span class="rating rating-confirmed">Confirmed</span></h3>
+
+  <p><strong>Universal pattern:</strong> Firms capture AI efficiency as margin expansion, not client price reductions.</p>
+
+  <table>
+    <tr><th>Sector</th><th>What's Happening</th></tr>
+    <tr><td>Legal</td><td>79% GenAI adoption — billable hour survived. Firms raised prices on human tasks.</td></tr>
+    <tr><td>Consulting</td><td>McKinsey: gains = "profit per partner," not invoice savings</td></tr>
+    <tr><td>IT Outsourcing</td><td>TCS/Wipro: cutting headcount while growing revenue</td></tr>
+  </table>
+
+  <p><strong>The math:</strong> A 10-week project compressed to 6 weeks = <strong>30–40% cost reduction</strong> for the firm. Client fees remain unchanged — that delta = pure margin expansion. AI acts as "synthetic labor" at near-zero marginal cost.</p>
+
+  <div class="callout callout-warn"><strong>The closing window:</strong> By late 2025, tech-savvy enterprise buyers began building internal AI capabilities. The window for capturing AI gains as margin is closing — but VSP's mid-market clients have not yet built internal sophistication.</div>
+
+  <div class="sources">
+    <a class="source-link" href="https://consultingquest.com/insights/ai-impact-consulting-economics-value-sharing/" target="_blank">ConsultingQuest — AI impact on consulting economics</a>
+  </div>
+</div>
+
+</div>
+
+<!-- ==================== TAB: PRICING STRATEGY ==================== -->
+<div id="strategy" class="tab-panel">
+
+<h2>Core Philosophy: FTE Equivalency, Not Headcount</h2>
+
+<div class="stat-grid">
+  <div class="stat-card"><span class="value">1 : 2.5</span><span class="label">Agentic Eng → FTE (defensible)</span></div>
+  <div class="stat-card"><span class="value">2 : 4–6</span><span class="label">Two engineers → FTE range</span></div>
+  <div class="stat-card"><span class="value" style="color:var(--gold)">1 : 3</span><span class="label">At the edge — needs evidence</span></div>
+</div>
+
+<div class="card">
+  <h3>The Honest Caveat (Hold Internally)</h3>
+  <p>Research shows real AI productivity gains average <strong>10–25%</strong> in controlled studies, not 2–3x. The VSP model works not because AI makes any individual engineer 3x faster, but because the <strong>pod architecture</strong> (right mix of human judgment + agent execution, no overhead layers, no bench time, no ramp-up) delivers 2–2.5x the throughput of a traditional staffing model.</p>
+  <p><strong>The multiplier is structural, not algorithmic.</strong></p>
+</div>
+
+<div class="card">
+  <h3>Market Validation</h3>
+  <ul>
+    <li>Globant launched this model in June 2025 — <em>"services as software, aligned to outcomes, not effort"</em></li>
+    <li>Bain endorses modular pod models: <em>"outcome-priced offerings in high-leverage domains like dev, QA, and support automation"</em></li>
+    <li>Forrester: 45–46% of enterprise buyers actively expanding fixed-price and performance-based engagements</li>
+  </ul>
+</div>
+
+<h2>Tier Structure</h2>
+
+<table>
+  <tr><th>Tier</th><th>Monthly Price</th><th>FTE Equivalent</th><th>Best For</th></tr>
+  <tr><td><strong>Tier 1</strong></td><td style="color:var(--green);font-weight:700">$15K/mo</td><td>2–3 FTE equivalents</td><td>Scoped, lower-velocity; early-stage clients</td></tr>
+  <tr><td><strong>Tier 2</strong></td><td style="color:var(--green);font-weight:700">$30K/mo</td><td>4–6 FTE equivalents</td><td>Core product dev; mid-market clients</td></tr>
+  <tr><td><strong>Tier 3</strong></td><td style="color:var(--green);font-weight:700">$50K/mo</td><td>8–10+ FTE equivalents</td><td>High-velocity, enterprise-scale delivery</td></tr>
+</table>
+
+<div class="card">
+  <h3>Market Benchmarks</h3>
+  <table>
+    <tr><th>Benchmark</th><th>Price</th><th>VSP Comparison</th></tr>
+    <tr><td>Globant AI Pod</td><td>~$20K/mo (token-based)</td><td>VSP Tier 1 undercuts by $5K</td></tr>
+    <tr><td>2x Toptal senior engineers</td><td>$20K–$68K/mo</td><td>VSP Tier 2 competitive on raw math</td></tr>
+    <tr><td>DevSquad per developer</td><td>$17K–$26K/mo each</td><td>VSP pod pricing = better value</td></tr>
+    <tr><td>In-house senior AI eng (fully loaded)</td><td><strong>$24K–$26K/mo each</strong></td><td>2 in-house = $48K–$52K. VSP Tier 2 = $30K.</td></tr>
+  </table>
+</div>
+
+<div class="callout callout-success"><strong>The buy-vs-build case for Tier 2:</strong> 2 in-house senior engineers cost $34,400–$51,400/month fully-loaded. VSP delivers equivalent or greater throughput at $30,000. Client saves money, gets faster delivery, no HR risk.</div>
+
+<div class="card">
+  <h3>What's Included (All Tiers)</h3>
+  <ul>
+    <li>Agentic engineering capacity</li>
+    <li>All tooling and license costs (Cursor, Claude, GitHub Copilot — ~$200–$500/engineer/month)</li>
+    <li>SME access and advisory layer</li>
+    <li>Velocity-appropriate delivery cadence</li>
+    <li>No recruitment cost, no ramp-up time, no bench cost</li>
+  </ul>
+  <p><strong>Differentiator between tiers:</strong> Throughput speed, parallel workstream capacity, depth of advisory — not named person count.</p>
+</div>
+
+<h2>Margin Analysis</h2>
+
+<div class="card">
+  <h3>Reference Model: Tier 2 at $30K/mo</h3>
+  <table>
+    <tr><th>Factor</th><th>Detail</th></tr>
+    <tr><td>Revenue</td><td>$30,000/mo</td></tr>
+    <tr><td>Pod: 2 senior engineers</td><td>[cost TBD based on comp]</td></tr>
+    <tr><td>Gross margin</td><td><strong>~34.7%</strong></td></tr>
+    <tr><td>Risk: +50% QA allocation</td><td>Compresses margin meaningfully</td></tr>
+  </table>
+
+  <h4>Market Margin Context</h4>
+  <table>
+    <tr><th>Firm</th><th>Operating Margin</th><th>Note</th></tr>
+    <tr><td>Accenture</td><td>~15%</td><td>Compressed by AI R&amp;D investment</td></tr>
+    <tr><td>EPAM</td><td>15.0–15.3%</td><td>Down from 16–17% — cautionary</td></tr>
+    <tr><td>Turing.com</td><td>50–55%</td><td>Cost-plus marketplace model</td></tr>
+    <tr><td>VSP target</td><td style="color:var(--green);font-weight:700">30%+</td><td>Value-based, not cost-plus</td></tr>
+  </table>
+</div>
+
+<div class="card">
+  <h3>The Consulting Economics Rule</h3>
+  <p>When AI compresses a 10-week engagement to 6 weeks, the firm's cost base drops 30–40% and margin expands. <strong>At fixed price, VSP captures that efficiency as profit. At T&amp;M, the client captures it.</strong> This is the core argument for fixed price from VSP's perspective.</p>
+
+  <h4>Tyler's S-Curve Model</h4>
+  <ul>
+    <li>Productivity: ramp up → plateau → step-function increase when another person/agent added</li>
+    <li>Pricing tiers should align to step-function thresholds, not linear headcount</li>
+    <li>Tier upgrade trigger: "We're at capacity for this tier's velocity ceiling"</li>
+  </ul>
+</div>
+
+<h2>Positioning Rules</h2>
+
+<table>
+  <tr><th>Model</th><th>Use When</th></tr>
+  <tr><td><strong>Fixed Price Pod</strong></td><td>Client wants predictable cost; willing to leave T&amp;M; scope reasonably defined</td></tr>
+  <tr><td><strong>T&amp;M (keep as-is)</strong></td><td>Existing happy client — never force a pivot. Only if client initiates or wants to reduce team.</td></tr>
+  <tr><td><strong>Hybrid: Fixed Dev + Advisory Retainer</strong></td><td>Client wants dev execution at fixed price + strategic/advisory access ("CTO layer")</td></tr>
+  <tr><td><strong>Advisory Retainer Only</strong></td><td>Architecture review, thought partnership — not a dev engagement</td></tr>
+</table>
+
+<div class="callout callout-warn">
+  <strong>Fixed-price failure modes (know before scoping):</strong>
+  <ul style="margin-top:8px;margin-bottom:0">
+    <li>Underdefined AI/ML requirements create rework risk</li>
+    <li>Small prompt/data changes trigger major rework — build change-order triggers</li>
+    <li>Client responsiveness bottlenecks absorbed as cost unless SOW has explicit SLAs</li>
+    <li>Scope creep is more dangerous at fixed price — sprint/milestone gates protect margin</li>
+  </ul>
+</div>
+
+<p><strong>Market signal:</strong> Paul tested fixed price with Joe at Bear Analytics — Joe latched onto it immediately. Strong early validation.</p>
+
+</div>
+
+<!-- ==================== TAB: COMPETITIVE ==================== -->
+<div id="competitive" class="tab-panel">
+
+<h2>Competitive Positioning</h2>
+
+<table>
+  <tr><th>Provider</th><th>Model</th><th>Price</th><th>FTE Claim</th><th>VSP Advantage</th></tr>
+  <tr><td><strong>Globant AI Pods</strong></td><td>Token subscription</td><td>~$20K/mo</td><td>Not stated</td><td>Simpler framing; boutique quality; lower entry</td></tr>
+  <tr><td><strong>Accenture</strong></td><td>T&amp;M → outcome</td><td>Enterprise custom</td><td>Not published</td><td>No legacy pyramid; faster to outcome model</td></tr>
+  <tr><td><strong>Toptal</strong></td><td>Per-dev hourly</td><td>$60–$200/hr</td><td>N/A</td><td>VSP pod = better value than 2 Toptal engineers</td></tr>
+  <tr><td><strong>DevSquad</strong></td><td>Fixed monthly/dev</td><td>$100–$150/hr</td><td>N/A</td><td>VSP includes AI tooling + SME layer</td></tr>
+  <tr><td><strong>TCS/Wipro/Infosys</strong></td><td>T&amp;M under pressure</td><td>Offshore rates</td><td>Cutting headcount</td><td>Senior talent only; no offshore pyramid</td></tr>
+  <tr><td><strong>Spiral Scout</strong></td><td>AI FTE at 1/3 cost</td><td>~$750/mo AI SDR</td><td>6x volume</td><td>VSP = human+AI pod for complex builds</td></tr>
+  <tr><td><strong>In-house hire</strong></td><td>Salary + overhead</td><td>$24K–$26K/mo each</td><td>1:1</td><td>VSP delivers 2–2.5x at lower total cost</td></tr>
+</table>
+
+<div class="card">
+  <h3>VSP's Differentiated Position</h3>
+  <p>Not the cheapest. Not the enterprise incumbent. VSP is the <strong>"managed AI pod"</strong> — senior human judgment with agentic execution — priced like a premium retainer, delivering like a team.</p>
+  <div class="quote">The closest analogy is a boutique law firm versus BigLaw: faster, senior attention on every matter, no associate overhead.</div>
+</div>
+
+<div class="card">
+  <h3>Where VSP Wins</h3>
+  <ul>
+    <li><strong>Mid-market ($5M–$50M revenue)</strong> — too sophisticated for offshore dev shops; too lean for enterprise overhead</li>
+    <li>Clients who've tried T&amp;M staffing and found velocity disappointing</li>
+    <li>Clients who understand AI tools require skilled humans to direct them</li>
+  </ul>
+
+  <h3>Where VSP Loses</h3>
+  <ul>
+    <li>Clients who want the lowest possible rate (Toptal, offshore)</li>
+    <li>Clients requiring proof-of-scale a boutique pod can't provide</li>
+    <li>Clients with internal AI capabilities who see no leverage in the pod model</li>
+  </ul>
+</div>
+
+<h2>What Is Proven vs. What VSP Is Betting On</h2>
+
+<div class="card">
+  <h3 style="color:var(--green)">Proven in the Market</h3>
+  <ul>
+    <li>Subscription/pod model works at scale (Globant, June 2025)</li>
+    <li>Buyers want fixed-price and performance-based engagements (Forrester: 45–46%)</li>
+    <li>Firms capture AI efficiency as margin, not pass to clients (universal pattern)</li>
+    <li>Mid-market anchor: $20K/month (Globant floor); VSP Tier 1 at $15K is competitive</li>
+    <li>In-house cost: $24K–$26K/month fully-loaded per engineer</li>
+    <li>Big IT outsourcers being forced to cut headcount and reprice</li>
+  </ul>
+</div>
+
+<div class="card">
+  <h3 style="color:var(--gold)">VSP Is Betting On</h3>
+  <ul>
+    <li>Mid-market clients will accept FTE equivalency framing (early signal: Bear Analytics validation)</li>
+    <li>1 agentic engineer = 2–2.5 FTE equivalents is defensible (research supports 10–25% per tool, but architectural gains are harder to quantify)</li>
+    <li>Fixed-price works for software dev (market says it struggles for undefined scope — VSP must scope carefully)</li>
+    <li>Clients will pay premium for "senior + agentic" over "cheap offshore + lots of people" — a bet on client sophistication</li>
+  </ul>
+</div>
+
+</div>
+
+<!-- ==================== TAB: CONTRACT ==================== -->
+<div id="contract" class="tab-panel">
+
+<h2>What NOT to Say in the Contract</h2>
+
+<p>Per <strong>Matt Walnock's</strong> strong recommendation — hard rules:</p>
+
+<div class="callout callout-warn">
+  <ul style="margin-bottom:0">
+    <li><strong>Do NOT state specific headcount.</strong> ("This engagement includes 2 engineers" is out.)</li>
+    <li><strong>Do NOT disclose pod composition.</strong> VSP's internal staffing ≠ the client's business.</li>
+    <li><strong>Do NOT tie deliverables to named individuals.</strong> Avoids renegotiation risk.</li>
+    <li><strong>Do NOT use "FTE equivalents" as a contractual unit.</strong> Sales framing only, not a contractual obligation.</li>
+  </ul>
+</div>
+
+<div class="card">
+  <h3>Market Precedent</h3>
+  <p>Globant's press release does not state headcount in AI Pod pricing — it's token-based metered capacity. The industry is moving to abstract the "how" and commit to the "what."</p>
+</div>
+
+<div class="card">
+  <h3>What to Say Instead</h3>
+  <ul>
+    <li>"VSP will deliver [outcome/velocity/throughput] as defined in this SOW."</li>
+    <li>"The engagement includes access to VSP's full AI pod capacity, tooling, licenses, and SME resources at the [Tier X] level."</li>
+    <li>Frame around delivery milestones, sprint velocity, or throughput metrics.</li>
+  </ul>
+</div>
+
+<div class="card">
+  <h3>Client SLA Language (Required for Fixed-Price)</h3>
+  <p>SOW must include:</p>
+  <ul>
+    <li><strong>Client response SLAs:</strong> "Client will respond to design reviews within 48 business hours"</li>
+    <li><strong>Change order triggers:</strong> Scope additions, material requirement changes, client-caused delays beyond X days</li>
+    <li><strong>Milestone acceptance:</strong> How delivered work is approved — preventing scope creep via revision requests</li>
+  </ul>
+</div>
+
+</div>
+
+<!-- ==================== TAB: OPEN QUESTIONS ==================== -->
+<div id="open" class="tab-panel">
+
+<h2>Open Questions</h2>
+<p>Items requiring resolution before broad AI Pod rollout:</p>
+
+<table>
+  <tr><th>Question</th><th>Owner</th><th>Status</th><th>Market Context</th></tr>
+  <tr>
+    <td>Specific SOW language for pod capacity without headcount disclosure?</td>
+    <td>Tyler / Legal</td>
+    <td><span class="rating rating-disputed">Open</span></td>
+    <td>Globant uses "token-based metered capacity" — study their structure</td>
+  </tr>
+  <tr>
+    <td>When is 1:3 FTE ratio defensible? What evidence needed?</td>
+    <td>Tyler</td>
+    <td><span class="rating rating-disputed">Open</span></td>
+    <td>Current research supports 1:2–2.5 max; 1:3 requires internal case data</td>
+  </tr>
+  <tr>
+    <td>How to contractually handle client-caused delays at fixed price?</td>
+    <td>Tyler / Matt</td>
+    <td><span class="rating rating-disputed">Open</span></td>
+    <td>Research uniformly flags this as #1 fixed-price failure mode</td>
+  </tr>
+  <tr>
+    <td>QA allocation model at each tier — included, optional, or separate?</td>
+    <td>Tyler</td>
+    <td><span class="rating rating-disputed">Open</span></td>
+    <td>Most variable cost lever; must model before quoting</td>
+  </tr>
+  <tr>
+    <td>Is hybrid (fixed dev + advisory retainer) a formal tier or custom?</td>
+    <td>Tyler</td>
+    <td><span class="rating rating-disputed">Open</span></td>
+    <td>Accenture moving to this hybrid at enterprise scale — validates concept</td>
+  </tr>
+  <tr>
+    <td>Exact gross margin at Tier 1 ($15K) and Tier 3 ($50K)?</td>
+    <td>Tyler</td>
+    <td><span class="rating rating-disputed">Open</span></td>
+    <td>EPAM/Accenture at 15% = cautionary floor; target 30%+</td>
+  </tr>
+  <tr>
+    <td>How to handle tier upgrades mid-engagement?</td>
+    <td>Tyler</td>
+    <td><span class="rating rating-disputed">Open</span></td>
+    <td>No market precedent — VSP opportunity to define the standard</td>
+  </tr>
+  <tr>
+    <td>Talk track for buyer pushback on AI productivity claims?</td>
+    <td>Tyler</td>
+    <td><span class="rating rating-disputed">Open</span></td>
+    <td>METR/DX studies = buyers right to be skeptical; lead with architectural argument</td>
+  </tr>
+</table>
+
+</div>
+
+</div><!-- /content -->
+
+<div class="footer">
+  Victory Square Partners &bull; Internal Strategy Document &bull; 2026-03-31<br>
+  Research: Claude (Sonnet 4.6) acting as Rocketship market analyst &bull; Sources: Globant, Bain, Forrester, Gartner, METR, DX, Accenture, McKinsey
+</div>
+
+<script>
+function switchTab(id) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+
+</body>
+</html>
