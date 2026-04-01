@@ -410,6 +410,12 @@
       "passwordHash": "662f91dd289b6d0cd92bd072ef47c121c8f57c0a27c2e9f81e54a296487cffd1",
       "accentColor": "#1e40af",
       "logo": null
+    },
+    "yourhealthpro": {
+      "name": "YourHealthPro",
+      "passwordHash": "4c9187cfae578ef1f84edaf9103abcfc953d825a6ebf4e963f21e34e202f6a8a",
+      "accentColor": "#10b981",
+      "logo": null
     }
   }
 }
