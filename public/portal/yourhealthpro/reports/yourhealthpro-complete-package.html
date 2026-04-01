@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YourHealthPro — Complete Deal Package | VSP</title>
+<style>
+  :root {
+    --vsp-navy: #1a1f36;
+    --vsp-blue: #2563eb;
+    --vsp-blue-light: #3b82f6;
+    --vsp-green: #10b981;
+    --vsp-green-light: #d1fae5;
+    --vsp-amber: #f59e0b;
+    --vsp-amber-light: #fef3c7;
+    --vsp-red: #ef4444;
+    --vsp-red-light: #fee2e2;
+    --vsp-gray-50: #f9fafb;
+    --vsp-gray-100: #f3f4f6;
+    --vsp-gray-200: #e5e7eb;
+    --vsp-gray-300: #d1d5db;
+    --vsp-gray-500: #6b7280;
+    --vsp-gray-700: #374151;
+    --vsp-gray-900: #111827;
+    --vsp-purple: #7c3aed;
+    --vsp-purple-light: #ede9fe;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--vsp-gray-50);
+    color: var(--vsp-gray-900);
+    line-height: 1.6;
+  }
+
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, var(--vsp-navy) 0%, #2d3561 100%);
+    color: white;
+    padding: 2rem 2rem 1rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+  }
+  .header h1 { font-size: 1.75rem; font-weight: 700; }
+  .header .subtitle { color: #94a3b8; font-size: 0.9rem; margin-top: 0.25rem; }
+  .header-badge {
+    background: var(--vsp-green);
+    color: white;
+    padding: 0.35rem 1rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  /* Tab Navigation */
+  .tab-nav {
+    display: flex;
+    gap: 0;
+    border-bottom: 2px solid rgba(255,255,255,0.1);
+    overflow-x: auto;
+  }
+  .tab-btn {
+    background: none;
+    border: none;
+    color: #94a3b8;
+    padding: 0.6rem 1.2rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .tab-btn:hover { color: white; }
+  .tab-btn.active { color: white; border-bottom-color: var(--vsp-blue-light); }
+
+  /* Main Content */
+  .main { max-width: 1200px; margin: 0 auto; padding: 1.5rem; }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* Cards */
+  .card {
+    background: white;
+    border-radius: 12px;
+    border: 1px solid var(--vsp-gray-200);
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+  .card-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .card-title .icon { font-size: 1.2rem; }
+
+  /* Grid */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
+  .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 1rem; }
+  @media (max-width: 768px) {
+    .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+  }
+
+  /* Stat Cards */
+  .stat-card {
+    background: white;
+    border-radius: 12px;
+    border: 1px solid var(--vsp-gray-200);
+    padding: 1.25rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+  .stat-label { font-size: 0.75rem; color: var(--vsp-gray-500); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
+  .stat-value { font-size: 1.75rem; font-weight: 800; margin-top: 0.25rem; }
+  .stat-sub { font-size: 0.8rem; color: var(--vsp-gray-500); margin-top: 0.25rem; }
+
+  /* Tables */
+  table { width: 100%; border-collapse: collapse; }
+  th { text-align: left; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--vsp-gray-500); font-weight: 600; padding: 0.75rem; border-bottom: 2px solid var(--vsp-gray-200); }
+  td { padding: 0.75rem; border-bottom: 1px solid var(--vsp-gray-100); font-size: 0.9rem; }
+  tr:hover { background: var(--vsp-gray-50); }
+
+  /* Status badges */
+  .badge {
+    display: inline-block;
+    padding: 0.2rem 0.65rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+  .badge-strong { background: var(--vsp-green-light); color: #065f46; }
+  .badge-moderate { background: var(--vsp-amber-light); color: #92400e; }
+  .badge-weak { background: var(--vsp-red-light); color: #991b1b; }
+  .badge-unknown { background: var(--vsp-gray-100); color: var(--vsp-gray-500); }
+  .badge-info { background: #dbeafe; color: #1e40af; }
+
+  /* Quote blocks */
+  .quote {
+    border-left: 3px solid var(--vsp-blue);
+    padding: 0.75rem 1rem;
+    background: #f0f5ff;
+    border-radius: 0 8px 8px 0;
+    margin: 0.75rem 0;
+    font-style: italic;
+    color: var(--vsp-gray-700);
+    font-size: 0.9rem;
+  }
+  .quote .attribution {
+    font-style: normal;
+    font-weight: 600;
+    color: var(--vsp-gray-500);
+    font-size: 0.8rem;
+    margin-top: 0.5rem;
+  }
+
+  /* Timeline */
+  .timeline { position: relative; padding-left: 2rem; }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0.5rem;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--vsp-gray-200);
+  }
+  .timeline-item { position: relative; margin-bottom: 1.5rem; }
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -1.65rem;
+    top: 0.4rem;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--vsp-blue);
+    border: 2px solid white;
+    box-shadow: 0 0 0 2px var(--vsp-blue);
+  }
+  .timeline-item.completed::before { background: var(--vsp-green); box-shadow: 0 0 0 2px var(--vsp-green); }
+  .timeline-item.next::before { background: var(--vsp-amber); box-shadow: 0 0 0 2px var(--vsp-amber); animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100% { box-shadow: 0 0 0 2px var(--vsp-amber); } 50% { box-shadow: 0 0 0 6px rgba(245,158,11,0.2); } }
+  .timeline-date { font-size: 0.75rem; color: var(--vsp-gray-500); font-weight: 600; }
+  .timeline-title { font-weight: 600; margin-top: 0.15rem; }
+  .timeline-detail { font-size: 0.85rem; color: var(--vsp-gray-700); margin-top: 0.25rem; }
+
+  /* Section headers */
+  .section-header {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--vsp-gray-500);
+    font-weight: 700;
+    margin: 1.5rem 0 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--vsp-gray-200);
+  }
+
+  /* Risk/alert boxes */
+  .alert {
+    padding: 1rem;
+    border-radius: 8px;
+    margin: 0.75rem 0;
+    font-size: 0.9rem;
+  }
+  .alert-warn { background: var(--vsp-amber-light); border-left: 3px solid var(--vsp-amber); }
+  .alert-danger { background: var(--vsp-red-light); border-left: 3px solid var(--vsp-red); }
+  .alert-info { background: #dbeafe; border-left: 3px solid var(--vsp-blue); }
+  .alert-success { background: var(--vsp-green-light); border-left: 3px solid var(--vsp-green); }
+
+  /* Checklist */
+  .checklist { list-style: none; }
+  .checklist li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--vsp-gray-100);
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+  }
+  .checklist li::before { content: ''; width: 16px; height: 16px; border: 2px solid var(--vsp-gray-300); border-radius: 4px; flex-shrink: 0; margin-top: 2px; }
+  .checklist li.done::before { background: var(--vsp-green); border-color: var(--vsp-green); content: ''; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z'/%3E%3C/svg%3E"); background-size: 12px; background-position: center; background-repeat: no-repeat; }
+  .checklist li.done { color: var(--vsp-gray-500); }
+
+  /* Revenue waterfall */
+  .waterfall { display: flex; align-items: flex-end; gap: 0.5rem; height: 180px; padding: 1rem 0; }
+  .waterfall-bar {
+    flex: 1;
+    background: var(--vsp-blue);
+    border-radius: 6px 6px 0 0;
+    position: relative;
+    min-width: 60px;
+    transition: all 0.3s;
+    cursor: pointer;
+  }
+  .waterfall-bar:hover { opacity: 0.85; }
+  .waterfall-bar .bar-label {
+    position: absolute;
+    bottom: -2rem;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 0.7rem;
+    color: var(--vsp-gray-500);
+    font-weight: 600;
+  }
+  .waterfall-bar .bar-value {
+    position: absolute;
+    top: -1.5rem;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--vsp-gray-700);
+  }
+
+  /* MEDDPIC radar */
+  .meddpic-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.75rem;
+  }
+  @media (max-width: 768px) { .meddpic-grid { grid-template-columns: repeat(2, 1fr); } }
+  .meddpic-item {
+    text-align: center;
+    padding: 1rem;
+    border-radius: 10px;
+    border: 1px solid var(--vsp-gray-200);
+  }
+  .meddpic-item.strong { background: var(--vsp-green-light); border-color: #a7f3d0; }
+  .meddpic-item.moderate { background: var(--vsp-amber-light); border-color: #fde68a; }
+  .meddpic-item .meddpic-letter { font-size: 1.5rem; font-weight: 800; }
+  .meddpic-item .meddpic-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--vsp-gray-500); margin-top: 0.15rem; }
+  .meddpic-item .meddpic-status { font-size: 0.75rem; font-weight: 600; margin-top: 0.35rem; }
+
+  /* Collapsible sections */
+  .collapsible-header {
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    user-select: none;
+  }
+  .collapsible-header .arrow { transition: transform 0.2s; font-size: 0.8rem; color: var(--vsp-gray-500); }
+  .collapsible-header.open .arrow { transform: rotate(90deg); }
+  .collapsible-body { display: none; padding-bottom: 0.5rem; }
+  .collapsible-body.open { display: block; }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 2rem;
+    color: var(--vsp-gray-500);
+    font-size: 0.8rem;
+    border-top: 1px solid var(--vsp-gray-200);
+    margin-top: 2rem;
+  }
+
+  /* Print */
+  @media print {
+    .header { position: static; }
+    .tab-nav { display: none; }
+    .tab-content { display: block !important; page-break-before: always; }
+    .tab-content:first-of-type { page-break-before: auto; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-top">
+    <div>
+      <h1>YourHealthPro</h1>
+      <div class="subtitle">Complete Deal Package — Victory Square Partners | April 1, 2026</div>
+    </div>
+    <div class="header-badge">Phase Zero Greenlit</div>
+  </div>
+  <nav class="tab-nav">
+    <button class="tab-btn active" data-tab="overview">Overview</button>
+    <button class="tab-btn" data-tab="deal">Deal Structure</button>
+    <button class="tab-btn" data-tab="revenue">Revenue Model</button>
+    <button class="tab-btn" data-tab="meddpic">MEDDPIC</button>
+    <button class="tab-btn" data-tab="technical">Technical</button>
+    <button class="tab-btn" data-tab="timeline">Timeline</button>
+    <button class="tab-btn" data-tab="risks">Risks & Intel</button>
+    <button class="tab-btn" data-tab="actions">Action Items</button>
+  </nav>
+</div>
+
+<div class="main">
+
+<!-- ==================== OVERVIEW TAB ==================== -->
+<div class="tab-content active" id="tab-overview">
+
+  <div class="grid-4" style="margin-bottom:1rem;">
+    <div class="stat-card">
+      <div class="stat-label">12-Month Revenue Target</div>
+      <div class="stat-value" style="color:var(--vsp-green);">$1.5M</div>
+      <div class="stat-sub">Via coaching program @ 15% take</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Retainer Flip Point</div>
+      <div class="stat-value" style="color:var(--vsp-blue);">$720K</div>
+      <div class="stat-sub">Annualized revenue trigger</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Provider Network</div>
+      <div class="stat-value">1,000+</div>
+      <div class="stat-sub">Active providers (6K+ total registered)</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">VSP Ramp Pod</div>
+      <div class="stat-value">~$30K</div>
+      <div class="stat-sub">/month baseline after Phase Zero</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">&#9432;</span> Executive Summary</div>
+    <p style="font-size:0.95rem;margin-bottom:1rem;">
+      <strong>YourHealthPro (YHP)</strong> is a DoorDash-style marketplace for mobile healthcare providers, built by <strong>Ed Cutler</strong> — founder of Alpha Phlebotomy Group with 30 years in mobile phlebotomy. The platform is feature-rich but stuck in pre-launch with no active developers after two failed dev relationships.
+    </p>
+    <p style="font-size:0.95rem;margin-bottom:1rem;">
+      On April 1, 2026, VSP and YHP aligned on a <strong>revenue share structure</strong> (over equity). Phase Zero starts at VSP's risk (~1 week, $0). Post-Phase Zero retainer of $20-50K/month kicks in once YHP hits sufficient revenue. Ed's 12-month target is <strong>$1.5M</strong> via a 100-phlebotomist coaching program at 15% platform take on $10M gross.
+    </p>
+    <div class="alert alert-success">
+      <strong>Why this deal matters:</strong> The business already exists. Revenue is already flowing manually. The app just has to turn on. Paul and Vlad built ShiftMed (same domain). No competing vendors. Ed is all-in.
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title"><span class="icon">&#128101;</span> Key Contacts</div>
+      <table>
+        <tr><th>Name</th><th>Role</th><th>Notes</th></tr>
+        <tr>
+          <td><strong>Ed Cutler</strong></td>
+          <td>CEO / Founder</td>
+          <td>Decision-maker. 30yr mobile phlebotomy veteran. Faith-driven.</td>
+        </tr>
+        <tr>
+          <td><strong>Patrick Cutler</strong></td>
+          <td>Co-founder / Numbers</td>
+          <td>Budget & ops. Based in Steubenville. Paul should meet in person.</td>
+        </tr>
+      </table>
+      <div style="margin-top:1rem;font-size:0.85rem;color:var(--vsp-gray-500);">
+        <strong>Email:</strong> ecutler@alphaphlebotomy.com | pcutler@yourhealthpro.net
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">&#127968;</span> VSP Team</div>
+      <table>
+        <tr><th>Name</th><th>Role</th></tr>
+        <tr><td><strong>Paul Doman</strong></td><td>Relationship lead, deal structuring</td></tr>
+        <tr><td><strong>Vlad Damian</strong></td><td>SVP Eng — codebase review, delivery lead</td></tr>
+        <tr><td><strong>Tyler Goble</strong></td><td>Sales ops, discovery, engagement coordination</td></tr>
+        <tr><td><strong>Marius</strong></td><td>Rev share / equity structuring (to be involved)</td></tr>
+      </table>
+      <div class="alert alert-info" style="margin-top:0.75rem;">
+        Paul & Vlad built <strong>ShiftMed</strong> (home nursing marketplace) — structurally identical to YHP. Direct prior-art competitive moat.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== DEAL STRUCTURE TAB ==================== -->
+<div class="tab-content" id="tab-deal">
+
+  <div class="card">
+    <div class="card-title"><span class="icon">&#128176;</span> Deal Structure — Revenue Share Model</div>
+    <div class="alert alert-success">
+      <strong>Both sides aligned April 1.</strong> Revenue share over equity. Ed is also open to equity component — "whatever works." No competing bids. No price objection.
+    </div>
+
+    <table style="margin-top:1rem;">
+      <tr><th>Phase</th><th>What Happens</th><th>Cost to YHP</th><th>VSP Revenue</th></tr>
+      <tr>
+        <td><strong>Phase Zero</strong></td>
+        <td>Engineers start work. ~1 week. Produces tighter cost estimate.</td>
+        <td style="color:var(--vsp-green);font-weight:700;">$0 — VSP at risk</td>
+        <td>None</td>
+      </tr>
+      <tr>
+        <td><strong>Pre-Revenue</strong></td>
+        <td>Rev share accrues monthly. Platform being built to launch.</td>
+        <td>No cash payments</td>
+        <td>Accrued rev share</td>
+      </tr>
+      <tr>
+        <td><strong>Flip Point</strong></td>
+        <td>YHP hits $100K in bank + $40K/month revenue (~$720K annualized)</td>
+        <td>$20-50K/month retainer begins</td>
+        <td>Retainer + residual rev share</td>
+      </tr>
+      <tr>
+        <td><strong>Steady State</strong></td>
+        <td>Ongoing ramp pod. Constant build as platform expands.</td>
+        <td>~$30K/month ramp pod</td>
+        <td>Retainer + rev share</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title"><span class="icon">&#128200;</span> Flip Point Math</div>
+      <table>
+        <tr><td>Cash in bank target</td><td style="font-weight:700;">$100,000</td></tr>
+        <tr><td>Monthly ops baseline</td><td style="font-weight:700;">$40,000</td></tr>
+        <tr><td>+ VSP retainer (low est.)</td><td style="font-weight:700;">$20,000</td></tr>
+        <tr><td>+ VSP retainer (high est.)</td><td style="font-weight:700;">$50,000</td></tr>
+        <tr><td>Monthly total needed</td><td style="font-weight:700;">$60,000 — $90,000</td></tr>
+        <tr style="background:var(--vsp-green-light);">
+          <td><strong>Annualized flip target</strong></td>
+          <td style="font-weight:800;font-size:1.1rem;">$720,000</td>
+        </tr>
+      </table>
+      <div style="margin-top:0.75rem;font-size:0.85rem;color:var(--vsp-gray-500);">
+        Source: Patrick Cutler on Apr 1 call. "$100K in the bank would be our magic number."
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">&#9888;</span> Open Deal Items</div>
+      <ul class="checklist">
+        <li>Specific revenue share percentage (Paul/Marius)</li>
+        <li>Rev share cap or sunset clause</li>
+        <li>Legal entity for the agreement</li>
+        <li>Who signs on YHP side</li>
+        <li>Whether Ed has legal counsel</li>
+        <li>Phase Zero kickoff date (Vlad)</li>
+        <li>Server status (Adam situation)</li>
+        <li>Mind map review cadence (Patrick's request)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">&#128172;</span> Key Quote — Deal Alignment</div>
+    <div class="quote">
+      "I'm open to whatever works. I really like your team. People that are good friends of Paul's said you could trust him with everything. I can actually see, for the first time in a while, a really long-term relationship to get this thing to flourishing."
+      <div class="attribution">— Ed Cutler, April 1 call</div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== REVENUE MODEL TAB ==================== -->
+<div class="tab-content" id="tab-revenue">
+
+  <div class="card">
+    <div class="card-title"><span class="icon">&#128181;</span> Revenue Engine: The 100-Phlebotomist Coaching Program</div>
+    <p style="font-size:0.95rem;margin-bottom:1rem;">
+      Ed's primary revenue play isn't just the marketplace — it's a <strong>SaaS-enabled coaching business</strong>. He's written a program called the "$100K Challenge" to coach 100 phlebotomists to $100K/year each using the YHP platform.
+    </p>
+
+    <div class="grid-4" style="margin:1rem 0;">
+      <div class="stat-card" style="text-align:center;">
+        <div class="stat-label">Providers Coached</div>
+        <div class="stat-value">100</div>
+      </div>
+      <div class="stat-card" style="text-align:center;">
+        <div class="stat-label">Gross/Provider</div>
+        <div class="stat-value">$100K</div>
+      </div>
+      <div class="stat-card" style="text-align:center;">
+        <div class="stat-label">Platform Take</div>
+        <div class="stat-value">15%</div>
+      </div>
+      <div class="stat-card" style="text-align:center;background:var(--vsp-green-light);border-color:#a7f3d0;">
+        <div class="stat-label">YHP Revenue</div>
+        <div class="stat-value" style="color:#065f46;">$1.5M</div>
+      </div>
+    </div>
+
+    <div class="alert alert-info">
+      <strong>Network leverage:</strong> Ed already has <strong>1,000+ active providers</strong>. He only needs 10% conversion to hit target. He receives daily texts and emails from providers asking how to grow their businesses.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">&#128202;</span> Revenue Projection (12 Months)</div>
+    <div class="waterfall" id="revenueChart">
+      <div class="waterfall-bar" style="height:5%;background:var(--vsp-gray-300);">
+        <div class="bar-value">$0</div>
+        <div class="bar-label">Now</div>
+      </div>
+      <div class="waterfall-bar" style="height:8%;background:var(--vsp-amber);">
+        <div class="bar-value">$10K</div>
+        <div class="bar-label">Q1</div>
+      </div>
+      <div class="waterfall-bar" style="height:25%;background:var(--vsp-blue);">
+        <div class="bar-value">$125K</div>
+        <div class="bar-label">Q2</div>
+      </div>
+      <div class="waterfall-bar" style="height:55%;background:var(--vsp-blue);">
+        <div class="bar-value">$375K</div>
+        <div class="bar-label">Q3</div>
+      </div>
+      <div class="waterfall-bar" style="height:100%;background:var(--vsp-green);">
+        <div class="bar-value">$1.5M</div>
+        <div class="bar-label">Q4 (Target)</div>
+      </div>
+    </div>
+    <div style="text-align:center;font-size:0.8rem;color:var(--vsp-gray-500);margin-top:2.5rem;">
+      Illustrative ramp. Actual trajectory depends on coaching program launch timing and platform go-live.
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title"><span class="icon">&#128178;</span> B2C Model (Marketplace)</div>
+      <table>
+        <tr><td>Fee structure</td><td>15% convenience fee per transaction</td></tr>
+        <tr><td>Provider pricing</td><td>Phlebotomists set own rates</td></tr>
+        <tr><td>Patient price (direct)</td><td>~$90 per draw</td></tr>
+        <tr><td>Patient price (Alpha middleman)</td><td>~$149</td></tr>
+        <tr><td>Disintermediation savings</td><td>~$59/patient</td></tr>
+        <tr><td>COVID peak volume</td><td>500+ patients/day</td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">&#128188;</span> B2B Model (Managed)</div>
+      <table>
+        <tr><td>Fee structure</td><td>Set fee margins on contracts</td></tr>
+        <tr><td>Use cases</td><td>Clinical trials, genomic testing</td></tr>
+        <tr><td>Pricing</td><td>Alpha sets rate, keeps margin</td></tr>
+        <tr><td>Pipeline</td><td>Contracts pending platform launch</td></tr>
+      </table>
+      <div class="alert alert-warn" style="margin-top:0.75rem;">
+        Athena EMR integration requested by existing client ("Catholic Doctor") — specific revenue dependency on platform launch.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">&#127758;</span> Expansion Roadmap</div>
+    <p style="font-size:0.9rem;color:var(--vsp-gray-700);margin-bottom:0.75rem;">YHP is starting with phlebotomy but the platform is designed for any mobile healthcare provider:</p>
+    <div class="grid-3">
+      <div style="text-align:center;padding:1rem;border:1px solid var(--vsp-gray-200);border-radius:8px;">
+        <div style="font-size:1.5rem;">&#129656;</div>
+        <div style="font-weight:700;margin-top:0.25rem;">Phlebotomy</div>
+        <div class="badge badge-strong" style="margin-top:0.25rem;">Active</div>
+      </div>
+      <div style="text-align:center;padding:1rem;border:1px solid var(--vsp-gray-200);border-radius:8px;">
+        <div style="font-size:1.5rem;">&#128137;</div>
+        <div style="font-weight:700;margin-top:0.25rem;">Vitamin IVs</div>
+        <div class="badge badge-info" style="margin-top:0.25rem;">Approved</div>
+      </div>
+      <div style="text-align:center;padding:1rem;border:1px solid var(--vsp-gray-200);border-radius:8px;">
+        <div style="font-size:1.5rem;">&#128187;</div>
+        <div style="font-weight:700;margin-top:0.25rem;">Telemedicine</div>
+        <div class="badge badge-info" style="margin-top:0.25rem;">In Scope</div>
+      </div>
+      <div style="text-align:center;padding:1rem;border:1px solid var(--vsp-gray-200);border-radius:8px;">
+        <div style="font-size:1.5rem;">&#129506;</div>
+        <div style="font-weight:700;margin-top:0.25rem;">Physical Therapy</div>
+        <div class="badge badge-moderate" style="margin-top:0.25rem;">Planned</div>
+      </div>
+      <div style="text-align:center;padding:1rem;border:1px solid var(--vsp-gray-200);border-radius:8px;">
+        <div style="font-size:1.5rem;">&#127822;</div>
+        <div style="font-weight:700;margin-top:0.25rem;">Dietitians</div>
+        <div class="badge badge-moderate" style="margin-top:0.25rem;">Planned</div>
+      </div>
+      <div style="text-align:center;padding:1rem;border:1px solid var(--vsp-gray-200);border-radius:8px;">
+        <div style="font-size:1.5rem;">&#128062;</div>
+        <div style="font-weight:700;margin-top:0.25rem;">Veterinary Labs</div>
+        <div class="badge badge-info" style="margin-top:0.25rem;">Partner Ready</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== MEDDPIC TAB ==================== -->
+<div class="tab-content" id="tab-meddpic">
+
+  <div class="card">
+    <div class="card-title"><span class="icon">&#127919;</span> MEDDPIC Qualification Dashboard</div>
+    <div class="meddpic-grid">
+      <div class="meddpic-item strong">
+        <div class="meddpic-letter" style="color:#065f46;">M</div>
+        <div class="meddpic-label">Metrics</div>
+        <div class="meddpic-status" style="color:#065f46;">Strong</div>
+      </div>
+      <div class="meddpic-item strong">
+        <div class="meddpic-letter" style="color:#065f46;">E</div>
+        <div class="meddpic-label">Econ Buyer</div>
+        <div class="meddpic-status" style="color:#065f46;">Strong</div>
+      </div>
+      <div class="meddpic-item strong">
+        <div class="meddpic-letter" style="color:#065f46;">D</div>
+        <div class="meddpic-label">Decision Criteria</div>
+        <div class="meddpic-status" style="color:#065f46;">Strong</div>
+      </div>
+      <div class="meddpic-item strong">
+        <div class="meddpic-letter" style="color:#065f46;">D</div>
+        <div class="meddpic-label">Decision Process</div>
+        <div class="meddpic-status" style="color:#065f46;">Strong</div>
+      </div>
+      <div class="meddpic-item moderate">
+        <div class="meddpic-letter" style="color:#92400e;">P</div>
+        <div class="meddpic-label">Paper Process</div>
+        <div class="meddpic-status" style="color:#92400e;">Moderate</div>
+      </div>
+      <div class="meddpic-item strong">
+        <div class="meddpic-letter" style="color:#065f46;">I</div>
+        <div class="meddpic-label">Identify Pain</div>
+        <div class="meddpic-status" style="color:#065f46;">Strong</div>
+      </div>
+      <div class="meddpic-item strong">
+        <div class="meddpic-letter" style="color:#065f46;">C</div>
+        <div class="meddpic-label">Champion</div>
+        <div class="meddpic-status" style="color:#065f46;">Strong</div>
+      </div>
+      <div class="meddpic-item strong">
+        <div class="meddpic-letter" style="color:#065f46;">C</div>
+        <div class="meddpic-label">Competition</div>
+        <div class="meddpic-status" style="color:#065f46;">Strong</div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:1rem;font-size:0.85rem;color:var(--vsp-gray-500);">
+      7 of 8 elements at Strong. Only Paper Process remains Moderate (rev share agreement not yet drafted).
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">&#128200;</span> Metrics — Strong</div>
+    <ul style="font-size:0.9rem;list-style:disc;padding-left:1.5rem;">
+      <li><strong>$1.5M / 12 months</strong> via 100-phlebotomist coaching program at 15% platform take on $10M gross</li>
+      <li>1,000+ existing providers — only need 10% conversion</li>
+      <li>COVID peak: 100 patients/month scaled to 500+/day</li>
+      <li>B2C: 15% convenience fee ($90 direct vs $149 via middleman)</li>
+      <li>$100K in bank + $40K/month revenue = operational comfort (Patrick's numbers)</li>
+      <li>$720K annualized = flip point from rev share to retainer</li>
+      <li>Expanding to all mobile healthcare verticals</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">&#128176;</span> Economic Buyer — Strong</div>
+    <ul style="font-size:0.9rem;list-style:disc;padding-left:1.5rem;">
+      <li>Ed Cutler = sole decision-maker. No board, no investors, no governance layer.</li>
+      <li>Patrick Cutler = numbers/budget. Not co-equal, but holds financial benchmarks.</li>
+      <li>Ed agreed to rev share on the Apr 1 call without pushback or negotiation.</li>
+      <li>Also open to equity — "whatever works"</li>
+      <li>Marius to be involved in structuring (Tyler flagged on call)</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">&#128270;</span> Decision Criteria — Strong</div>
+    <ul style="font-size:0.9rem;list-style:disc;padding-left:1.5rem;">
+      <li>Trust and mission alignment are the top criteria (not price, not speed)</li>
+      <li>Faith-driven values: Colossians 3:23 as business philosophy</li>
+      <li>VSP's audit was "night and day" better than any prior team</li>
+      <li>Paul vouched by mutual friends — "you could trust him with everything"</li>
+      <li>Previous dev relationships failed on trust and communication, not capability</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">&#128196;</span> Paper Process — Moderate</div>
+    <ul style="font-size:0.9rem;list-style:disc;padding-left:1.5rem;">
+      <li>Revenue share agreement needed (not equity docs as originally planned)</li>
+      <li>Phase Zero has no paper — VSP just starts work at risk</li>
+      <li>Retainer agreement needed at flip point</li>
+      <li>Ed's legal counsel status: <strong>unknown</strong> — need to ask</li>
+      <li>Signing authority: assumed Ed, but not confirmed</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">&#128549;</span> Identify Pain — Strong</div>
+    <div class="quote">
+      "I feel like I've been almost like lost. Like immobilized. Which way do I go first? I never operate like that. I'm usually head down and I move fast and furious."
+      <div class="attribution">— Ed Cutler, April 1</div>
+    </div>
+    <ul style="font-size:0.9rem;list-style:disc;padding-left:1.5rem;margin-top:0.75rem;">
+      <li>Platform has been "almost live" for <strong>years</strong></li>
+      <li>Two dev relationships burned (ClickLab strung along 2yr; Adam shut server down)</li>
+      <li>Ed feels paralyzed — "immobilized" and "in spiritual battle"</li>
+      <li>Revenue running manually that could be automated</li>
+      <li>9+ critical bugs blocking launch</li>
+      <li>Security vulnerabilities (hardcoded OTP, creds in GitHub)</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">&#127942;</span> Champion — Strong</div>
+    <ul style="font-size:0.9rem;list-style:disc;padding-left:1.5rem;">
+      <li>Ed is all-in. Highest trust signal since engagement began.</li>
+      <li>Patrick engaged on numbers — wants regular mind map review meetings</li>
+      <li>"For the first time in a while, I can see a really long-term relationship"</li>
+      <li>Faith alignment is genuine and deep — not performative</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">&#127760;</span> Competition — Strong (Favorable)</div>
+    <ul style="font-size:0.9rem;list-style:disc;padding-left:1.5rem;">
+      <li>No competing vendors. Ed is done looking.</li>
+      <li>ClickLab relationship burned. Adam relationship burned.</li>
+      <li>Solo dev contacts went nowhere.</li>
+      <li>VSP competitive moat: Paul + Vlad built ShiftMed (identical domain)</li>
+      <li>200 engineers available via Vlad's network</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ==================== TECHNICAL TAB ==================== -->
+<div class="tab-content" id="tab-technical">
+
+  <div class="card">
+    <div class="card-title"><span class="icon">&#128736;</span> Current Tech Stack</div>
+    <table>
+      <tr><th>Layer</th><th>Technology</th><th>Status</th></tr>
+      <tr><td>Frontend</td><td>Angular 5</td><td><span class="badge badge-weak">EOL since 2018</span></td></tr>
+      <tr><td>Backend</td><td>Node.js</td><td><span class="badge badge-moderate">Existing</span></td></tr>
+      <tr><td>Hosting</td><td>Azure</td><td><span class="badge badge-weak">On friend's account</span></td></tr>
+      <tr><td>Payments</td><td>Stripe</td><td><span class="badge badge-strong">Working</span></td></tr>
+      <tr><td>SMS / OTP</td><td>Twilio</td><td><span class="badge badge-weak">Hardcoded default OTP</span></td></tr>
+      <tr><td>Background Checks</td><td>Checkr</td><td><span class="badge badge-moderate">Planned</span></td></tr>
+      <tr><td>EMR</td><td>Athena</td><td><span class="badge badge-moderate">Priority integration</span></td></tr>
+      <tr><td>CRM / Comms</td><td>GoHighLevel</td><td><span class="badge badge-strong">Connected</span></td></tr>
+      <tr><td>Design</td><td>Figma</td><td><span class="badge badge-strong">Designs exist</span></td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">&#128680;</span> Critical Bugs Blocking Launch</div>
+    <table>
+      <tr><th>#</th><th>Issue</th><th>Severity</th></tr>
+      <tr><td>1</td><td>Services/packages NOT filtered by company ID — pulls from ALL companies</td><td><span class="badge badge-weak">Critical</span></td></tr>
+      <tr><td>2</td><td>Removing one cart item removes ALL items</td><td><span class="badge badge-weak">Critical</span></td></tr>
+      <tr><td>3</td><td>Categories don't persist on provider service setup</td><td><span class="badge badge-weak">Critical</span></td></tr>
+      <tr><td>4</td><td>No patient registration flow — no patient roster being built</td><td><span class="badge badge-weak">Critical</span></td></tr>
+      <tr><td>5</td><td>Provider registration inconsistent across app vs. web portal</td><td><span class="badge badge-moderate">High</span></td></tr>
+      <tr><td>6</td><td>Schedule not connected to Google Calendar or Outlook</td><td><span class="badge badge-moderate">High</span></td></tr>
+      <tr><td>7</td><td>Auto-allocation toggle spins indefinitely</td><td><span class="badge badge-moderate">High</span></td></tr>
+      <tr><td>8</td><td>No provider bio/description field</td><td><span class="badge badge-info">Medium</span></td></tr>
+      <tr><td>9</td><td>Hardcoded default OTP — security vulnerability</td><td><span class="badge badge-weak">Critical / Security</span></td></tr>
+    </table>
+    <div class="alert alert-danger" style="margin-top:1rem;">
+      <strong>Compliance blockers:</strong> Angular 5 (EOL), credentials in GitHub, no WAF/secrets management, no CI/CD. These block HIPAA and SOC2 compliance and must be fixed before any production traffic.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">&#128218;</span> Phase Zero Scope</div>
+    <p style="font-size:0.9rem;margin-bottom:0.75rem;">Scoped at 11-17 man days. Produces a refined effort estimate, not revenue.</p>
+    <ul style="font-size:0.9rem;list-style:disc;padding-left:1.5rem;">
+      <li>AWS setup and infrastructure review</li>
+      <li>Angular/Firebase compliance evaluation</li>
+      <li>AI gap analysis</li>
+      <li>Tukan migration path assessment</li>
+      <li>Refined MVP estimate with prioritized backlog</li>
+      <li>Security remediation plan</li>
+    </ul>
+    <div class="alert alert-info" style="margin-top:0.75rem;">
+      <strong>MVP scope:</strong> Security remediation + 3 panels (admin, provider, customer web). Mobile apps explicitly deferred to post-launch.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">&#128279;</span> Platform Architecture</div>
+    <div class="grid-2">
+      <div>
+        <p class="section-header">Customer-Facing</p>
+        <table>
+          <tr><td>Customer site</td><td><a href="https://yourhealthco.net" target="_blank">yourhealthco.net</a></td></tr>
+          <tr><td>Provider site</td><td><a href="https://yourhealthpro.net" target="_blank">yourhealthpro.net</a></td></tr>
+        </table>
+      </div>
+      <div>
+        <p class="section-header">Internal Resources</p>
+        <table>
+          <tr><td>Figma (Provider App)</td><td><a href="https://www.figma.com/design/hJ1u48BUQhOJdxpsfZjAny" target="_blank">Provider designs</a></td></tr>
+          <tr><td>Scope / QA Sheet</td><td><a href="https://docs.google.com/spreadsheets/d/1T1c_sstsrPgUx0VgSvE7Z9tcbp-2N63WnmuMMeINqVk" target="_blank">Project scope</a></td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== TIMELINE TAB ==================== -->
+<div class="tab-content" id="tab-timeline">
+
+  <div class="card">
+    <div class="card-title"><span class="icon">&#128197;</span> Engagement Timeline</div>
+    <div class="timeline">
+      <div class="timeline-item completed">
+        <div class="timeline-date">March 19, 2026</div>
+        <div class="timeline-title">Calendar Invite</div>
+        <div class="timeline-detail">Paul scheduled MyHealthPro + Victory Square call</div>
+      </div>
+      <div class="timeline-item completed">
+        <div class="timeline-date">March 25, 2026</div>
+        <div class="timeline-title">Discovery Call</div>
+        <div class="timeline-detail">Full team: Tyler, Vlad, Ed, Patrick. Product demo, platform walkthrough, business model deep-dive. Vlad real-time technical assessment. 9+ critical bugs identified.</div>
+      </div>
+      <div class="timeline-item completed">
+        <div class="timeline-date">March 28-29, 2026</div>
+        <div class="timeline-title">Vlad Codebase Review</div>
+        <div class="timeline-detail">Weekend review of GitHub, Azure infrastructure. Angular 5 EOL confirmed, credentials in GitHub, no CI/CD.</div>
+      </div>
+      <div class="timeline-item completed">
+        <div class="timeline-date">March 30, 2026</div>
+        <div class="timeline-title">Follow-Up / Scoping Call</div>
+        <div class="timeline-detail">MVP gap analysis review. Phase Zero scoped at 11-17 man days. Security remediation prioritized.</div>
+      </div>
+      <div class="timeline-item completed">
+        <div class="timeline-date">April 1, 2026</div>
+        <div class="timeline-title">Paperwork Discussion</div>
+        <div class="timeline-detail">Revenue share agreed. Phase Zero greenlit at VSP risk. $1.5M/12mo revenue path confirmed. Coaching program as primary engine. Ed's mindset shift to long-term mission.</div>
+      </div>
+      <div class="timeline-item next">
+        <div class="timeline-date">April 2-4, 2026 (Target)</div>
+        <div class="timeline-title">Phase Zero Kickoff</div>
+        <div class="timeline-detail">Engineers coming off bench from another project. Vlad to coordinate. Tyler/Paul both on vacation — handoff must be clean.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">April 8-11, 2026 (Est.)</div>
+        <div class="timeline-title">Phase Zero Complete</div>
+        <div class="timeline-detail">Tighter cost estimate delivered. Retainer range confirmed ($20-50K/month). Rev share terms proposed.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">April, 2026</div>
+        <div class="timeline-title">Paul + Patrick In-Person</div>
+        <div class="timeline-detail">Patrick lives in Steubenville. Paul visiting the area. Face-to-face to solidify relationship.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">TBD</div>
+        <div class="timeline-title">Revenue Share Agreement Signed</div>
+        <div class="timeline-detail">Legal docs for rev share + retainer flip terms. Marius involved in structuring.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">TBD (~$720K annualized)</div>
+        <div class="timeline-title">Retainer Flip Point</div>
+        <div class="timeline-detail">$100K in bank + $40K/month revenue. Rev share becomes residual. Standard retainer begins.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== RISKS TAB ==================== -->
+<div class="tab-content" id="tab-risks">
+
+  <div class="card">
+    <div class="card-title"><span class="icon">&#9888;</span> Risk Assessment</div>
+
+    <div class="alert alert-danger" style="margin-bottom:1rem;">
+      <strong>RISK 1: Ed's Communication Pattern</strong><br>
+      Ed's instinct when frustrated is to bring in other people without telling his current team. This killed two prior dev relationships (ClickLab and Adam). VSP must set explicit exclusivity expectations during the engagement.
+    </div>
+
+    <div class="alert alert-warn" style="margin-bottom:1rem;">
+      <strong>RISK 2: Feature Factory Mentality</strong><br>
+      Ed built too many features and launched nothing. Vlad: "low maturity, feature factory — classic example of trying to fit the kitchen sink before going to market." VSP must hold the line on MVP scope.
+    </div>
+
+    <div class="alert alert-warn" style="margin-bottom:1rem;">
+      <strong>RISK 3: Ed's Focus and Emotional State</strong><br>
+      Ed described feeling "immobilized" and "lost." He's vulnerable and earnest, but fragile. VSP needs to reduce his cognitive load, not add options. Give him one path, not three.
+    </div>
+
+    <div class="alert alert-warn" style="margin-bottom:1rem;">
+      <strong>RISK 4: Tyler and Paul Both on Vacation</strong><br>
+      Both are going on vacation at the same time. Vlad may need to start Phase Zero without them. Handoff must be clean and complete.
+    </div>
+
+    <div class="alert alert-info" style="margin-bottom:1rem;">
+      <strong>RISK 5: Server Status Unknown</strong><br>
+      Adam shut the server down after the communication breakdown. It's unclear whether the platform is currently accessible. Need to confirm before Phase Zero.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">&#128373;</span> Previous Dev History — Full Intel</div>
+
+    <div class="collapsible-header open" onclick="toggleCollapsible(this)">
+      <strong>1. ClickLab (India) — Original Dev Shop</strong>
+      <span class="arrow">&#9654;</span>
+    </div>
+    <div class="collapsible-body open">
+      <ul style="font-size:0.9rem;list-style:disc;padding-left:1.5rem;">
+        <li>Billed monthly for ~2 years</li>
+        <li>Outside reviewer told Ed work could have been done in 3-4 months</li>
+        <li>"That's where they got you — they strung it out because it was a monthly"</li>
+        <li>Held platform hostage when invoices were late</li>
+        <li>Relationship completely burned</li>
+      </ul>
+    </div>
+
+    <div class="collapsible-header" onclick="toggleCollapsible(this)">
+      <strong>2. Adam (Unnamed Team) — The Server Shutdown</strong>
+      <span class="arrow">&#9654;</span>
+    </div>
+    <div class="collapsible-body">
+      <ul style="font-size:0.9rem;list-style:disc;padding-left:1.5rem;">
+        <li>A friend/contact who put up funds to get Ed's GitHub accessible after ClickLab</li>
+        <li>Adam's team hosted the platform and started working on it</li>
+        <li>Ed gave other developers (referred by lab partners) access to the same GitHub without telling Adam</li>
+        <li>Adam found out, got angry, and <strong>shut the server down</strong></li>
+        <li>Ed: "I'm sorry, I'm just doing my best, I'm trying to get this thing live"</li>
+        <li>Adam is also described as "a friend through church" — personal relationship damaged</li>
+      </ul>
+    </div>
+
+    <div class="collapsible-header" onclick="toggleCollapsible(this)">
+      <strong>3. Solo Devs — Informal Contacts</strong>
+      <span class="arrow">&#9654;</span>
+    </div>
+    <div class="collapsible-body">
+      <ul style="font-size:0.9rem;list-style:disc;padding-left:1.5rem;">
+        <li>At least two people looked at code informally, referred by lab partners</li>
+        <li>One was going to work on it "at night" for free</li>
+        <li>One female dev told Ed most of the code could have been built in 3-4 months</li>
+        <li>These contacts went nowhere — no sustained engagement</li>
+        <li>These were the contacts that triggered the Adam blowup</li>
+      </ul>
+    </div>
+
+    <div class="alert alert-danger" style="margin-top:1rem;">
+      <strong>Pattern for VSP to manage:</strong> When Ed feels stuck, he reaches out to anyone who might help — without coordinating with his current team. This is not malicious; it's desperation. But it burns bridges. VSP must set the rule: while we're engaged, nobody else touches the code without our knowledge.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">&#128591;</span> Ed's Mindset Shift — Context for Paul</div>
+    <div class="quote">
+      "My first intention was to sell this in three to five years. But I've been really praying about this. I think God is really changing it to where this is something that's needed. Anyone who purchases it would just look at it for revenue, and that's all. This has to be almost like a ministry for people."
+      <div class="attribution">— Ed Cutler, April 1</div>
+    </div>
+    <p style="font-size:0.9rem;margin-top:0.75rem;">
+      Ed read David Green's "The Legacy Life" (Hobby Lobby founder) last week and it reframed his entire business philosophy. He's abandoned the PE exit strategy because every PE group that approached had misaligned mission. Business motto is now Colossians 3:23 — "Whatever you do, do it as unto God, not as to human masters."
+    </p>
+    <p style="font-size:0.9rem;margin-top:0.75rem;">
+      <strong>Why this matters for VSP:</strong> Ed has rejected PE firms specifically because their mission didn't align. VSP's Christian values connection isn't just nice — it's the reason Ed chose VSP. This is a genuine competitive moat, not surface-level rapport.
+    </p>
+  </div>
+</div>
+
+<!-- ==================== ACTIONS TAB ==================== -->
+<div class="tab-content" id="tab-actions">
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title"><span class="icon">&#128308;</span> Tyler — Immediate</div>
+      <ul class="checklist">
+        <li>Sync with Paul on rev share terms and percentages</li>
+        <li>Loop Marius in on deal structuring</li>
+        <li>Connect Paul and Patrick for Steubenville meetup</li>
+        <li>Confirm Phase Zero kickoff date with Vlad</li>
+        <li>Follow up: is the server still down (Adam situation)?</li>
+        <li>Set up recurring mind map review meetings (Patrick)</li>
+        <li>Send follow-up email summarizing Apr 1 agreements</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">&#128309;</span> Paul — Needs to Know</div>
+      <ul class="checklist">
+        <li>Rev share > equity — both sides aligned, Tyler led this</li>
+        <li>Ed shifted from sell-in-5yr to long-term mission</li>
+        <li>Phase Zero starts at VSP risk, ~1 week</li>
+        <li>Patrick is in Steubenville — meet him in person</li>
+        <li>Ed burned last partner by sharing GitHub access — set exclusivity expectations</li>
+        <li>Marius should structure rev share terms</li>
+        <li>Tyler and Paul both on vacation — clean handoff to Vlad</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title"><span class="icon">&#128311;</span> Vlad — Delivery</div>
+      <ul class="checklist">
+        <li>Phase Zero is greenlit — engineers coming off bench</li>
+        <li>Scope unchanged from prior scoping call</li>
+        <li>No payment during Phase Zero — VSP at risk</li>
+        <li>Deliver tighter cost estimate ($20-50K/month range)</li>
+        <li>Confirm server access status</li>
+        <li>May need to start without Tyler/Paul (vacation)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">&#128312;</span> Strategic Observations</div>
+      <ul style="font-size:0.9rem;list-style:none;padding:0;">
+        <li style="padding:0.5rem 0;border-bottom:1px solid var(--vsp-gray-100);">
+          <strong>1.</strong> Deal is closer than it looks. No negotiation left — just paperwork.
+        </li>
+        <li style="padding:0.5rem 0;border-bottom:1px solid var(--vsp-gray-100);">
+          <strong>2.</strong> Ed's biggest risk to VSP is Ed. Set clear exclusivity rules.
+        </li>
+        <li style="padding:0.5rem 0;border-bottom:1px solid var(--vsp-gray-100);">
+          <strong>3.</strong> The coaching program IS the business. Frame the build as SaaS-enabled coaching, not just a marketplace.
+        </li>
+        <li style="padding:0.5rem 0;border-bottom:1px solid var(--vsp-gray-100);">
+          <strong>4.</strong> Patrick is the stabilizer. Engage him directly on roadmap — he'll hold Ed accountable.
+        </li>
+        <li style="padding:0.5rem 0;">
+          <strong>5.</strong> Faith alignment is a genuine competitive moat. Don't underestimate it.
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">&#128203;</span> Conversion Criteria — Move to Active Deals</div>
+    <ul class="checklist">
+      <li>Rev share terms agreed (including percentage and cap)</li>
+      <li class="done">Phase Zero scoped and greenlit</li>
+      <li class="done">Revenue model and path to profit confirmed</li>
+      <li class="done">MEDDPIC qualification at Strong across core elements</li>
+      <li>Rev share agreement signed</li>
+      <li>Phase Zero complete with refined estimate</li>
+      <li>Retainer amount confirmed</li>
+    </ul>
+  </div>
+</div>
+
+</div><!-- .main -->
+
+<div class="footer">
+  Victory Square Partners — YourHealthPro Complete Package<br>
+  Generated April 1, 2026 | Confidential — Internal Use Only
+</div>
+
+<script>
+  // Tab switching
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    });
+  });
+
+  // Collapsible sections
+  function toggleCollapsible(header) {
+    header.classList.toggle('open');
+    const body = header.nextElementSibling;
+    body.classList.toggle('open');
+  }
+</script>
+</body>
+</html>
