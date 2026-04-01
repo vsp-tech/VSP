@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stephanie Young, PhD — Forensic Assessment AI | VSP Discovery Package</title>
+<style>
+  :root {
+    --primary: #6366f1;
+    --primary-dark: #4f46e5;
+    --bg: #0f172a;
+    --surface: #1e293b;
+    --surface2: #334155;
+    --text: #f1f5f9;
+    --text-muted: #94a3b8;
+    --accent-green: #10b981;
+    --accent-amber: #f59e0b;
+    --accent-red: #ef4444;
+    --accent-blue: #3b82f6;
+    --accent-purple: #a855f7;
+    --border: #475569;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+  .header { background: linear-gradient(135deg, var(--primary-dark), #7c3aed); padding: 2rem; text-align: center; }
+  .header h1 { font-size: 1.8rem; margin-bottom: 0.3rem; }
+  .header .subtitle { color: rgba(255,255,255,0.8); font-size: 1rem; }
+  .header .badge { display: inline-block; background: rgba(255,255,255,0.2); padding: 0.3rem 1rem; border-radius: 999px; font-size: 0.85rem; margin-top: 0.8rem; }
+  .tabs { display: flex; background: var(--surface); border-bottom: 2px solid var(--border); overflow-x: auto; }
+  .tab { padding: 0.8rem 1.2rem; cursor: pointer; white-space: nowrap; color: var(--text-muted); font-size: 0.85rem; font-weight: 500; border-bottom: 2px solid transparent; transition: all 0.2s; }
+  .tab:hover { color: var(--text); background: var(--surface2); }
+  .tab.active { color: var(--primary); border-bottom-color: var(--primary); }
+  .content { max-width: 1100px; margin: 0 auto; padding: 1.5rem; }
+  .panel { display: none; }
+  .panel.active { display: block; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.2rem; }
+  .card h2 { font-size: 1.2rem; margin-bottom: 1rem; color: var(--primary); }
+  .card h3 { font-size: 1rem; margin: 1rem 0 0.5rem; color: var(--accent-blue); }
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+  .stat { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.2rem; text-align: center; }
+  .stat .value { font-size: 1.6rem; font-weight: 700; color: var(--primary); }
+  .stat .label { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.3rem; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+  th { text-align: left; padding: 0.6rem; border-bottom: 2px solid var(--border); color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; }
+  td { padding: 0.6rem; border-bottom: 1px solid var(--border); }
+  .badge-strong { background: rgba(16,185,129,0.15); color: var(--accent-green); padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; }
+  .badge-moderate { background: rgba(245,158,11,0.15); color: var(--accent-amber); padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; }
+  .badge-early { background: rgba(148,163,184,0.15); color: var(--text-muted); padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; }
+  .quote { border-left: 3px solid var(--primary); padding: 0.8rem 1rem; margin: 0.8rem 0; background: rgba(99,102,241,0.08); border-radius: 0 8px 8px 0; font-style: italic; }
+  .quote .attr { font-style: normal; color: var(--text-muted); font-size: 0.85rem; margin-top: 0.3rem; }
+  .timeline { position: relative; padding-left: 2rem; }
+  .timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: var(--border); }
+  .timeline-item { position: relative; margin-bottom: 1.5rem; }
+  .timeline-item::before { content: ''; position: absolute; left: -1.55rem; top: 0.4rem; width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--primary); background: var(--bg); }
+  .timeline-item.done::before { background: var(--accent-green); border-color: var(--accent-green); }
+  .timeline-item.next::before { background: var(--primary); border-color: var(--primary); }
+  .timeline-item .date { font-size: 0.8rem; color: var(--text-muted); }
+  .timeline-item .desc { font-size: 0.95rem; }
+  .checklist { list-style: none; }
+  .checklist li { padding: 0.4rem 0; padding-left: 1.5rem; position: relative; }
+  .checklist li::before { content: ''; position: absolute; left: 0; top: 0.65rem; width: 14px; height: 14px; border: 2px solid var(--border); border-radius: 3px; }
+  .risk-card { border-left: 3px solid var(--accent-amber); }
+  .collapsible { cursor: pointer; user-select: none; }
+  .collapsible::after { content: ' +'; color: var(--text-muted); }
+  .collapsible.open::after { content: ' -'; }
+  .collapse-content { display: none; margin-top: 0.5rem; }
+  .collapse-content.show { display: block; }
+  ul { padding-left: 1.2rem; }
+  ul li { margin-bottom: 0.3rem; }
+  .footer { text-align: center; padding: 2rem; color: var(--text-muted); font-size: 0.8rem; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Stephanie Young, PhD</h1>
+  <div class="subtitle">Forensic Assessment AI Tool — Discovery Package</div>
+  <div class="badge">Discovery Complete — Scoping in Progress</div>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="showTab('overview')">Overview</div>
+  <div class="tab" onclick="showTab('workflow')">Her Workflow</div>
+  <div class="tab" onclick="showTab('product')">The Product</div>
+  <div class="tab" onclick="showTab('deal')">Deal Structure</div>
+  <div class="tab" onclick="showTab('meddpic')">MEDDPIC</div>
+  <div class="tab" onclick="showTab('quotes')">Key Quotes</div>
+  <div class="tab" onclick="showTab('timeline')">Timeline</div>
+  <div class="tab" onclick="showTab('actions')">Action Items</div>
+</div>
+
+<div class="content">
+
+<!-- OVERVIEW -->
+<div class="panel active" id="overview">
+  <div class="stat-grid">
+    <div class="stat">
+      <div class="value">$25–50K</div>
+      <div class="label">MVP Price Range (Paul's Quote)</div>
+    </div>
+    <div class="stat">
+      <div class="value">Apr 21</div>
+      <div class="label">Next Call (9am PT)</div>
+    </div>
+    <div class="stat">
+      <div class="value">Fixed Price</div>
+      <div class="label">Deal Type</div>
+    </div>
+    <div class="stat">
+      <div class="value">Dr. Stock</div>
+      <div class="label">Comparable Client</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Executive Summary</h2>
+    <p>Stephanie Young, PhD is a licensed clinical psychologist in San Francisco doing forensic evaluations for Bay Area counties and the State of California. She and her business partner <strong>Rami</strong> (forensic psychologist) want to build an AI-powered tool for forensic evaluations — records review, interview transcription, and report drafting with traceable citations.</p>
+    <p style="margin-top:0.8rem">She's currently using a broken hodgepodge of Bastion GPT, Claude, and ChatGPT. Lost trust after <strong>Bastion hallucinated fake Spanish test norms</strong> with fabricated journal citations on a case where she'd be called to testify. She's incorporated a Delaware C Corp, consulted attorneys, and has a requirements doc ready.</p>
+    <p style="margin-top:0.8rem">Referral came through <strong>Maurice at DataTribe</strong> — Stephanie's husband (ex-Microsoft M&A, now runs Kadrian AI) and Maurice are best friends. Paul quoted $25–50K. No pushback. Paul compared her to Dr. Stock. Tyler leads scoping from here.</p>
+  </div>
+
+  <div class="card">
+    <h2>Key Contacts</h2>
+    <table>
+      <tr><th>Name</th><th>Role</th><th>Notes</th></tr>
+      <tr><td><strong>Stephanie Young, PhD</strong></td><td>Co-founder / Clinical Psychologist</td><td>PSY 32569, SF. Primary contact. Drives decisions.</td></tr>
+      <tr><td><strong>Rami</strong> (last name TBD)</td><td>Co-founder / Forensic Psychologist</td><td>Same specialty. Originated the product idea. Joining April 21.</td></tr>
+      <tr><td>Stephanie's Husband</td><td>Advisor</td><td>Ex-Microsoft M&A, runs Kadrian AI. Connected to Maurice.</td></tr>
+      <tr><td><strong>Maurice</strong></td><td>DataTribe — Referral Source</td><td>Husband's best friend since mid-90s. Paul's buddy.</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- WORKFLOW -->
+<div class="panel" id="workflow">
+  <div class="card">
+    <h2>Forensic Evaluation Workflow — As Stephanie Described It</h2>
+    <p style="color:var(--text-muted);margin-bottom:1rem">This is the workflow the product must support. Each phase has distinct pain points and AI opportunities.</p>
+
+    <h3>Phase 1: Records Review</h3>
+    <ul>
+      <li>Receives case documents from referring party (court, attorney, CPS)</li>
+      <li>Documents: medical records, court updates, prior psych evals, rap sheets, police reports</li>
+      <li>Some scanned from the 1980s — handwritten police reports, degraded quality</li>
+      <li>Combs through all data for holes, inconsistencies, missing sources</li>
+      <li>Must track down missing originals when cited data has no source</li>
+    </ul>
+    <div class="quote">Pain: "These are documents that come to you scanned sometimes from like the 80s. Very difficult to read. Sometimes police reports were handwritten."<div class="attr">— Stephanie</div></div>
+
+    <h3>Phase 2: Clinical Interview (1–4 hours)</h3>
+    <ul>
+      <li>Face-to-face with defendant/patient/subject</li>
+      <li>Simultaneously: building rapport, asking questions, thinking of follow-ups, AND typing verbatim quotes</li>
+      <li>Must capture exact wording — cited in reports, challenged in court</li>
+      <li>After questions: administer standardized tests (neuropsych, personality, forensic assessment instruments)</li>
+      <li>Recording permitted with consent</li>
+    </ul>
+    <div class="quote">Pain: "I'm sitting there typing away furiously, trying to get exact verbatim quotes while listening and building a rapport and also thinking of what question should I ask next. It's a lot to juggle."<div class="attr">— Stephanie</div></div>
+
+    <h3>Phase 3: Report Writing (15–22+ pages)</h3>
+    <ul>
+      <li>Structure: referring question → sources → methodology → history → interview → tests → analysis → conclusions</li>
+      <li>History section is "a bear" — synthesizing records into coherent narrative with citations</li>
+      <li>Every paragraph cited. Verbatim quotes placed throughout.</li>
+      <li>Must be "beyond reproach" for court submission</li>
+    </ul>
+    <div class="quote">Pain: "Based on the legal and ethical standards of psychologists, it has to be beyond reproach, a very well written, accurate report. And that can be incredibly time consuming. I just finished one yesterday that was 22 pages long."<div class="attr">— Stephanie</div></div>
+
+    <h3>Phase 4: Testimony</h3>
+    <ul>
+      <li>Subpoenaed to defend every statement on the stand</li>
+      <li>Opposing counsel challenges specific citations and conclusions</li>
+      <li>If AI hallucinated a citation, she gets destroyed under cross-examination</li>
+    </ul>
+  </div>
+
+  <div class="card risk-card">
+    <h2>The Hallucination Incident</h2>
+    <p>Bastion GPT generated Spanish norms for a standardized test with <strong>multiple fabricated journal article citations</strong>. Stephanie knew the literature and had never seen these sources. She spent hours tracking down every paper by the supposed author — <strong>the articles didn't exist</strong>.</p>
+    <p style="margin-top:0.5rem">This was for a case where she expected to testify. She stopped using Bastion entirely for a period. This incident makes <strong>citation traceability the #1 non-negotiable requirement</strong> for any tool she uses.</p>
+    <div class="quote">"Bastion came up with multiple sources and gave me output scores for these made up data sources. I spent a very long time literally trying to track down the author, every single journal article he'd ever written — and he didn't. I was just freaked out."<div class="attr">— Stephanie</div></div>
+  </div>
+</div>
+
+<!-- PRODUCT -->
+<div class="panel" id="product">
+  <div class="card">
+    <h2>MVP Scope (Agreed April 1)</h2>
+    <div class="stat-grid">
+      <div class="stat">
+        <div class="value" style="font-size:1.2rem">Records Review</div>
+        <div class="label">Document ingestion, summarization, gap detection</div>
+      </div>
+      <div class="stat">
+        <div class="value" style="font-size:1.2rem">Transcription</div>
+        <div class="label">Interview recording, accurate transcription, quote extraction</div>
+      </div>
+      <div class="stat">
+        <div class="value" style="font-size:1.2rem">Report Drafting</div>
+        <div class="label">Structured reports with traceable citations</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Current Tool Stack (Failing)</h2>
+    <table>
+      <tr><th>Tool</th><th>Use</th><th>Problem</th></tr>
+      <tr><td>Bastion GPT</td><td>Report writing, transcription</td><td style="color:var(--accent-red)">Hallucinated fake test norms. Transcription inaccurate.</td></tr>
+      <tr><td>Claude</td><td>General assistance</td><td>No integrated workflow</td></tr>
+      <tr><td>ChatGPT</td><td>General assistance</td><td>Manually comparing outputs between tools</td></tr>
+      <tr><td>Manual typing</td><td>Interview capture</td><td>Still types during interviews — doesn't trust any tool</td></tr>
+    </table>
+    <div class="quote">"I think it's sped up my workflow, but it's still clunky and frustrating."<div class="attr">— Stephanie</div></div>
+  </div>
+
+  <div class="card">
+    <h2>Post-MVP Vision</h2>
+    <ul>
+      <li>Productize for other forensic psychologists (start with friends/colleagues)</li>
+      <li>Scale from California statutes to all 50 states</li>
+      <li>Cover all forensic evaluation types</li>
+      <li>"Raise the standard of quality of reports" industry-wide</li>
+      <li>SaaS subscription model</li>
+    </ul>
+    <div class="quote">"The idea would be to scale it. I don't have a business degree, I don't know anything about funding. But let's make some money too while we're at it."<div class="attr">— Stephanie</div></div>
+  </div>
+
+  <div class="card">
+    <h2>Market Signals</h2>
+    <ul>
+      <li>Stephanie attended a 5-part AI training series for forensic psychologists</li>
+      <li>"There is a move towards getting psychologists on board" with AI tools</li>
+      <li>Field is "a bunch of old dudes super resistant to technological changes"</li>
+      <li>Low county pay forces high volume → poor quality → AI breaks the cycle</li>
+      <li>No existing tool specific to forensic psychologists</li>
+    </ul>
+  </div>
+</div>
+
+<!-- DEAL -->
+<div class="panel" id="deal">
+  <div class="card">
+    <h2>Deal Structure</h2>
+    <table>
+      <tr><td style="color:var(--text-muted)">Deal Type</td><td><strong>Fixed-price MVP build</strong></td></tr>
+      <tr><td style="color:var(--text-muted)">Price Range</td><td><strong>$25K–$50K</strong> (Paul's quote on call)</td></tr>
+      <tr><td style="color:var(--text-muted)">Her Expectation</td><td>Was thinking $6K–$15K (contract engineer rates)</td></tr>
+      <tr><td style="color:var(--text-muted)">Reaction</td><td style="color:var(--accent-green)">No flinch, no pushback</td></tr>
+      <tr><td style="color:var(--text-muted)">Payment Model</td><td>Deliverable-based: product delivered → payment</td></tr>
+      <tr><td style="color:var(--text-muted)">IP Ownership</td><td>100% Stephanie's entity (confirmed on call)</td></tr>
+      <tr><td style="color:var(--text-muted)">Post-MVP</td><td>Maintenance tail, then feature expansion if funded</td></tr>
+      <tr><td style="color:var(--text-muted)">Funding Source</td><td>Self-funded / bootstrapped</td></tr>
+      <tr><td style="color:var(--text-muted)">Investor Interest</td><td>"A couple of people" have asked — she thinks too early</td></tr>
+      <tr><td style="color:var(--text-muted)">Comparable</td><td>Dr. Stock — PhD psychologist, fixed-price, same pattern</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>Paul's Positioning (Perfectly Calibrated)</h2>
+    <ul>
+      <li>Framed VSP as "custom home builders, we just do it in software"</li>
+      <li>Anchored with $500K/month client to contextualize the $25–50K range</li>
+      <li>Acknowledged cost sensitivity: "It's your money, not investors' money"</li>
+      <li>Surfaced Dr. Stock as comparable unprompted</li>
+      <li>Proposed NDA → docs → one more call → estimation</li>
+      <li>Tyler reinforced with IP ownership horror stories and security warnings</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>Risk Factors</h2>
+    <table>
+      <tr><th>Risk</th><th>Severity</th><th>Mitigation</th></tr>
+      <tr><td>Sticker shock at formal proposal</td><td><span class="badge-moderate">Medium</span></td><td>Paul already anchored $25–50K with no pushback</td></tr>
+      <tr><td>Rami misalignment</td><td><span class="badge-moderate">Medium</span></td><td>Get him on April 21 call, understand his role and investment</td></tr>
+      <tr><td>HIPAA complexity inflates scope</td><td><span class="badge-strong" style="background:rgba(239,68,68,0.15);color:var(--accent-red)">High</span></td><td>Scope Phase 1 with anonymized data; defer production PHI to Phase 2</td></tr>
+      <tr><td>Scope creep toward productization</td><td><span class="badge-moderate">Medium</span></td><td>Hold the line: MVP is internal tool for Stephanie + Rami only</td></tr>
+      <tr><td>Transcription accuracy expectations</td><td><span class="badge-moderate">Medium</span></td><td>Frame as augmentation, not replacement — she'll still review</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- MEDDPIC -->
+<div class="panel" id="meddpic">
+  <div class="card">
+    <h2>MEDDPIC Qualification Dashboard</h2>
+    <table>
+      <tr><th>Element</th><th>Status</th><th>Key Intel</th></tr>
+      <tr><td><strong>Metrics</strong></td><td><span class="badge-moderate">Moderate</span></td><td>Huge time per evaluation, "insignificant" hourly rate. Need volume numbers.</td></tr>
+      <tr><td><strong>Economic Buyer</strong></td><td><span class="badge-moderate">Moderate</span></td><td>Self-funded. Didn't flinch at $25–50K. Rami's contribution unknown.</td></tr>
+      <tr><td><strong>Decision Criteria</strong></td><td><span class="badge-strong">Strong</span></td><td>Traceability #1. Transcription accuracy. HIPAA. IP ownership confirmed.</td></tr>
+      <tr><td><strong>Decision Process</strong></td><td><span class="badge-moderate">Moderate</span></td><td>Founder decision, no board. Rami's authority unknown. No competing bids.</td></tr>
+      <tr><td><strong>Paper Process</strong></td><td><span class="badge-early">Early</span></td><td>Delaware C Corp exists. NDA is first step. No SOW discussed yet.</td></tr>
+      <tr><td><strong>Identify Pain</strong></td><td><span class="badge-strong">Strong</span></td><td>Hallucination incident. Cognitive overload. Report time sink. Can't find engineer.</td></tr>
+      <tr><td><strong>Champion</strong></td><td><span class="badge-strong">Strong</span></td><td>"Feeling excited and hopeful." Has requirements doc. Did the homework.</td></tr>
+      <tr><td><strong>Competition</strong></td><td><span class="badge-strong">Strong</span></td><td>No competing vendors, no competing products, no other conversations.</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>Pain Deep Dive</h2>
+    <h3>The Hallucination Event (Trust-Destroying)</h3>
+    <p>Bastion GPT fabricated Spanish test norms with fake journal citations. She spent hours verifying. The articles didn't exist. This was for a case where she'd testify. <strong>Traceability is now non-negotiable.</strong></p>
+
+    <h3>Cognitive Overload During Interviews</h3>
+    <p>1–4 hours simultaneously: listening, building rapport, formulating questions, typing verbatim quotes. "It's a lot to juggle." She still manually types because she doesn't trust any transcription tool.</p>
+
+    <h3>Report Writing Time Sink</h3>
+    <p>22+ page reports, every paragraph cited. History section requires synthesizing massive records into coherent narrative. Extracting and placing verbatim quotes from 2.5-hour interviews takes "so long."</p>
+
+    <h3>Stuck Without Technical Help</h3>
+    <p>Tried coding on Claude (gave up after a weekend). Husband's firm too busy. Can't evaluate contract engineers. "I feel kind of stuck right now."</p>
+
+    <h3>Economic Squeeze</h3>
+    <p>County pays "embarrassingly tiny" rates. Hourly rate becomes "insignificant" after all the time invested. AI efficiency would make county work financially viable.</p>
+  </div>
+</div>
+
+<!-- QUOTES -->
+<div class="panel" id="quotes">
+  <div class="card">
+    <h2>Key Quotes from April 1 Discovery Call</h2>
+
+    <h3>On Her Pain</h3>
+    <div class="quote">"I am spending — my hourly rate works out to be so insignificant by the time all is said and done that having something that would really make this process easier would be a game changer."<div class="attr">— Stephanie</div></div>
+    <div class="quote">"I'm sitting there typing away furiously, trying to get exact verbatim quotes while listening and building a rapport and thinking of what question should I ask next. It's a lot to juggle."<div class="attr">— Stephanie</div></div>
+
+    <h3>On the Hallucination</h3>
+    <div class="quote">"Bastion came up with multiple sources and gave me output scores for these made up data sources. I spent a very long time literally trying to track down the author, every single journal article he'd ever written — and he didn't. I was just freaked out."<div class="attr">— Stephanie</div></div>
+
+    <h3>On Finding Help</h3>
+    <div class="quote">"The idea of interviewing potential contract engineers — that's why I was looking at my husband like, find someone for me. You worked at Microsoft."<div class="attr">— Stephanie</div></div>
+    <div class="quote">"I tried for a weekend coding it myself on Claude and I was like, fuck this, it's too complicated."<div class="attr">— Stephanie</div></div>
+
+    <h3>On the Vision</h3>
+    <div class="quote">"The idea would be to scale it. I don't have a business degree. But yeah, let's make some money too while we're at it."<div class="attr">— Stephanie</div></div>
+    <div class="quote">"It would be amazing if we could get to a place where every report that's submitted to court — there's a standard and it's a really high standard and everyone is meeting that."<div class="attr">— Stephanie</div></div>
+
+    <h3>On Trust and IP</h3>
+    <div class="quote">"Do we keep 100% control over the code and the IP?"<div class="attr">— Stephanie (Paul: "Yeah, yeah." Immediate, no hesitation.)</div></div>
+
+    <h3>VSP Positioning</h3>
+    <div class="quote">"That's the moat right now, honestly. Your brain is the moat. And your experience, having it in a siloed environment to where you actually know the right way to build this."<div class="attr">— Tyler</div></div>
+    <div class="quote">"Stephanie reminds me of Dr. Stock."<div class="attr">— Paul (unprompted)</div></div>
+    <div class="quote">"Lay down on the couch, tell us all your problems." — Paul<br>"No, that's my line." — Stephanie<div class="attr">Best rapport moment of the call</div></div>
+
+    <h3>Call Close</h3>
+    <div class="quote">"Thank you guys. It was really nice to meet you and I'm feeling excited and hopeful."<div class="attr">— Stephanie</div></div>
+  </div>
+</div>
+
+<!-- TIMELINE -->
+<div class="panel" id="timeline">
+  <div class="card">
+    <h2>Engagement Timeline</h2>
+    <div class="timeline">
+      <div class="timeline-item done">
+        <div class="date">March 28, 2026</div>
+        <div class="desc"><strong>Inbound Referral</strong> — Maurice (DataTribe) called Paul before RSA trip. Stephanie's husband connected them.</div>
+      </div>
+      <div class="timeline-item done">
+        <div class="date">April 1, 2026 — 2:30 PM ET</div>
+        <div class="desc"><strong>Discovery Call</strong> — 60 min. Full workflow walkthrough, AI frustrations, pricing ($25–50K), Dr. Stock comparable, IP confirmed, next steps agreed.</div>
+      </div>
+      <div class="timeline-item next">
+        <div class="date">This Week (by April 4)</div>
+        <div class="desc"><strong>Paul sends NDA</strong> — First paper step. Unlocks document sharing.</div>
+      </div>
+      <div class="timeline-item next">
+        <div class="date">This Week (by April 4)</div>
+        <div class="desc"><strong>Tyler sends wireframe</strong> — Based on call + email. Visual for Stephanie and Rami to react to.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="date">After NDA Signed</div>
+        <div class="desc"><strong>Stephanie sends requirements doc</strong> — She has materials ready to share.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="date">April 21, 2026 — 9:00 AM PT</div>
+        <div class="desc"><strong>Scoping Call</strong> — Tyler + Paul (Jacksonville FL) + Stephanie + Rami + VSP engineer. Deep dive, screen share, technical scoping.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="date">Week of April 21</div>
+        <div class="desc"><strong>Estimation + Proposal</strong> — Fixed-price proposal based on scoping call findings.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ACTIONS -->
+<div class="panel" id="actions">
+  <div class="card">
+    <h2>Tyler's Action Items</h2>
+    <ul class="checklist">
+      <li>Build wireframe from call + email — send by April 4</li>
+      <li>Get Rami's last name and email before April 21</li>
+      <li>Determine which VSP engineer for April 21 (Vlad or Matt)</li>
+      <li>Create Pipedrive person: Stephanie Young, PhD (after NDA)</li>
+      <li>Create Pipedrive org (Delaware C Corp entity)</li>
+      <li>Create Pipedrive lead</li>
+      <li>Research competing forensic psych AI tools before April 21</li>
+      <li>Post-April 21: produce estimation and formal proposal</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>Paul's Action Items</h2>
+    <ul class="checklist">
+      <li>Send NDA to Stephanie this week</li>
+      <li>Offer Dr. Stock reference call if deal progresses</li>
+      <li>Keep Maurice in the loop on outcome</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>Stephanie's Action Items</h2>
+    <ul class="checklist">
+      <li>Sign NDA when received</li>
+      <li>Send requirements doc + materials under NDA</li>
+      <li>Review Tyler's wireframe and provide feedback</li>
+      <li>Invite Rami to April 21 call</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>Conversion Criteria</h2>
+    <ul class="checklist">
+      <li>NDA signed</li>
+      <li>April 21 scoping call completed with Rami</li>
+      <li>Requirements doc reviewed</li>
+      <li>Formal proposal/estimation delivered</li>
+      <li>SOW signed</li>
+    </ul>
+  </div>
+</div>
+
+</div>
+
+<div class="footer">
+  VSP Rocketship — Discovery Package | Generated 2026-04-01 | Confidential
+</div>
+
+<script>
+function showTab(id) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+}
+document.querySelectorAll('.collapsible').forEach(el => {
+  el.addEventListener('click', () => {
+    el.classList.toggle('open');
+    el.nextElementSibling.classList.toggle('show');
+  });
+});
+</script>
+
+</body>
+</html>

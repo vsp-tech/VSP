@@ -416,6 +416,12 @@
       "passwordHash": "4c9187cfae578ef1f84edaf9103abcfc953d825a6ebf4e963f21e34e202f6a8a",
       "accentColor": "#10b981",
       "logo": null
+    },
+    "stephanie-young-forensic-ai": {
+      "name": "Stephanie Young — Forensic AI",
+      "passwordHash": "4c9187cfae578ef1f84edaf9103abcfc953d825a6ebf4e963f21e34e202f6a8a",
+      "accentColor": "#6366f1",
+      "logo": null
     }
   }
 }
