@@ -1,459 +1,919 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Stephanie Young, PhD — Forensic Assessment AI | VSP Discovery Package</title>
-<style>
-  :root {
-    --primary: #6366f1;
-    --primary-dark: #4f46e5;
-    --bg: #0f172a;
-    --surface: #1e293b;
-    --surface2: #334155;
-    --text: #f1f5f9;
-    --text-muted: #94a3b8;
-    --accent-green: #10b981;
-    --accent-amber: #f59e0b;
-    --accent-red: #ef4444;
-    --accent-blue: #3b82f6;
-    --accent-purple: #a855f7;
-    --border: #475569;
-  }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
-  .header { background: linear-gradient(135deg, var(--primary-dark), #7c3aed); padding: 2rem; text-align: center; }
-  .header h1 { font-size: 1.8rem; margin-bottom: 0.3rem; }
-  .header .subtitle { color: rgba(255,255,255,0.8); font-size: 1rem; }
-  .header .badge { display: inline-block; background: rgba(255,255,255,0.2); padding: 0.3rem 1rem; border-radius: 999px; font-size: 0.85rem; margin-top: 0.8rem; }
-  .tabs { display: flex; background: var(--surface); border-bottom: 2px solid var(--border); overflow-x: auto; }
-  .tab { padding: 0.8rem 1.2rem; cursor: pointer; white-space: nowrap; color: var(--text-muted); font-size: 0.85rem; font-weight: 500; border-bottom: 2px solid transparent; transition: all 0.2s; }
-  .tab:hover { color: var(--text); background: var(--surface2); }
-  .tab.active { color: var(--primary); border-bottom-color: var(--primary); }
-  .content { max-width: 1100px; margin: 0 auto; padding: 1.5rem; }
-  .panel { display: none; }
-  .panel.active { display: block; }
-  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.2rem; }
-  .card h2 { font-size: 1.2rem; margin-bottom: 1rem; color: var(--primary); }
-  .card h3 { font-size: 1rem; margin: 1rem 0 0.5rem; color: var(--accent-blue); }
-  .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
-  .stat { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.2rem; text-align: center; }
-  .stat .value { font-size: 1.6rem; font-weight: 700; color: var(--primary); }
-  .stat .label { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.3rem; }
-  table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
-  th { text-align: left; padding: 0.6rem; border-bottom: 2px solid var(--border); color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; }
-  td { padding: 0.6rem; border-bottom: 1px solid var(--border); }
-  .badge-strong { background: rgba(16,185,129,0.15); color: var(--accent-green); padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; }
-  .badge-moderate { background: rgba(245,158,11,0.15); color: var(--accent-amber); padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; }
-  .badge-early { background: rgba(148,163,184,0.15); color: var(--text-muted); padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; }
-  .quote { border-left: 3px solid var(--primary); padding: 0.8rem 1rem; margin: 0.8rem 0; background: rgba(99,102,241,0.08); border-radius: 0 8px 8px 0; font-style: italic; }
-  .quote .attr { font-style: normal; color: var(--text-muted); font-size: 0.85rem; margin-top: 0.3rem; }
-  .timeline { position: relative; padding-left: 2rem; }
-  .timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: var(--border); }
-  .timeline-item { position: relative; margin-bottom: 1.5rem; }
-  .timeline-item::before { content: ''; position: absolute; left: -1.55rem; top: 0.4rem; width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--primary); background: var(--bg); }
-  .timeline-item.done::before { background: var(--accent-green); border-color: var(--accent-green); }
-  .timeline-item.next::before { background: var(--primary); border-color: var(--primary); }
-  .timeline-item .date { font-size: 0.8rem; color: var(--text-muted); }
-  .timeline-item .desc { font-size: 0.95rem; }
-  .checklist { list-style: none; }
-  .checklist li { padding: 0.4rem 0; padding-left: 1.5rem; position: relative; }
-  .checklist li::before { content: ''; position: absolute; left: 0; top: 0.65rem; width: 14px; height: 14px; border: 2px solid var(--border); border-radius: 3px; }
-  .risk-card { border-left: 3px solid var(--accent-amber); }
-  .collapsible { cursor: pointer; user-select: none; }
-  .collapsible::after { content: ' +'; color: var(--text-muted); }
-  .collapsible.open::after { content: ' -'; }
-  .collapse-content { display: none; margin-top: 0.5rem; }
-  .collapse-content.show { display: block; }
-  ul { padding-left: 1.2rem; }
-  ul li { margin-bottom: 0.3rem; }
-  .footer { text-align: center; padding: 2rem; color: var(--text-muted); font-size: 0.8rem; }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Victory Square Partners + Stephanie Young, PhD — Discovery Package</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --green-lightest: #97f377;
+      --green-light: #7bd15d;
+      --green: #65a74e;
+      --green-dark: #4f813e;
+      --green-darkest: #355629;
+      --yellow-lightest: #fff5c2;
+      --yellow-light: #ffef96;
+      --yellow: #ffe86b;
+      --navy-light: #59709c;
+      --navy: #46597c;
+      --navy-dark: #344566;
+      --navy-darkest: #2b374d;
+      --white: #ffffff;
+      --gray-dark: #3f3f3f;
+      --black: #0c0c0c;
+      --gray-light: #f5f7fa;
+      --gray-border: #e2e8f0;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-snap-type: y mandatory;
+      overflow-y: scroll;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      color: var(--gray-dark);
+      background: var(--white);
+      line-height: 1.6;
+    }
+
+    .slide {
+      min-height: 100vh;
+      width: 100%;
+      scroll-snap-align: start;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 60px 80px;
+      position: relative;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .slide.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .slide-inner {
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    #nav-dots {
+      position: fixed;
+      right: 24px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 1000;
+    }
+
+    .nav-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--navy-light);
+      opacity: 0.3;
+      cursor: pointer;
+      transition: all 0.3s;
+      border: none;
+    }
+
+    .nav-dot.active {
+      opacity: 1;
+      background: var(--green);
+      transform: scale(1.3);
+    }
+
+    /* ─── Slide Styles ───────────────────────────────────────────── */
+
+    /* Title Slide */
+    .slide-title {
+      background: linear-gradient(135deg, var(--navy-darkest) 0%, var(--navy-dark) 60%, var(--navy) 100%);
+      color: var(--white);
+      text-align: center;
+    }
+
+    .slide-title .badge {
+      display: inline-block;
+      background: var(--green);
+      color: var(--white);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 6px 18px;
+      border-radius: 20px;
+      margin-bottom: 28px;
+    }
+
+    .slide-title h1 {
+      font-size: 52px;
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+
+    .slide-title h1 span {
+      color: var(--green-lightest);
+    }
+
+    .slide-title .subtitle {
+      font-size: 20px;
+      font-weight: 400;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 32px;
+    }
+
+    .slide-title .meta {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.45);
+    }
+
+    .slide-title .meta strong {
+      color: var(--yellow);
+    }
+
+    /* Section Headers */
+    .section-label {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: 12px;
+    }
+
+    .slide h2 {
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--navy-darkest);
+      margin-bottom: 8px;
+      line-height: 1.2;
+    }
+
+    .slide .lead {
+      font-size: 17px;
+      color: var(--navy-light);
+      margin-bottom: 32px;
+      max-width: 700px;
+    }
+
+    /* Cards */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: var(--white);
+      border: 1px solid var(--gray-border);
+      border-radius: 12px;
+      padding: 28px;
+      box-shadow: 0 2px 12px rgba(44,55,77,0.06);
+    }
+
+    .card h3 {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--navy-darkest);
+      margin-bottom: 8px;
+    }
+
+    .card p, .card li {
+      font-size: 14px;
+      color: var(--gray-dark);
+      line-height: 1.7;
+    }
+
+    .card ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .card ul li {
+      padding: 4px 0;
+      padding-left: 16px;
+      position: relative;
+    }
+
+    .card ul li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 12px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+    }
+
+    .card-accent {
+      border-left: 4px solid var(--green);
+    }
+
+    .card-warn {
+      border-left: 4px solid var(--yellow);
+    }
+
+    .card-navy {
+      background: var(--navy-darkest);
+      color: var(--white);
+      border: none;
+    }
+
+    .card-navy h3 { color: var(--green-lightest); }
+    .card-navy p, .card-navy li { color: rgba(255,255,255,0.75); }
+    .card-navy ul li::before { background: var(--yellow); }
+
+    /* Tables */
+    .info-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    .info-table th {
+      text-align: left;
+      font-weight: 700;
+      color: var(--navy-darkest);
+      padding: 12px 16px;
+      border-bottom: 2px solid var(--green);
+      white-space: nowrap;
+    }
+
+    .info-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--gray-border);
+      color: var(--gray-dark);
+    }
+
+    /* MEDDPIC Bars */
+    .meddpic-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--gray-border);
+    }
+
+    .meddpic-label {
+      width: 160px;
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--navy-darkest);
+      flex-shrink: 0;
+    }
+
+    .meddpic-bar-bg {
+      flex: 1;
+      height: 24px;
+      background: var(--gray-light);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .meddpic-bar {
+      height: 100%;
+      border-radius: 12px;
+      transition: width 1s ease;
+    }
+
+    .bar-strong { background: var(--green); width: 90%; }
+    .bar-moderate { background: var(--yellow); width: 60%; }
+    .bar-early { background: var(--navy-light); width: 30%; }
+
+    .meddpic-status {
+      width: 80px;
+      text-align: right;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .status-strong { color: var(--green-dark); }
+    .status-moderate { color: #b8860b; }
+    .status-early { color: var(--navy-light); }
+
+    /* Quote */
+    .quote-block {
+      background: var(--navy-darkest);
+      border-radius: 16px;
+      padding: 40px 48px;
+      margin: 24px 0;
+      position: relative;
+    }
+
+    .quote-block::before {
+      content: '\201C';
+      position: absolute;
+      top: 12px;
+      left: 24px;
+      font-size: 72px;
+      color: var(--green);
+      opacity: 0.3;
+      line-height: 1;
+    }
+
+    .quote-block p {
+      font-size: 18px;
+      font-style: italic;
+      color: rgba(255,255,255,0.85);
+      line-height: 1.7;
+      margin-bottom: 12px;
+    }
+
+    .quote-block .attribution {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--green-lightest);
+      font-style: normal;
+    }
+
+    /* Timeline */
+    .timeline {
+      position: relative;
+      padding-left: 32px;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 8px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--green);
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 28px;
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -28px;
+      top: 6px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--green);
+      border: 3px solid var(--white);
+      box-shadow: 0 0 0 2px var(--green);
+    }
+
+    .timeline-item.future::before {
+      background: var(--white);
+      border-color: var(--navy-light);
+      box-shadow: 0 0 0 2px var(--navy-light);
+    }
+
+    .timeline-date {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--green-dark);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .timeline-item.future .timeline-date {
+      color: var(--navy-light);
+    }
+
+    .timeline-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--navy-darkest);
+      margin: 4px 0;
+    }
+
+    .timeline-desc {
+      font-size: 14px;
+      color: var(--gray-dark);
+    }
+
+    /* Slide backgrounds */
+    .slide-light {
+      background: var(--gray-light);
+    }
+
+    .slide-dark {
+      background: var(--navy-darkest);
+      color: var(--white);
+    }
+
+    .slide-dark h2 { color: var(--white); }
+    .slide-dark .lead { color: rgba(255,255,255,0.55); }
+    .slide-dark .section-label { color: var(--green-lightest); }
+
+    /* Risk table */
+    .risk-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .risk-high { background: #fee2e2; color: #b91c1c; }
+    .risk-medium { background: var(--yellow-lightest); color: #92400e; }
+    .risk-low { background: #dcfce7; color: #166534; }
+
+    @media (max-width: 768px) {
+      .slide { padding: 40px 24px; }
+      .slide-title h1 { font-size: 32px; }
+      .slide h2 { font-size: 26px; }
+      .card-grid { grid-template-columns: 1fr; }
+      .meddpic-label { width: 100px; font-size: 12px; }
+      .quote-block { padding: 28px 24px; }
+      .slide-title .meta { flex-direction: column; gap: 8px; }
+      #nav-dots { display: none; }
+    }
+  </style>
 </head>
 <body>
 
-<div class="header">
-  <h1>Stephanie Young, PhD</h1>
-  <div class="subtitle">Forensic Assessment AI Tool — Discovery Package</div>
-  <div class="badge">Discovery Complete — Scoping in Progress</div>
-</div>
+  <nav id="nav-dots"></nav>
 
-<div class="tabs">
-  <div class="tab active" onclick="showTab('overview')">Overview</div>
-  <div class="tab" onclick="showTab('workflow')">Her Workflow</div>
-  <div class="tab" onclick="showTab('product')">The Product</div>
-  <div class="tab" onclick="showTab('deal')">Deal Structure</div>
-  <div class="tab" onclick="showTab('meddpic')">MEDDPIC</div>
-  <div class="tab" onclick="showTab('quotes')">Key Quotes</div>
-  <div class="tab" onclick="showTab('timeline')">Timeline</div>
-  <div class="tab" onclick="showTab('actions')">Action Items</div>
-</div>
-
-<div class="content">
-
-<!-- OVERVIEW -->
-<div class="panel active" id="overview">
-  <div class="stat-grid">
-    <div class="stat">
-      <div class="value">$25–50K</div>
-      <div class="label">MVP Price Range (Paul's Quote)</div>
-    </div>
-    <div class="stat">
-      <div class="value">Apr 21</div>
-      <div class="label">Next Call (9am PT)</div>
-    </div>
-    <div class="stat">
-      <div class="value">Fixed Price</div>
-      <div class="label">Deal Type</div>
-    </div>
-    <div class="stat">
-      <div class="value">Dr. Stock</div>
-      <div class="label">Comparable Client</div>
-    </div>
-  </div>
-
-  <div class="card">
-    <h2>Executive Summary</h2>
-    <p>Stephanie Young, PhD is a licensed clinical psychologist in San Francisco doing forensic evaluations for Bay Area counties and the State of California. She and her business partner <strong>Rami</strong> (forensic psychologist) want to build an AI-powered tool for forensic evaluations — records review, interview transcription, and report drafting with traceable citations.</p>
-    <p style="margin-top:0.8rem">She's currently using a broken hodgepodge of Bastion GPT, Claude, and ChatGPT. Lost trust after <strong>Bastion hallucinated fake Spanish test norms</strong> with fabricated journal citations on a case where she'd be called to testify. She's incorporated a Delaware C Corp, consulted attorneys, and has a requirements doc ready.</p>
-    <p style="margin-top:0.8rem">Referral came through <strong>Maurice at DataTribe</strong> — Stephanie's husband (ex-Microsoft M&A, now runs Kadrian AI) and Maurice are best friends. Paul quoted $25–50K. No pushback. Paul compared her to Dr. Stock. Tyler leads scoping from here.</p>
-  </div>
-
-  <div class="card">
-    <h2>Key Contacts</h2>
-    <table>
-      <tr><th>Name</th><th>Role</th><th>Notes</th></tr>
-      <tr><td><strong>Stephanie Young, PhD</strong></td><td>Co-founder / Clinical Psychologist</td><td>PSY 32569, SF. Primary contact. Drives decisions.</td></tr>
-      <tr><td><strong>Rami</strong> (last name TBD)</td><td>Co-founder / Forensic Psychologist</td><td>Same specialty. Originated the product idea. Joining April 21.</td></tr>
-      <tr><td>Stephanie's Husband</td><td>Advisor</td><td>Ex-Microsoft M&A, runs Kadrian AI. Connected to Maurice.</td></tr>
-      <tr><td><strong>Maurice</strong></td><td>DataTribe — Referral Source</td><td>Husband's best friend since mid-90s. Paul's buddy.</td></tr>
-    </table>
-  </div>
-</div>
-
-<!-- WORKFLOW -->
-<div class="panel" id="workflow">
-  <div class="card">
-    <h2>Forensic Evaluation Workflow — As Stephanie Described It</h2>
-    <p style="color:var(--text-muted);margin-bottom:1rem">This is the workflow the product must support. Each phase has distinct pain points and AI opportunities.</p>
-
-    <h3>Phase 1: Records Review</h3>
-    <ul>
-      <li>Receives case documents from referring party (court, attorney, CPS)</li>
-      <li>Documents: medical records, court updates, prior psych evals, rap sheets, police reports</li>
-      <li>Some scanned from the 1980s — handwritten police reports, degraded quality</li>
-      <li>Combs through all data for holes, inconsistencies, missing sources</li>
-      <li>Must track down missing originals when cited data has no source</li>
-    </ul>
-    <div class="quote">Pain: "These are documents that come to you scanned sometimes from like the 80s. Very difficult to read. Sometimes police reports were handwritten."<div class="attr">— Stephanie</div></div>
-
-    <h3>Phase 2: Clinical Interview (1–4 hours)</h3>
-    <ul>
-      <li>Face-to-face with defendant/patient/subject</li>
-      <li>Simultaneously: building rapport, asking questions, thinking of follow-ups, AND typing verbatim quotes</li>
-      <li>Must capture exact wording — cited in reports, challenged in court</li>
-      <li>After questions: administer standardized tests (neuropsych, personality, forensic assessment instruments)</li>
-      <li>Recording permitted with consent</li>
-    </ul>
-    <div class="quote">Pain: "I'm sitting there typing away furiously, trying to get exact verbatim quotes while listening and building a rapport and also thinking of what question should I ask next. It's a lot to juggle."<div class="attr">— Stephanie</div></div>
-
-    <h3>Phase 3: Report Writing (15–22+ pages)</h3>
-    <ul>
-      <li>Structure: referring question → sources → methodology → history → interview → tests → analysis → conclusions</li>
-      <li>History section is "a bear" — synthesizing records into coherent narrative with citations</li>
-      <li>Every paragraph cited. Verbatim quotes placed throughout.</li>
-      <li>Must be "beyond reproach" for court submission</li>
-    </ul>
-    <div class="quote">Pain: "Based on the legal and ethical standards of psychologists, it has to be beyond reproach, a very well written, accurate report. And that can be incredibly time consuming. I just finished one yesterday that was 22 pages long."<div class="attr">— Stephanie</div></div>
-
-    <h3>Phase 4: Testimony</h3>
-    <ul>
-      <li>Subpoenaed to defend every statement on the stand</li>
-      <li>Opposing counsel challenges specific citations and conclusions</li>
-      <li>If AI hallucinated a citation, she gets destroyed under cross-examination</li>
-    </ul>
-  </div>
-
-  <div class="card risk-card">
-    <h2>The Hallucination Incident</h2>
-    <p>Bastion GPT generated Spanish norms for a standardized test with <strong>multiple fabricated journal article citations</strong>. Stephanie knew the literature and had never seen these sources. She spent hours tracking down every paper by the supposed author — <strong>the articles didn't exist</strong>.</p>
-    <p style="margin-top:0.5rem">This was for a case where she expected to testify. She stopped using Bastion entirely for a period. This incident makes <strong>citation traceability the #1 non-negotiable requirement</strong> for any tool she uses.</p>
-    <div class="quote">"Bastion came up with multiple sources and gave me output scores for these made up data sources. I spent a very long time literally trying to track down the author, every single journal article he'd ever written — and he didn't. I was just freaked out."<div class="attr">— Stephanie</div></div>
-  </div>
-</div>
-
-<!-- PRODUCT -->
-<div class="panel" id="product">
-  <div class="card">
-    <h2>MVP Scope (Agreed April 1)</h2>
-    <div class="stat-grid">
-      <div class="stat">
-        <div class="value" style="font-size:1.2rem">Records Review</div>
-        <div class="label">Document ingestion, summarization, gap detection</div>
-      </div>
-      <div class="stat">
-        <div class="value" style="font-size:1.2rem">Transcription</div>
-        <div class="label">Interview recording, accurate transcription, quote extraction</div>
-      </div>
-      <div class="stat">
-        <div class="value" style="font-size:1.2rem">Report Drafting</div>
-        <div class="label">Structured reports with traceable citations</div>
+  <!-- ════════════ SLIDE 1: TITLE ════════════ -->
+  <section class="slide slide-title" data-label="Overview">
+    <div class="slide-inner" style="display:flex;flex-direction:column;align-items:center;">
+      <div class="badge">Discovery Package</div>
+      <h1>Forensic Assessment <span>AI Tool</span></h1>
+      <p class="subtitle">Stephanie Young, PhD &mdash; Clinical Psychologist, San Francisco</p>
+      <div class="meta">
+        <span>Prepared <strong>April 1, 2026</strong></span>
+        <span>Discovery Call <strong>Complete</strong></span>
+        <span>Deal Range <strong>$25K &ndash; $50K</strong></span>
+        <span>Next Call <strong>April 21</strong></span>
       </div>
     </div>
-  </div>
+  </section>
 
-  <div class="card">
-    <h2>Current Tool Stack (Failing)</h2>
-    <table>
-      <tr><th>Tool</th><th>Use</th><th>Problem</th></tr>
-      <tr><td>Bastion GPT</td><td>Report writing, transcription</td><td style="color:var(--accent-red)">Hallucinated fake test norms. Transcription inaccurate.</td></tr>
-      <tr><td>Claude</td><td>General assistance</td><td>No integrated workflow</td></tr>
-      <tr><td>ChatGPT</td><td>General assistance</td><td>Manually comparing outputs between tools</td></tr>
-      <tr><td>Manual typing</td><td>Interview capture</td><td>Still types during interviews — doesn't trust any tool</td></tr>
-    </table>
-    <div class="quote">"I think it's sped up my workflow, but it's still clunky and frustrating."<div class="attr">— Stephanie</div></div>
-  </div>
+  <!-- ════════════ SLIDE 2: PROSPECT SNAPSHOT ════════════ -->
+  <section class="slide" data-label="Prospect">
+    <div class="slide-inner">
+      <span class="section-label">The Prospect</span>
+      <h2>Stephanie Young, PhD</h2>
+      <p class="lead">Licensed clinical psychologist performing forensic evaluations for Bay Area counties and the State of California. Warm referral through Maurice at DataTribe.</p>
 
-  <div class="card">
-    <h2>Post-MVP Vision</h2>
-    <ul>
-      <li>Productize for other forensic psychologists (start with friends/colleagues)</li>
-      <li>Scale from California statutes to all 50 states</li>
-      <li>Cover all forensic evaluation types</li>
-      <li>"Raise the standard of quality of reports" industry-wide</li>
-      <li>SaaS subscription model</li>
-    </ul>
-    <div class="quote">"The idea would be to scale it. I don't have a business degree, I don't know anything about funding. But let's make some money too while we're at it."<div class="attr">— Stephanie</div></div>
-  </div>
+      <div class="card-grid">
+        <div class="card card-accent">
+          <h3>Quick Facts</h3>
+          <table class="info-table">
+            <tr><td style="font-weight:600;width:140px;">License</td><td>PSY 32569 (California)</td></tr>
+            <tr><td style="font-weight:600;">Location</td><td>870 Market St, Suite 915, San Francisco, CA</td></tr>
+            <tr><td style="font-weight:600;">Entity</td><td>Delaware C Corp (formed, attorneys consulted)</td></tr>
+            <tr><td style="font-weight:600;">Partner</td><td>Rami (forensic psychologist, co-founder)</td></tr>
+            <tr><td style="font-weight:600;">Referral Path</td><td>Maurice (DataTribe) &rarr; Paul Doman &rarr; VSP</td></tr>
+            <tr><td style="font-weight:600;">Funding</td><td>Self-funded / bootstrapped from practice income</td></tr>
+          </table>
+        </div>
 
-  <div class="card">
-    <h2>Market Signals</h2>
-    <ul>
-      <li>Stephanie attended a 5-part AI training series for forensic psychologists</li>
-      <li>"There is a move towards getting psychologists on board" with AI tools</li>
-      <li>Field is "a bunch of old dudes super resistant to technological changes"</li>
-      <li>Low county pay forces high volume → poor quality → AI breaks the cycle</li>
-      <li>No existing tool specific to forensic psychologists</li>
-    </ul>
-  </div>
-</div>
-
-<!-- DEAL -->
-<div class="panel" id="deal">
-  <div class="card">
-    <h2>Deal Structure</h2>
-    <table>
-      <tr><td style="color:var(--text-muted)">Deal Type</td><td><strong>Fixed-price MVP build</strong></td></tr>
-      <tr><td style="color:var(--text-muted)">Price Range</td><td><strong>$25K–$50K</strong> (Paul's quote on call)</td></tr>
-      <tr><td style="color:var(--text-muted)">Her Expectation</td><td>Was thinking $6K–$15K (contract engineer rates)</td></tr>
-      <tr><td style="color:var(--text-muted)">Reaction</td><td style="color:var(--accent-green)">No flinch, no pushback</td></tr>
-      <tr><td style="color:var(--text-muted)">Payment Model</td><td>Deliverable-based: product delivered → payment</td></tr>
-      <tr><td style="color:var(--text-muted)">IP Ownership</td><td>100% Stephanie's entity (confirmed on call)</td></tr>
-      <tr><td style="color:var(--text-muted)">Post-MVP</td><td>Maintenance tail, then feature expansion if funded</td></tr>
-      <tr><td style="color:var(--text-muted)">Funding Source</td><td>Self-funded / bootstrapped</td></tr>
-      <tr><td style="color:var(--text-muted)">Investor Interest</td><td>"A couple of people" have asked — she thinks too early</td></tr>
-      <tr><td style="color:var(--text-muted)">Comparable</td><td>Dr. Stock — PhD psychologist, fixed-price, same pattern</td></tr>
-    </table>
-  </div>
-
-  <div class="card">
-    <h2>Paul's Positioning (Perfectly Calibrated)</h2>
-    <ul>
-      <li>Framed VSP as "custom home builders, we just do it in software"</li>
-      <li>Anchored with $500K/month client to contextualize the $25–50K range</li>
-      <li>Acknowledged cost sensitivity: "It's your money, not investors' money"</li>
-      <li>Surfaced Dr. Stock as comparable unprompted</li>
-      <li>Proposed NDA → docs → one more call → estimation</li>
-      <li>Tyler reinforced with IP ownership horror stories and security warnings</li>
-    </ul>
-  </div>
-
-  <div class="card">
-    <h2>Risk Factors</h2>
-    <table>
-      <tr><th>Risk</th><th>Severity</th><th>Mitigation</th></tr>
-      <tr><td>Sticker shock at formal proposal</td><td><span class="badge-moderate">Medium</span></td><td>Paul already anchored $25–50K with no pushback</td></tr>
-      <tr><td>Rami misalignment</td><td><span class="badge-moderate">Medium</span></td><td>Get him on April 21 call, understand his role and investment</td></tr>
-      <tr><td>HIPAA complexity inflates scope</td><td><span class="badge-strong" style="background:rgba(239,68,68,0.15);color:var(--accent-red)">High</span></td><td>Scope Phase 1 with anonymized data; defer production PHI to Phase 2</td></tr>
-      <tr><td>Scope creep toward productization</td><td><span class="badge-moderate">Medium</span></td><td>Hold the line: MVP is internal tool for Stephanie + Rami only</td></tr>
-      <tr><td>Transcription accuracy expectations</td><td><span class="badge-moderate">Medium</span></td><td>Frame as augmentation, not replacement — she'll still review</td></tr>
-    </table>
-  </div>
-</div>
-
-<!-- MEDDPIC -->
-<div class="panel" id="meddpic">
-  <div class="card">
-    <h2>MEDDPIC Qualification Dashboard</h2>
-    <table>
-      <tr><th>Element</th><th>Status</th><th>Key Intel</th></tr>
-      <tr><td><strong>Metrics</strong></td><td><span class="badge-moderate">Moderate</span></td><td>Huge time per evaluation, "insignificant" hourly rate. Need volume numbers.</td></tr>
-      <tr><td><strong>Economic Buyer</strong></td><td><span class="badge-moderate">Moderate</span></td><td>Self-funded. Didn't flinch at $25–50K. Rami's contribution unknown.</td></tr>
-      <tr><td><strong>Decision Criteria</strong></td><td><span class="badge-strong">Strong</span></td><td>Traceability #1. Transcription accuracy. HIPAA. IP ownership confirmed.</td></tr>
-      <tr><td><strong>Decision Process</strong></td><td><span class="badge-moderate">Moderate</span></td><td>Founder decision, no board. Rami's authority unknown. No competing bids.</td></tr>
-      <tr><td><strong>Paper Process</strong></td><td><span class="badge-early">Early</span></td><td>Delaware C Corp exists. NDA is first step. No SOW discussed yet.</td></tr>
-      <tr><td><strong>Identify Pain</strong></td><td><span class="badge-strong">Strong</span></td><td>Hallucination incident. Cognitive overload. Report time sink. Can't find engineer.</td></tr>
-      <tr><td><strong>Champion</strong></td><td><span class="badge-strong">Strong</span></td><td>"Feeling excited and hopeful." Has requirements doc. Did the homework.</td></tr>
-      <tr><td><strong>Competition</strong></td><td><span class="badge-strong">Strong</span></td><td>No competing vendors, no competing products, no other conversations.</td></tr>
-    </table>
-  </div>
-
-  <div class="card">
-    <h2>Pain Deep Dive</h2>
-    <h3>The Hallucination Event (Trust-Destroying)</h3>
-    <p>Bastion GPT fabricated Spanish test norms with fake journal citations. She spent hours verifying. The articles didn't exist. This was for a case where she'd testify. <strong>Traceability is now non-negotiable.</strong></p>
-
-    <h3>Cognitive Overload During Interviews</h3>
-    <p>1–4 hours simultaneously: listening, building rapport, formulating questions, typing verbatim quotes. "It's a lot to juggle." She still manually types because she doesn't trust any transcription tool.</p>
-
-    <h3>Report Writing Time Sink</h3>
-    <p>22+ page reports, every paragraph cited. History section requires synthesizing massive records into coherent narrative. Extracting and placing verbatim quotes from 2.5-hour interviews takes "so long."</p>
-
-    <h3>Stuck Without Technical Help</h3>
-    <p>Tried coding on Claude (gave up after a weekend). Husband's firm too busy. Can't evaluate contract engineers. "I feel kind of stuck right now."</p>
-
-    <h3>Economic Squeeze</h3>
-    <p>County pays "embarrassingly tiny" rates. Hourly rate becomes "insignificant" after all the time invested. AI efficiency would make county work financially viable.</p>
-  </div>
-</div>
-
-<!-- QUOTES -->
-<div class="panel" id="quotes">
-  <div class="card">
-    <h2>Key Quotes from April 1 Discovery Call</h2>
-
-    <h3>On Her Pain</h3>
-    <div class="quote">"I am spending — my hourly rate works out to be so insignificant by the time all is said and done that having something that would really make this process easier would be a game changer."<div class="attr">— Stephanie</div></div>
-    <div class="quote">"I'm sitting there typing away furiously, trying to get exact verbatim quotes while listening and building a rapport and thinking of what question should I ask next. It's a lot to juggle."<div class="attr">— Stephanie</div></div>
-
-    <h3>On the Hallucination</h3>
-    <div class="quote">"Bastion came up with multiple sources and gave me output scores for these made up data sources. I spent a very long time literally trying to track down the author, every single journal article he'd ever written — and he didn't. I was just freaked out."<div class="attr">— Stephanie</div></div>
-
-    <h3>On Finding Help</h3>
-    <div class="quote">"The idea of interviewing potential contract engineers — that's why I was looking at my husband like, find someone for me. You worked at Microsoft."<div class="attr">— Stephanie</div></div>
-    <div class="quote">"I tried for a weekend coding it myself on Claude and I was like, fuck this, it's too complicated."<div class="attr">— Stephanie</div></div>
-
-    <h3>On the Vision</h3>
-    <div class="quote">"The idea would be to scale it. I don't have a business degree. But yeah, let's make some money too while we're at it."<div class="attr">— Stephanie</div></div>
-    <div class="quote">"It would be amazing if we could get to a place where every report that's submitted to court — there's a standard and it's a really high standard and everyone is meeting that."<div class="attr">— Stephanie</div></div>
-
-    <h3>On Trust and IP</h3>
-    <div class="quote">"Do we keep 100% control over the code and the IP?"<div class="attr">— Stephanie (Paul: "Yeah, yeah." Immediate, no hesitation.)</div></div>
-
-    <h3>VSP Positioning</h3>
-    <div class="quote">"That's the moat right now, honestly. Your brain is the moat. And your experience, having it in a siloed environment to where you actually know the right way to build this."<div class="attr">— Tyler</div></div>
-    <div class="quote">"Stephanie reminds me of Dr. Stock."<div class="attr">— Paul (unprompted)</div></div>
-    <div class="quote">"Lay down on the couch, tell us all your problems." — Paul<br>"No, that's my line." — Stephanie<div class="attr">Best rapport moment of the call</div></div>
-
-    <h3>Call Close</h3>
-    <div class="quote">"Thank you guys. It was really nice to meet you and I'm feeling excited and hopeful."<div class="attr">— Stephanie</div></div>
-  </div>
-</div>
-
-<!-- TIMELINE -->
-<div class="panel" id="timeline">
-  <div class="card">
-    <h2>Engagement Timeline</h2>
-    <div class="timeline">
-      <div class="timeline-item done">
-        <div class="date">March 28, 2026</div>
-        <div class="desc"><strong>Inbound Referral</strong> — Maurice (DataTribe) called Paul before RSA trip. Stephanie's husband connected them.</div>
-      </div>
-      <div class="timeline-item done">
-        <div class="date">April 1, 2026 — 2:30 PM ET</div>
-        <div class="desc"><strong>Discovery Call</strong> — 60 min. Full workflow walkthrough, AI frustrations, pricing ($25–50K), Dr. Stock comparable, IP confirmed, next steps agreed.</div>
-      </div>
-      <div class="timeline-item next">
-        <div class="date">This Week (by April 4)</div>
-        <div class="desc"><strong>Paul sends NDA</strong> — First paper step. Unlocks document sharing.</div>
-      </div>
-      <div class="timeline-item next">
-        <div class="date">This Week (by April 4)</div>
-        <div class="desc"><strong>Tyler sends wireframe</strong> — Based on call + email. Visual for Stephanie and Rami to react to.</div>
-      </div>
-      <div class="timeline-item">
-        <div class="date">After NDA Signed</div>
-        <div class="desc"><strong>Stephanie sends requirements doc</strong> — She has materials ready to share.</div>
-      </div>
-      <div class="timeline-item">
-        <div class="date">April 21, 2026 — 9:00 AM PT</div>
-        <div class="desc"><strong>Scoping Call</strong> — Tyler + Paul (Jacksonville FL) + Stephanie + Rami + VSP engineer. Deep dive, screen share, technical scoping.</div>
-      </div>
-      <div class="timeline-item">
-        <div class="date">Week of April 21</div>
-        <div class="desc"><strong>Estimation + Proposal</strong> — Fixed-price proposal based on scoping call findings.</div>
+        <div class="card card-navy">
+          <h3>Key Contacts</h3>
+          <ul>
+            <li><strong>Stephanie Young, PhD</strong> &mdash; Primary decision-maker, drives engagement</li>
+            <li><strong>Rami (last name TBD)</strong> &mdash; Co-founder, forensic psychologist, joining April 21</li>
+            <li><strong>Stephanie's Husband</strong> &mdash; Ex-Microsoft M&A, runs Kadrian (AI implementation). Advisor, not stakeholder.</li>
+            <li><strong>Maurice (DataTribe)</strong> &mdash; Referral source, best friends with husband since mid-90s</li>
+          </ul>
+        </div>
       </div>
     </div>
-  </div>
-</div>
+  </section>
 
-<!-- ACTIONS -->
-<div class="panel" id="actions">
-  <div class="card">
-    <h2>Tyler's Action Items</h2>
-    <ul class="checklist">
-      <li>Build wireframe from call + email — send by April 4</li>
-      <li>Get Rami's last name and email before April 21</li>
-      <li>Determine which VSP engineer for April 21 (Vlad or Matt)</li>
-      <li>Create Pipedrive person: Stephanie Young, PhD (after NDA)</li>
-      <li>Create Pipedrive org (Delaware C Corp entity)</li>
-      <li>Create Pipedrive lead</li>
-      <li>Research competing forensic psych AI tools before April 21</li>
-      <li>Post-April 21: produce estimation and formal proposal</li>
-    </ul>
-  </div>
+  <!-- ════════════ SLIDE 3: THE PROBLEM ════════════ -->
+  <section class="slide slide-light" data-label="Problem">
+    <div class="slide-inner">
+      <span class="section-label">The Pain</span>
+      <h2>Why She Needs This Built</h2>
+      <p class="lead">High-stakes forensic evaluations demand perfection. Current AI tools are failing her &mdash; and one nearly destroyed her professional credibility.</p>
 
-  <div class="card">
-    <h2>Paul's Action Items</h2>
-    <ul class="checklist">
-      <li>Send NDA to Stephanie this week</li>
-      <li>Offer Dr. Stock reference call if deal progresses</li>
-      <li>Keep Maurice in the loop on outcome</li>
-    </ul>
-  </div>
+      <div class="quote-block">
+        <p>Bastion came up with these multiple sources and gave me output scores for these made up data sources. I spent a very long time literally trying to track down the author, every single journal article he'd ever written &mdash; and he didn't exist. I was just freaked out.</p>
+        <span class="attribution">&mdash; Stephanie Young, on the hallucination that shattered her trust in AI</span>
+      </div>
 
-  <div class="card">
-    <h2>Stephanie's Action Items</h2>
-    <ul class="checklist">
-      <li>Sign NDA when received</li>
-      <li>Send requirements doc + materials under NDA</li>
-      <li>Review Tyler's wireframe and provide feedback</li>
-      <li>Invite Rami to April 21 call</li>
-    </ul>
-  </div>
+      <div class="card-grid" style="margin-top:24px;">
+        <div class="card card-warn">
+          <h3>Cognitive Overload</h3>
+          <p>1&ndash;4 hour clinical interviews: simultaneously listening, building rapport, thinking of follow-up questions, AND typing verbatim quotes. "It's a lot to juggle."</p>
+        </div>
+        <div class="card card-warn">
+          <h3>Report Writing Time Sink</h3>
+          <p>15&ndash;22 page reports with every paragraph cited. History sections are "a bear." Verbatim quote extraction from 2.5-hour interviews takes hours.</p>
+        </div>
+        <div class="card card-warn">
+          <h3>Hodgepodge Workflow</h3>
+          <p>Bastion GPT + Claude + ChatGPT &mdash; prompt one, prompt another, compare, feed between them. "Clunky and frustrating."</p>
+        </div>
+        <div class="card card-warn">
+          <h3>Can't Find an Engineer</h3>
+          <p>Tried coding on Claude herself (gave up after a weekend). Husband's firm is too busy. Looked for contract engineers. "I feel kind of stuck right now."</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  <div class="card">
-    <h2>Conversion Criteria</h2>
-    <ul class="checklist">
-      <li>NDA signed</li>
-      <li>April 21 scoping call completed with Rami</li>
-      <li>Requirements doc reviewed</li>
-      <li>Formal proposal/estimation delivered</li>
-      <li>SOW signed</li>
-    </ul>
-  </div>
-</div>
+  <!-- ════════════ SLIDE 4: THE WORKFLOW ════════════ -->
+  <section class="slide" data-label="Workflow">
+    <div class="slide-inner">
+      <span class="section-label">Current Workflow</span>
+      <h2>The Forensic Evaluation Process</h2>
+      <p class="lead">Four phases, each with distinct AI opportunities. This is the workflow the MVP must support.</p>
 
-</div>
+      <div class="card-grid" style="grid-template-columns: repeat(4, 1fr);">
+        <div class="card" style="border-top:4px solid var(--green);">
+          <div style="font-size:32px;margin-bottom:8px;">1</div>
+          <h3>Records Review</h3>
+          <p>Ingest case documents (PDFs, scanned docs from 1980s, handwritten police reports). Cross-reference, flag gaps and inconsistencies.</p>
+        </div>
+        <div class="card" style="border-top:4px solid var(--green-light);">
+          <div style="font-size:32px;margin-bottom:8px;">2</div>
+          <h3>Clinical Interview</h3>
+          <p>1&ndash;4 hours face-to-face. Must capture verbatim quotes for court citation. Currently types manually because transcription tools are unreliable.</p>
+        </div>
+        <div class="card" style="border-top:4px solid var(--yellow);">
+          <div style="font-size:32px;margin-bottom:8px;">3</div>
+          <h3>Report Writing</h3>
+          <p>15&ndash;22+ page structured report: history, interview, tests, analysis, conclusions. Every statement traceable to source material.</p>
+        </div>
+        <div class="card" style="border-top:4px solid var(--navy);">
+          <div style="font-size:32px;margin-bottom:8px;">4</div>
+          <h3>Testimony</h3>
+          <p>Defend every statement under oath. Opposing counsel challenges citations. Zero tolerance for fabrication or hallucination.</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-<div class="footer">
-  VSP Rocketship — Discovery Package | Generated 2026-04-01 | Confidential
-</div>
+  <!-- ════════════ SLIDE 5: MVP SCOPE ════════════ -->
+  <section class="slide slide-dark" data-label="MVP Scope">
+    <div class="slide-inner">
+      <span class="section-label">Proposed MVP</span>
+      <h2>Three Core Modules</h2>
+      <p class="lead">Agreed on the April 1 discovery call. Fixed-price, deliverable-based engagement.</p>
 
-<script>
-function showTab(id) {
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  event.target.classList.add('active');
-}
-document.querySelectorAll('.collapsible').forEach(el => {
-  el.addEventListener('click', () => {
-    el.classList.toggle('open');
-    el.nextElementSibling.classList.toggle('show');
-  });
-});
-</script>
+      <div class="card-grid">
+        <div class="card" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);">
+          <h3 style="color:var(--green-lightest);">Records Review Assistance</h3>
+          <ul>
+            <li style="color:rgba(255,255,255,0.75);">Ingest case documents (PDF, scanned, handwritten)</li>
+            <li style="color:rgba(255,255,255,0.75);">Summarize and cross-reference across sources</li>
+            <li style="color:rgba(255,255,255,0.75);">Flag gaps and inconsistencies</li>
+            <li style="color:rgba(255,255,255,0.75);">Track every citation back to source document</li>
+          </ul>
+        </div>
+        <div class="card" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);">
+          <h3 style="color:var(--green-lightest);">Interview Recording + Transcription</h3>
+          <ul>
+            <li style="color:rgba(255,255,255,0.75);">Record 1&ndash;4 hour clinical interviews with consent</li>
+            <li style="color:rgba(255,255,255,0.75);">Accurate, context-aware transcription</li>
+            <li style="color:rgba(255,255,255,0.75);">Extract verbatim quotes for report insertion</li>
+            <li style="color:rgba(255,255,255,0.75);">Searchable transcript with timestamps</li>
+          </ul>
+        </div>
+        <div class="card" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);">
+          <h3 style="color:var(--green-lightest);">Report Drafting</h3>
+          <ul>
+            <li style="color:rgba(255,255,255,0.75);">Structured forensic evaluation report template</li>
+            <li style="color:rgba(255,255,255,0.75);">Traceable citations &mdash; non-negotiable</li>
+            <li style="color:rgba(255,255,255,0.75);">History section synthesis from records</li>
+            <li style="color:rgba(255,255,255,0.75);">"Beyond reproach" for court submission</li>
+          </ul>
+        </div>
+      </div>
+
+      <div style="margin-top:32px;padding:20px 28px;background:rgba(255,255,255,0.06);border-radius:12px;border:1px solid rgba(255,255,255,0.1);">
+        <h3 style="color:var(--yellow);font-size:14px;margin-bottom:8px;">Post-MVP (Deferred by Mutual Agreement)</h3>
+        <p style="font-size:14px;color:rgba(255,255,255,0.55);">Productize for other forensic psychologists &bull; Scale from California to all 50 states &bull; Expand evaluation types (child custody, etc.) &bull; SaaS subscription model</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════ SLIDE 6: MEDDPIC ════════════ -->
+  <section class="slide" data-label="MEDDPIC">
+    <div class="slide-inner">
+      <span class="section-label">Qualification</span>
+      <h2>MEDDPIC Assessment</h2>
+      <p class="lead">Strong discovery call. High conversion probability. Key gap: Rami alignment (April 21).</p>
+
+      <div style="max-width:800px;">
+        <div class="meddpic-row">
+          <span class="meddpic-label">Metrics</span>
+          <div class="meddpic-bar-bg"><div class="meddpic-bar bar-moderate"></div></div>
+          <span class="meddpic-status status-moderate">Moderate</span>
+        </div>
+        <div class="meddpic-row">
+          <span class="meddpic-label">Economic Buyer</span>
+          <div class="meddpic-bar-bg"><div class="meddpic-bar bar-moderate"></div></div>
+          <span class="meddpic-status status-moderate">Moderate</span>
+        </div>
+        <div class="meddpic-row">
+          <span class="meddpic-label">Decision Criteria</span>
+          <div class="meddpic-bar-bg"><div class="meddpic-bar bar-strong"></div></div>
+          <span class="meddpic-status status-strong">Strong</span>
+        </div>
+        <div class="meddpic-row">
+          <span class="meddpic-label">Decision Process</span>
+          <div class="meddpic-bar-bg"><div class="meddpic-bar bar-moderate"></div></div>
+          <span class="meddpic-status status-moderate">Moderate</span>
+        </div>
+        <div class="meddpic-row">
+          <span class="meddpic-label">Paper Process</span>
+          <div class="meddpic-bar-bg"><div class="meddpic-bar bar-early"></div></div>
+          <span class="meddpic-status status-early">Early</span>
+        </div>
+        <div class="meddpic-row">
+          <span class="meddpic-label">Identify Pain</span>
+          <div class="meddpic-bar-bg"><div class="meddpic-bar bar-strong"></div></div>
+          <span class="meddpic-status status-strong">Strong</span>
+        </div>
+        <div class="meddpic-row">
+          <span class="meddpic-label">Champion</span>
+          <div class="meddpic-bar-bg"><div class="meddpic-bar bar-strong"></div></div>
+          <span class="meddpic-status status-strong">Strong</span>
+        </div>
+        <div class="meddpic-row" style="border-bottom:none;">
+          <span class="meddpic-label">Competition</span>
+          <div class="meddpic-bar-bg"><div class="meddpic-bar bar-strong"></div></div>
+          <span class="meddpic-status status-strong">Strong</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════ SLIDE 7: DEAL STRUCTURE ════════════ -->
+  <section class="slide slide-light" data-label="Deal">
+    <div class="slide-inner">
+      <span class="section-label">Commercials</span>
+      <h2>Deal Structure</h2>
+      <p class="lead">Fixed-price MVP build. Paul anchored $25&ndash;$50K on the call &mdash; no pushback from Stephanie.</p>
+
+      <div class="card-grid">
+        <div class="card card-accent">
+          <h3>Pricing</h3>
+          <table class="info-table">
+            <tr><td style="font-weight:600;width:160px;">Deal Type</td><td>Fixed-price MVP build</td></tr>
+            <tr><td style="font-weight:600;">VSP Range</td><td>$25,000 &ndash; $50,000</td></tr>
+            <tr><td style="font-weight:600;">Her Expectation</td><td>Was thinking $6K&ndash;$15K (contract engineer rates)</td></tr>
+            <tr><td style="font-weight:600;">Reaction</td><td>No flinch, no pushback</td></tr>
+            <tr><td style="font-weight:600;">Payment Model</td><td>Deliverable-based: product delivered &rarr; payment</td></tr>
+            <tr><td style="font-weight:600;">IP Ownership</td><td>100% Stephanie's entity (confirmed on call)</td></tr>
+          </table>
+        </div>
+
+        <div class="card card-accent">
+          <h3>Comparable: Dr. Stock</h3>
+          <p style="margin-bottom:12px;">Paul surfaced this comparison unprompted. Pattern is identical:</p>
+          <ul>
+            <li>Domain-expert PhD with no technical ability</li>
+            <li>Got stuck trying to build on their own</li>
+            <li>Warm referral through trusted network</li>
+            <li>Fixed-price MVP with real problem worth solving</li>
+            <li>Potential to scale into a product</li>
+          </ul>
+          <p style="margin-top:12px;font-size:13px;color:var(--navy-light);">Difference: Dr. Stock was grant-funded; Stephanie is self-funded (faster decisions, more price-sensitive).</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════ SLIDE 8: QUOTES ════════════ -->
+  <section class="slide slide-dark" data-label="Quotes">
+    <div class="slide-inner">
+      <span class="section-label">From the Call</span>
+      <h2>In Her Own Words</h2>
+
+      <div class="quote-block" style="background:rgba(255,255,255,0.06);margin-bottom:20px;">
+        <p>I am spending &mdash; my hourly rate works out to be so insignificant by the time all is said and done that having something that would really make this process easier would be a game changer.</p>
+        <span class="attribution">&mdash; Stephanie, on the economics of forensic evaluations</span>
+      </div>
+
+      <div class="quote-block" style="background:rgba(255,255,255,0.06);margin-bottom:20px;">
+        <p>The idea of interviewing potential contract engineers &mdash; that's why I was looking at my husband like, find someone for me. Come on, you know someone like this, you worked at Microsoft.</p>
+        <span class="attribution">&mdash; Stephanie, on why she hasn't hired anyone yet</span>
+      </div>
+
+      <div class="quote-block" style="background:rgba(255,255,255,0.06);">
+        <p>I'm feeling excited and hopeful.</p>
+        <span class="attribution">&mdash; Stephanie, at the close of the discovery call</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════ SLIDE 9: TIMELINE ════════════ -->
+  <section class="slide" data-label="Timeline">
+    <div class="slide-inner">
+      <span class="section-label">Engagement Timeline</span>
+      <h2>Path to Close</h2>
+      <p class="lead">Committed next steps from the April 1 discovery call.</p>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;">
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-date">March 28, 2026</div>
+            <div class="timeline-title">Inbound Referral</div>
+            <div class="timeline-desc">Maurice (DataTribe) called Paul before RSA trip. Stephanie emailed Paul the same day.</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-date">April 1, 2026</div>
+            <div class="timeline-title">Discovery Call (60 min)</div>
+            <div class="timeline-desc">Full workflow walkthrough, pricing discussed, Dr. Stock comparable, IP confirmed, next steps agreed.</div>
+          </div>
+          <div class="timeline-item future">
+            <div class="timeline-date">This Week</div>
+            <div class="timeline-title">NDA + Wireframe</div>
+            <div class="timeline-desc">Paul sends NDA. Tyler builds wireframe by April 4. Stephanie sends requirements doc after NDA signed.</div>
+          </div>
+          <div class="timeline-item future">
+            <div class="timeline-date">April 21, 2026</div>
+            <div class="timeline-title">Scoping Call</div>
+            <div class="timeline-desc">Tyler + Paul (Jacksonville FL) + Stephanie + Rami + VSP engineer. Produce estimation and proposal.</div>
+          </div>
+        </div>
+
+        <div>
+          <div class="card card-accent" style="margin-bottom:20px;">
+            <h3>Committed Actions</h3>
+            <ul>
+              <li>Paul sends NDA to Stephanie</li>
+              <li>Tyler builds wireframe by April 4</li>
+              <li>Stephanie sends requirements doc under NDA</li>
+              <li>Get Rami's last name and email</li>
+              <li>Determine VSP engineer for April 21 (Vlad or Matt)</li>
+              <li>April 21 scoping call: 9 AM PT / 12 PM ET</li>
+              <li>Post-April 21: formal estimation and proposal</li>
+            </ul>
+          </div>
+
+          <div class="card card-warn">
+            <h3>Conversion Criteria</h3>
+            <ul>
+              <li>NDA signed</li>
+              <li>April 21 scoping call with Rami completed</li>
+              <li>Requirements doc reviewed</li>
+              <li>Formal proposal delivered</li>
+              <li>SOW signed</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════ SLIDE 10: RISKS ════════════ -->
+  <section class="slide slide-light" data-label="Risks">
+    <div class="slide-inner">
+      <span class="section-label">Risk Register</span>
+      <h2>What Could Slow This Down</h2>
+      <p class="lead">Overall assessment: high conversion probability. Two medium risks to manage.</p>
+
+      <table class="info-table" style="background:var(--white);border-radius:12px;overflow:hidden;box-shadow:0 2px 12px rgba(44,55,77,0.06);">
+        <thead>
+          <tr>
+            <th>Risk</th>
+            <th>Severity</th>
+            <th>Mitigation</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="font-weight:600;">Sticker shock at formal proposal</td>
+            <td><span class="risk-badge risk-medium">Medium</span></td>
+            <td>Paul already anchored $25&ndash;$50K. She didn't flinch. Frame as investment with productization upside.</td>
+          </tr>
+          <tr>
+            <td style="font-weight:600;">Rami misalignment</td>
+            <td><span class="risk-badge risk-medium">Medium</span></td>
+            <td>Get him on April 21 call. Understand his role, investment appetite, and vision alignment.</td>
+          </tr>
+          <tr>
+            <td style="font-weight:600;">HIPAA complexity inflates scope</td>
+            <td><span class="risk-badge risk-high">High</span></td>
+            <td>Scope Phase 1 with anonymized/sample data. Defer production PHI handling to Phase 2.</td>
+          </tr>
+          <tr>
+            <td style="font-weight:600;">Scope creep toward productization</td>
+            <td><span class="risk-badge risk-medium">Medium</span></td>
+            <td>Hold the line: MVP is internal tool for Stephanie + Rami. Productization is Phase 2+.</td>
+          </tr>
+          <tr>
+            <td style="font-weight:600;">Transcription accuracy expectations</td>
+            <td><span class="risk-badge risk-medium">Medium</span></td>
+            <td>Set expectation that transcription augments, not replaces. She'll still review everything.</td>
+          </tr>
+          <tr>
+            <td style="font-weight:600;">Husband second-guesses approach</td>
+            <td><span class="risk-badge risk-low">Low</span></td>
+            <td>He's an ally, not a blocker. Brief proactively if needed.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ════════════ SLIDE 11: STRATEGIC READ ════════════ -->
+  <section class="slide slide-dark" data-label="Strategy">
+    <div class="slide-inner">
+      <span class="section-label">Strategic Read</span>
+      <h2>Bottom Line</h2>
+
+      <div class="card-grid" style="margin-top:24px;">
+        <div class="card" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);">
+          <h3 style="color:var(--green-lightest);">This Converts</h3>
+          <p style="color:rgba(255,255,255,0.75);">She's stuck, she trusts Maurice, she trusts us after the call, and the problem is real. The only risk is sticker shock &mdash; and Paul threaded the pricing needle well. Dr. Stock 2.0.</p>
+        </div>
+        <div class="card" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);">
+          <h3 style="color:var(--green-lightest);">She's Ready to Move</h3>
+          <p style="color:rgba(255,255,255,0.75);">Delaware C Corp formed. Attorneys consulted. Requirements doc written. Tried building it herself. Multiple failed attempts to find an engineer. "Excited and hopeful."</p>
+        </div>
+        <div class="card" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);">
+          <h3 style="color:var(--yellow);">Rami Is the Unknown</h3>
+          <p style="color:rgba(255,255,255,0.75);">His investment appetite, decision authority, and vision alignment are all TBD. April 21 is the qualifying event. If Rami is in, this closes.</p>
+        </div>
+        <div class="card" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);">
+          <h3 style="color:var(--green-lightest);">DataTribe Relationship</h3>
+          <p style="color:rgba(255,255,255,0.75);">Keep Maurice warm. If Stephanie converts and the product scales, this could become a DataTribe portfolio investment. Maurice should hear about the outcome either way.</p>
+        </div>
+      </div>
+
+      <div style="margin-top:40px;text-align:center;">
+        <div style="display:inline-block;background:var(--green);color:var(--white);padding:12px 32px;border-radius:8px;font-weight:700;font-size:15px;">
+          Deal Read: High Probability &mdash; Close by May 2026
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════ FOOTER ════════════ -->
+  <section class="slide" style="min-height:30vh;background:var(--navy-darkest);justify-content:center;text-align:center;" data-label="">
+    <div class="slide-inner">
+      <p style="font-size:12px;color:rgba(255,255,255,0.3);letter-spacing:0.1em;text-transform:uppercase;">Victory Square Partners &bull; Confidential &bull; April 2026</p>
+    </div>
+  </section>
+
+  <script>
+    // Intersection Observer for slide animations
+    const slides = document.querySelectorAll('.slide');
+    const dotsNav = document.getElementById('nav-dots');
+
+    // Create nav dots
+    slides.forEach((slide, i) => {
+      const label = slide.getAttribute('data-label');
+      if (!label && label !== '') return;
+      const dot = document.createElement('button');
+      dot.className = 'nav-dot';
+      dot.title = label || '';
+      dot.setAttribute('data-index', i);
+      dot.addEventListener('click', () => {
+        slides[i].scrollIntoView({ behavior: 'smooth' });
+      });
+      dotsNav.appendChild(dot);
+    });
+
+    const dots = dotsNav.querySelectorAll('.nav-dot');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          // Update dots
+          const idx = Array.from(slides).indexOf(entry.target);
+          dots.forEach((d, i) => {
+            const dotIdx = parseInt(d.getAttribute('data-index'));
+            d.classList.toggle('active', dotIdx === idx);
+          });
+        }
+      });
+    }, { threshold: 0.3 });
+
+    slides.forEach(s => observer.observe(s));
+  </script>
 
 </body>
 </html>
