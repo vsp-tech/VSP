@@ -221,7 +221,7 @@ tr:hover td { background:rgba(255,255,255,.02); }
   <div class="tab tab-pulse" onclick="showTab(6)"><span class="dot dot-amber"></span>10:00a Alex/Henry &#9733;</div>
   <div class="tab" onclick="showTab(7)"><span class="dot dot-blue"></span>10:30a SixMap Standup</div>
   <div class="tab" onclick="showTab(8)"><span class="dot dot-amber"></span>11:00a Ed Paperwork</div>
-  <div class="tab tab-pulse" onclick="showTab(9)"><span class="dot dot-amber"></span>2:30p Stephanie &#9733;</div>
+  <div class="tab tab-pulse" onclick="showTab(9)"><span class="dot dot-amber"></span>2:30p Stephanie — Forensic AI &#9733;</div>
 </div>
 
 <div class="content">
@@ -883,10 +883,10 @@ tr:hover td { background:rgba(255,255,255,.02); }
     <div class="dur">30 min</div>
   </div>
   <div class="meeting-info">
-    <h2>Stephanie Young, PhD &amp; Victory Square <span style="color:var(--amber)">&#9733; FULL PREP</span></h2>
+    <h2>Stephanie Young, PhD — Forensic Assessment AI <span style="color:var(--amber)">&#9733; FULL PREP</span></h2>
     <div class="meta-row">
-      <span class="tag tag-blue">New</span>
-      <span class="tag tag-amber">Prospect — Discovery</span>
+      <span class="tag tag-amber">Prospect — Discovery / Scoping</span>
+      <span class="tag tag-blue">Inbound — Paul Doman Referral</span>
       <span>3 attendees</span>
       <span>30 min</span>
       <a class="btn-join" href="https://us02web.zoom.us/j/89083786173?pwd=vFGhoxZTAnBaIeUhtonkbTtfJmhqgQ.1" target="_blank">&#9654; Join Zoom</a>
@@ -895,8 +895,8 @@ tr:hover td { background:rgba(255,255,255,.02); }
 </div>
 
 <div class="alert alert-amber">
-  <strong>First Discovery Call — All MEDDPIC Elements Unknown</strong>
-  This is a first conversation with Stephanie Young, PhD. Paul Doman organized this meeting and is attending. We do not know Stephanie's organization, background, or how she connects to VSP's work. Goal: learn who she is, what she's working on, what's hard, and what relationship type fits. Don't over-pitch. Listen first.
+  <strong>CORRECTION: This is NOT Stephanie Roulic (Startup Boston).</strong>
+  Stephanie Young, PhD is a licensed clinical psychologist in San Francisco who emailed Paul on Mar 28 about building an AI-powered forensic assessment tool. This is a high-fit applied AI product build engagement — RAG pipeline, LLM integration, HIPAA-grade data handling. Go in prepared to demonstrate technical credibility and scope the project. After this call: rename the prospect folder from <code>Stephanie_Roulic_Startup_Boston</code> → <code>Stephanie_Young_Forensic_AI</code>.
 </div>
 
 <div class="section-title">Attendees</div>
@@ -906,75 +906,108 @@ tr:hover td { background:rgba(255,255,255,.02); }
     <tbody>
       <tr>
         <td><strong>Stephanie Young, PhD</strong></td>
-        <td>Unknown — discovery needed</td>
-        <td><span class="tag tag-amber">Primary Contact</span></td>
-        <td>stephanie.young.phd@gmail.com</td>
+        <td>Licensed Clinical Psychologist — PSY 32569 (CA)<br><span style="font-size:.75rem;color:var(--muted)">870 Market St, Suite 915, San Francisco, CA</span></td>
+        <td><span class="tag tag-amber">Prospect / Project Co-founder</span></td>
+        <td>stephanie.young.phd@gmail.com<br>415-317-9679</td>
       </tr>
       <tr>
         <td><strong>Paul Doman</strong></td>
         <td>CEO, Victory Square Partners</td>
-        <td><span class="tag tag-green">Organizer / Relationship Lead</span></td>
-        <td>paul.doman@vspartners.us</td>
+        <td><span class="tag tag-green">Referral Source / Relationship Lead</span></td>
+        <td>paul.doman@victorysquarepartners.com</td>
       </tr>
       <tr>
         <td><strong>Tyler Goble</strong></td>
-        <td>VSP</td>
-        <td><span class="tag tag-green">Account Lead</span></td>
-        <td>Discovery / relationship mapping</td>
+        <td>VSP AI Engineering Lead</td>
+        <td><span class="tag tag-green">Technical Discovery Lead</span></td>
+        <td>tyler.goble@vspartners.us</td>
       </tr>
     </tbody>
   </table>
 </div>
 
-<div class="section-title">Background</div>
+<div class="section-title">The Project — What She Told Us</div>
 <div class="context-block">
-  <strong>Who is Stephanie Young, PhD?</strong> Unknown at this time — discovery needed. She uses a personal Gmail (stephanie.young.phd@gmail.com) which suggests this may be a personal connection rather than an inbound org lead. The PhD credential suggests academic, research, or professional services background, but org affiliation is not confirmed.<br><br>
-  <strong>How this came together:</strong> Paul Doman organized and is attending, which suggests this is a warm relationship from Paul's network. No prior meetings, activities, or deals in Pipedrive or Circleback for this specific Stephanie. No Startup Boston connection — the prior briefing was incorrect. Treat this as a completely fresh first conversation.<br><br>
-  <strong>Relationship type undetermined:</strong> prospect (does she need what we sell?), partner (event or program collaboration?), referral node (does she know our buyers?), or community (peer relationship). Discovery should resolve this. Let Paul lead the introduction since he organized the call.
+  <strong>Product Vision:</strong> AI-powered tool to assist forensic psychologists with evaluations from start to finish — improving accuracy, consistency, and efficiency in high-stakes assessments.<br><br>
+  <strong>Use Cases:</strong> Competency to stand trial &bull; Mental state at time of offense &bull; Child custody evaluations &bull; Risk assessments<br><br>
+  <strong>Technical Architecture (her words):</strong> System ingests large documents, retrieves relevant information via RAG, and uses LLMs to generate structured outputs with <em>traceable citations</em>.<br><br>
+  <strong>Engineering Needs (her words):</strong> Reliable RAG pipeline &bull; Document ingestion and processing &bull; Secure systems for sensitive data (HIPAA / legal sensitivity) &bull; Clean SaaS interface &bull; Full-stack: Python/Node backend, LLM integration (OpenAI/Anthropic), vector databases, cloud deployment (AWS/GCP)<br><br>
+  <strong>Co-founder:</strong> She mentioned "a colleague and I are interested in building this" — <strong>this person is unnamed and may be the real decision-maker or money.</strong> Getting their identity is a primary gate for this call.<br><br>
+  <strong>How this came together:</strong> Stephanie emailed Paul on March 28. Paul routed it to VSP as a product build engagement (she may still be thinking "hire a freelancer"). First contact was 4 days ago — this is hot and inbound.
+</div>
+
+<div class="section-title">Why This Is a Strong Fit for VSP</div>
+<div class="card">
+  <table>
+    <thead><tr><th>#</th><th>Signal</th><th>Why It Matters</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td><strong>Applied AI product build</strong></td><td>RAG pipeline + LLM integration + SaaS = VSP core competency. This is exactly what we do.</td></tr>
+      <tr><td>2</td><td><strong>Domain expertise gap</strong></td><td>Forensic psych is specialized enough that Stephanie needs a consultative partner, not a code shop. VSP's advisory approach is a differentiator.</td></tr>
+      <tr><td>3</td><td><strong>High-stakes = premium pricing</strong></td><td>These evaluations affect criminal sentencing, custody, civil commitment. Accuracy and auditability command premium fees.</td></tr>
+      <tr><td>4</td><td><strong>Traceable citations</strong></td><td>She specifically called this out — a solved RAG problem we can demonstrate immediately with a working example.</td></tr>
+      <tr><td>5</td><td><strong>HIPAA / legal compliance</strong></td><td>Compliance-grade build = higher scope, longer engagement, recurring retainer potential.</td></tr>
+    </tbody>
+  </table>
 </div>
 
 <div class="section-title">MEDDPIC Status</div>
 <div class="meddpic-grid">
   <div class="meddpic-item">
     <div class="m-label">Metrics</div>
-    <div class="m-status m-unknown">Unknown</div>
-    <div style="font-size:.75rem;color:var(--muted);margin-top:.2rem">What does success look like for her? What is she trying to accomplish?</div>
+    <div class="m-status m-unknown">Probe Today</div>
+    <div style="font-size:.75rem;color:var(--muted);margin-top:.2rem">What does success look like? "50% faster evaluations"? "Zero missed citations"? Get her measurable outcome.</div>
   </div>
   <div class="meddpic-item">
     <div class="m-label">Economic Buyer</div>
-    <div class="m-status m-unknown">Unknown</div>
-    <div style="font-size:.75rem;color:var(--muted);margin-top:.2rem">Is Stephanie the decision-maker? What org does she represent?</div>
+    <div class="m-status m-unknown">Probe Today</div>
+    <div style="font-size:.75rem;color:var(--muted);margin-top:.2rem">Is Stephanie funding this? Is the unnamed colleague the money? Grant, institution, or practice budget?</div>
   </div>
   <div class="meddpic-item">
     <div class="m-label">Decision Criteria</div>
-    <div class="m-status m-unknown">Unknown</div>
-    <div style="font-size:.75rem;color:var(--muted);margin-top:.2rem">How does she evaluate partners or service providers?</div>
+    <div class="m-status m-moderate">Partial</div>
+    <div style="font-size:.75rem;color:var(--muted);margin-top:.2rem">She listed tech requirements. What else? Speed to MVP? Domain understanding? IP ownership? Ongoing support?</div>
   </div>
   <div class="meddpic-item">
     <div class="m-label">Decision Process</div>
-    <div class="m-status m-unknown">Unknown</div>
-    <div style="font-size:.75rem;color:var(--muted);margin-top:.2rem">Org structure entirely unknown — solo or team?</div>
+    <div class="m-status m-unknown">Probe Today</div>
+    <div style="font-size:.75rem;color:var(--muted);margin-top:.2rem">Is she evaluating multiple vendors? What's the path from this call to a signed SOW?</div>
   </div>
   <div class="meddpic-item">
     <div class="m-label">Paper Process</div>
-    <div class="m-status m-unknown">Unknown</div>
-    <div style="font-size:.75rem;color:var(--muted);margin-top:.2rem">Procurement and contracting process unknown</div>
+    <div class="m-status m-unknown">Probe Today</div>
+    <div style="font-size:.75rem;color:var(--muted);margin-top:.2rem">Who signs? Is there a legal entity? MSA / SOW review process?</div>
   </div>
   <div class="meddpic-item">
     <div class="m-label">Identify Pain</div>
-    <div class="m-status m-unknown">Unknown</div>
-    <div style="font-size:.75rem;color:var(--muted);margin-top:.2rem">Core goal of this call — what's hard for her right now?</div>
+    <div class="m-status m-moderate">Moderate</div>
+    <div style="font-size:.75rem;color:var(--muted);margin-top:.2rem">Implied in email — deepen today. How many hours per evaluation? What errors keep her up at night?</div>
   </div>
   <div class="meddpic-item">
     <div class="m-label">Champion</div>
-    <div class="m-status m-unknown">Unknown</div>
-    <div style="font-size:.75rem;color:var(--muted);margin-top:.2rem">Is Stephanie the champion or a referral to someone else? Is Paul positioning her as a lead?</div>
+    <div class="m-status m-moderate">Likely Stephanie</div>
+    <div style="font-size:.75rem;color:var(--muted);margin-top:.2rem">Is she the champion AND buyer, or does the unnamed colleague hold different authority?</div>
   </div>
   <div class="meddpic-item">
     <div class="m-label">Competition</div>
-    <div class="m-status m-unknown">Unknown</div>
-    <div style="font-size:.75rem;color:var(--muted);margin-top:.2rem">Who else is she talking to or working with?</div>
+    <div class="m-status m-unknown">Probe Today</div>
+    <div style="font-size:.75rem;color:var(--muted);margin-top:.2rem">Are there existing forensic psych AI tools? Has she tried building with ChatGPT/Claude directly?</div>
   </div>
+</div>
+
+<div class="section-title">Discovery Gates — Priority Order</div>
+<div class="card">
+  <table class="agenda-table">
+    <thead><tr><th>Gate</th><th>What to Learn</th><th>Why It Matters</th></tr></thead>
+    <tbody>
+      <tr><td><strong style="color:var(--amber)">1</strong></td><td>Who is the colleague?</td><td>Co-founder, investor, or advisor? Affects decision-making and budget authority.</td></tr>
+      <tr><td><strong style="color:var(--amber)">2</strong></td><td>How far along are they?</td><td>Napkin idea, deck, or prototypes/data? Determines scope of engagement.</td></tr>
+      <tr><td><strong style="color:var(--amber)">3</strong></td><td>Budget reality</td><td>Self-funded, grant-funded, or VC-backed? This determines engagement size.</td></tr>
+      <tr><td>4</td><td>Timeline and urgency</td><td>Grant deadline? Conference? Market window? What creates urgency?</td></tr>
+      <tr><td>5</td><td>Data access</td><td>Do they have sample forensic documents? Redacted case files?</td></tr>
+      <tr><td>6</td><td>Regulatory landscape</td><td>HIPAA? State licensing board requirements? Court admissibility standards?</td></tr>
+      <tr><td>7</td><td>Competition</td><td>Other tools? Prior vendor attempts? Has she used existing AI tools?</td></tr>
+    </tbody>
+  </table>
 </div>
 
 <div class="section-title">Suggested Agenda</div>
@@ -982,52 +1015,112 @@ tr:hover td { background:rgba(255,255,255,.02); }
   <table class="agenda-table">
     <thead><tr><th>Time</th><th>Topic</th><th>Goal</th></tr></thead>
     <tbody>
-      <tr><td>0–5 min</td><td>Opening &amp; rapport</td><td>Let Paul set context — he organized this and knows the relationship. Follow his lead on framing</td></tr>
-      <tr><td>5–10 min</td><td>Learn who Stephanie is</td><td>What does she do? What org is she with? What brought her to this call?</td></tr>
-      <tr><td>10–20 min</td><td>Discovery</td><td>What's hard? What does success look like? Three Whys probing. No assumptions.</td></tr>
-      <tr><td>20–25 min</td><td>Explore fit</td><td>Prospect? Partner? Referral node? Community? Let the answer emerge from discovery</td></tr>
-      <tr><td>25–30 min</td><td>Next steps &amp; close</td><td>Lock specific next step with date — only if there's a clear fit</td></tr>
+      <tr><td>0–3 min</td><td>Open — show you've done your homework</td><td>Name the project, cite her email. Signal technical credibility immediately.</td></tr>
+      <tr><td>3–10 min</td><td>Her vision in her own words</td><td>Let her walk through the project. Confirm use cases, technical vision, user base.</td></tr>
+      <tr><td>10–18 min</td><td>Discovery gates 1–4</td><td>Colleague identity, how far along, budget reality, timeline/urgency.</td></tr>
+      <tr><td>18–24 min</td><td>Technical deep-dive</td><td>Document types, RAG architecture, citations, HIPAA. Demonstrate you've built this before.</td></tr>
+      <tr><td>24–28 min</td><td>VSP fit + proposal path</td><td>Scope Phase 1 MVP together. Propose a scoping doc by EOD Friday.</td></tr>
+      <tr><td>28–30 min</td><td>Next steps</td><td>Lock colleague intro, follow-up call date, scoping proposal delivery.</td></tr>
     </tbody>
   </table>
 </div>
 
 <div class="section-title">Talking Points</div>
 <div class="tp-block">
-  <div class="tp-trigger">Opening (defer to Paul)</div>
-  Let Paul introduce the context for this meeting — he organized it. Follow his lead before diving into VSP positioning.
+  <div class="tp-trigger">Opening — show you read her email</div>
+  "Stephanie, thanks for taking the time. I read your note to Paul and I have to say — this is exactly the kind of applied AI build we love. Forensic evaluations, RAG with traceable citations, high-stakes accuracy requirements — that's our sweet spot. I've got a lot of questions, but first I'd love to hear you walk us through the vision in your own words."
 </div>
 <div class="tp-block">
-  <div class="tp-trigger">What does VSP do?</div>
-  "We help founders at the intersection of technology, community, and values. We go deep on a few relationships — we don't spread thin."
+  <div class="tp-trigger">Demonstrate technical credibility — traceable citations</div>
+  "When you mention traceable citations — that's critical in a legal context. We've built RAG systems where every generated output links back to the source document, page, and paragraph. For forensic evaluations, I'd imagine you need that chain of evidence to be airtight — is that something you'd want a judge or opposing counsel to be able to audit?"
 </div>
 <div class="tp-block">
-  <div class="tp-trigger">Establishing her background</div>
-  "Tell me a bit about what you're focused on right now — I want to make sure this conversation is useful to you."
+  <div class="tp-trigger">Probe the unnamed colleague</div>
+  "You mentioned you're working on this with a colleague — can you tell me about them? Are they clinical as well, or do they bring a different angle — business, technical, legal?"
 </div>
 <div class="tp-block">
-  <div class="tp-trigger">If relationship type is unclear</div>
-  "That's what I want to figure out together. There are a few ways we tend to work with people — sometimes it's a direct engagement, sometimes it's partnership, sometimes it's just staying in community. What would be most valuable to you?"
+  <div class="tp-trigger">Understand current state</div>
+  "How far along are you right now? Is this still at the concept stage, or have you started building anything — even manually mapping out the workflow with existing tools?"
 </div>
 <div class="tp-block">
-  <div class="tp-trigger">If she's excited</div>
-  "Let's set up a follow-up with a specific agenda — what's your schedule in the next two weeks?"
+  <div class="tp-trigger">Budget reality probe (indirect)</div>
+  "What's your vision for how this gets funded? Are you thinking bootstrapped from your practice, or is there a grant, an institution, or investment capital behind it?"
+</div>
+<div class="tp-block">
+  <div class="tp-trigger">Deep pain probe</div>
+  "Walk me through a forensic evaluation today — start to finish. Where does it hurt the most? Where do you lose the most time? Where are the biggest risks of error?"
+</div>
+<div class="tp-block">
+  <div class="tp-trigger">If she asks about pricing or timeline</div>
+  "I don't want to throw numbers out before I understand the scope — but to give you a feel: a Phase 1 MVP with document ingestion, RAG pipeline, and a basic interface is typically a 6–8 week build for us. I'd want to scope it properly after today's conversation. Can I send you a proposal by end of week?"
+</div>
+<div class="tp-block">
+  <div class="tp-trigger">If she asks about VSP's AI experience</div>
+  "We build production AI systems for clients across industries — document processing, CRM enrichment, LLM-powered workflows. The forensic psych domain is new for us, but the engineering patterns — RAG, citation tracking, secure data handling — are exactly what we do every day. What's unique here is the domain expertise you bring. The best builds happen when the domain expert and the engineering team are in tight collaboration."
 </div>
 
-<div class="section-title">Red Flags</div>
+<div class="section-title">Strategic Questions</div>
+<div class="card">
+  <ol style="margin:.5rem 0 .5rem 1.2rem;line-height:1.9">
+    <li>"What forensic evaluation type would you start with for an MVP — competency to stand trial, custody, risk assessment, or all four from day one?"</li>
+    <li>"What does a typical case file look like? How many pages? What formats — PDFs, scanned documents, typed reports?"</li>
+    <li>"How important is court admissibility of AI-assisted outputs? Are there existing legal standards you need to meet?"</li>
+    <li>"Who would the end users be — just you and your colleague, or are you thinking about licensing this to other forensic psychologists?"</li>
+    <li>"Have you tried using Claude or ChatGPT directly for any of this work? What worked, what didn't?"</li>
+    <li>"What's your timeline? Is there a grant deadline, a conference presentation, or a market window driving urgency?"</li>
+  </ol>
+</div>
+
+<div class="section-title">Red Flags / Sensitivities</div>
 <ul class="rf-list">
-  <li>We know almost nothing about her — don't project context from the prior (incorrect) briefing</li>
-  <li>Vague enthusiasm without substance — probe harder for urgency</li>
-  <li>No clear fit emerges — it's OK to end with "let me think about how VSP can add value and follow up"</li>
-  <li>No decision-making clarity — understand org structure before locking a next step</li>
+  <li><strong>She framed this as hiring an engineer, not engaging a firm.</strong> Paul reframed it as a VSP engagement. She may still be thinking "freelancer at $150/hr." Read her expectations before quoting anything.</li>
+  <li><strong>The colleague is unnamed.</strong> This person may be the real decision-maker, money, or technical co-founder. Don't assume Stephanie has full authority until you know who this person is.</li>
+  <li><strong>Sensitive data — HIPAA + legal privilege.</strong> Forensic evaluations involve criminal defendants, children, and mental health records. Emphasize secure architecture and compliance from the start. Do NOT offer to handle real patient data casually.</li>
+  <li><strong>3-hour time zone gap.</strong> She's in San Francisco. Factor this into ongoing collaboration cadence.</li>
+  <li><strong>Paul sourced this.</strong> Give Paul credit, keep him in the loop. If this converts, it's a Paul-sourced deal.</li>
 </ul>
+
+<div class="section-title">If the Call Stalls</div>
+<div class="card">
+  <table>
+    <thead><tr><th>Stall Type</th><th>Recovery Response</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>She expects a freelancer, not a firm</strong></td>
+        <td>"I hear you — for a project like this, you could go either route. The difference with us is you get a team, not a person. If your developer gets sick or hits a wall, the project doesn't stop. For something with legal and clinical implications, that continuity matters. But let me understand your budget constraints and I'll tell you honestly whether we're the right fit."</td>
+      </tr>
+      <tr>
+        <td><strong>Colleague is the real DM and isn't on the call</strong></td>
+        <td>"Totally makes sense — let's get them on the next call. I'll send a summary of what we discussed so they're up to speed, and we can dive into the specifics together."</td>
+      </tr>
+      <tr>
+        <td><strong>Prior vendor or approach already failed</strong></td>
+        <td>"That's actually useful — tell me what didn't work. Understanding the failure mode helps me scope this better than starting from scratch."</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
 <div class="section-title">Success Criteria</div>
 <ul class="sc-list">
-  <li>Stephanie's org and professional background confirmed</li>
-  <li>At least 1 named pain point or goal with urgency</li>
-  <li>Relationship type clarified (prospect / partner / referral / community)</li>
-  <li>Personal win surfaced — what does Stephanie gain from this relationship?</li>
-  <li>Next step locked with date and format (if clear fit exists)</li>
+  <li>Unnamed colleague identified — name, role, relationship to project</li>
+  <li>Budget reality established — self-funded, grant, or institutional</li>
+  <li>At least 1 measurable success metric locked ("50% faster" / "zero missed citations")</li>
+  <li>Phase 1 MVP scope direction agreed (which use case first?)</li>
+  <li>HIPAA / compliance posture understood</li>
+  <li>Proposal delivery committed — EOD Friday April 4</li>
+  <li>Follow-up call scheduled with Stephanie + colleague</li>
+</ul>
+
+<div class="section-title">Post-Call Actions</div>
+<ul class="sc-list">
+  <li>Create Pipedrive person: Stephanie Young, PhD (stephanie.young.phd@gmail.com, 415-317-9679)</li>
+  <li>Create Pipedrive org (her practice or new entity — TBD from call)</li>
+  <li>Create lead or deal based on qualification level</li>
+  <li>Rename prospect folder: <code>Stephanie_Roulic_Startup_Boston</code> → <code>Stephanie_Young_Forensic_AI</code></li>
+  <li>Log call via /process-call</li>
+  <li>Send follow-up email within 24h</li>
+  <li>Draft scoping proposal by EOD Friday April 4 if qualified</li>
 </ul>
 
 </div><!-- /panel-9 -->
