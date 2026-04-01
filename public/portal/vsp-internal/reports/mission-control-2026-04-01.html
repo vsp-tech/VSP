@@ -3,228 +3,1019 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="/assets/css/vsp-theme.css">
-<title>Mission Control — April 1, 2026 — VSP Internal</title>
+<title>Mission Control — April 1, 2026 | VSP</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0e17;
+  --card: #141925;
+  --card-hover: #1a2133;
+  --border: #1e293b;
+  --green: #10b981;
+  --blue: #3b82f6;
+  --amber: #f59e0b;
+  --red: #ef4444;
+  --purple: #8b5cf6;
+  --text: #e2e8f0;
+  --muted: #94a3b8;
+  --dim: #64748b;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Inter',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+a { color:var(--blue); text-decoration:none; }
+a:hover { text-decoration:underline; }
+
+/* Header */
+.header { background:linear-gradient(135deg,#0f1629 0%,#0d1a2e 50%,#0f1629 100%); border-bottom:1px solid var(--border); padding:2rem 2rem 1.5rem; text-align:center; }
+.header-top { display:flex; align-items:center; justify-content:center; gap:1rem; margin-bottom:.4rem; }
+.header h1 { font-size:2rem; font-weight:800; background:linear-gradient(135deg,var(--blue),var(--purple)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.header .subtitle { color:var(--muted); font-size:.88rem; }
+.header-badges { display:flex; flex-wrap:wrap; gap:.5rem; justify-content:center; margin-top:.75rem; }
+.header-badge { display:inline-block; font-size:.72rem; font-weight:600; padding:.2rem .65rem; border-radius:999px; }
+.badge-blue { background:rgba(59,130,246,.12); color:var(--blue); border:1px solid rgba(59,130,246,.25); }
+.badge-green { background:rgba(16,185,129,.12); color:var(--green); border:1px solid rgba(16,185,129,.25); }
+.badge-amber { background:rgba(245,158,11,.12); color:var(--amber); border:1px solid rgba(245,158,11,.25); }
+.badge-red { background:rgba(239,68,68,.12); color:var(--red); border:1px solid rgba(239,68,68,.25); }
+.badge-purple { background:rgba(139,92,246,.12); color:var(--purple); border:1px solid rgba(139,92,246,.25); }
+
+/* Dot indicators */
+.dot { display:inline-block; width:7px; height:7px; border-radius:50%; flex-shrink:0; margin-right:4px; vertical-align:middle; position:relative; top:-1px; }
+.dot-green { background:var(--green); }
+.dot-blue { background:var(--blue); }
+.dot-amber { background:var(--amber); }
+.dot-red { background:var(--red); }
+.dot-purple { background:var(--purple); }
+
+/* Pulse animation for prospect tab */
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(245,158,11,.6); }
+  70% { box-shadow: 0 0 0 6px rgba(245,158,11,0); }
+  100% { box-shadow: 0 0 0 0 rgba(245,158,11,0); }
+}
+.tab-pulse .dot { animation: pulse 1.8s infinite; }
+
+/* Tabs */
+.tabs { display:flex; flex-wrap:wrap; gap:0; background:var(--card); border-bottom:2px solid var(--border); padding:0 .75rem; overflow-x:auto; position:sticky; top:0; z-index:100; }
+.tab { display:flex; align-items:center; gap:4px; padding:.8rem .95rem; font-size:.74rem; font-weight:500; color:var(--muted); cursor:pointer; border-bottom:2px solid transparent; margin-bottom:-2px; transition:all .2s; white-space:nowrap; }
+.tab:hover { color:var(--text); background:rgba(255,255,255,.03); }
+.tab.active { color:var(--text); border-bottom-color:var(--blue); font-weight:600; }
+.tab.active.tab-green { color:var(--green); border-bottom-color:var(--green); }
+.tab.active.tab-amber { color:var(--amber); border-bottom-color:var(--amber); }
+.tab.active.tab-red { color:var(--red); border-bottom-color:var(--red); }
+.tab.active.tab-purple { color:var(--purple); border-bottom-color:var(--purple); }
+
+/* Content */
+.content { max-width:1200px; margin:0 auto; padding:2rem 1.5rem; }
+.panel { display:none; }
+.panel.active { display:block; }
+
+/* Cards */
+.card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:1.5rem; margin-bottom:1.25rem; }
+.card:hover { border-color:rgba(59,130,246,.2); }
+.card h3 { font-size:.95rem; font-weight:600; margin-bottom:.85rem; color:var(--green); display:flex; align-items:center; gap:.5rem; }
+.card h4 { font-size:.85rem; font-weight:600; margin-bottom:.5rem; color:var(--text); }
+
+/* Tables */
+table { width:100%; border-collapse:collapse; font-size:.82rem; }
+th { text-align:left; padding:.55rem .75rem; background:rgba(59,130,246,.07); color:var(--blue); font-weight:600; font-size:.72rem; text-transform:uppercase; letter-spacing:.5px; border-bottom:1px solid var(--border); }
+td { padding:.55rem .75rem; border-bottom:1px solid rgba(30,41,59,.5); color:var(--text); vertical-align:top; }
+tr:last-child td { border-bottom:none; }
+tr:hover td { background:rgba(255,255,255,.02); }
+
+/* Tags */
+.tag { display:inline-block; padding:.15rem .5rem; border-radius:4px; font-size:.7rem; font-weight:500; margin:.1rem; white-space:nowrap; }
+.tag-green { background:rgba(16,185,129,.15); color:var(--green); border:1px solid rgba(16,185,129,.2); }
+.tag-blue { background:rgba(59,130,246,.15); color:var(--blue); border:1px solid rgba(59,130,246,.2); }
+.tag-amber { background:rgba(245,158,11,.15); color:var(--amber); border:1px solid rgba(245,158,11,.2); }
+.tag-purple { background:rgba(139,92,246,.15); color:var(--purple); border:1px solid rgba(139,92,246,.2); }
+.tag-red { background:rgba(239,68,68,.15); color:var(--red); border:1px solid rgba(239,68,68,.2); }
+.tag-dim { background:rgba(100,116,139,.15); color:var(--dim); border:1px solid rgba(100,116,139,.2); }
+
+/* Stats Grid */
+.stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:1rem; margin-bottom:1.5rem; }
+.stat { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:1.2rem; text-align:center; }
+.stat .num { font-size:2rem; font-weight:700; line-height:1.1; }
+.stat .num-blue { background:linear-gradient(135deg,var(--blue),var(--purple)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.stat .num-green { background:linear-gradient(135deg,var(--green),var(--blue)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.stat .num-amber { color:var(--amber); }
+.stat .num-red { color:var(--red); }
+.stat .label { font-size:.7rem; color:var(--muted); margin-top:.3rem; text-transform:uppercase; letter-spacing:.5px; }
+
+/* Meeting card (per-tab) */
+.meeting-header { display:flex; align-items:flex-start; gap:1rem; padding:1.25rem 1.5rem; background:linear-gradient(135deg,rgba(59,130,246,.04),rgba(139,92,246,.04)); border:1px solid var(--border); border-radius:12px; margin-bottom:1.25rem; }
+.meeting-time-block { text-align:center; flex-shrink:0; width:72px; }
+.meeting-time-block .time { font-size:1.1rem; font-weight:700; color:var(--blue); line-height:1.1; }
+.meeting-time-block .dur { font-size:.68rem; color:var(--dim); margin-top:.2rem; }
+.meeting-info { flex:1; }
+.meeting-info h2 { font-size:1.15rem; font-weight:700; margin-bottom:.35rem; }
+.meeting-info .meta-row { display:flex; flex-wrap:wrap; gap:.4rem; align-items:center; font-size:.78rem; color:var(--muted); }
+
+/* Section divider */
+.section-title { font-size:.75rem; font-weight:600; color:var(--dim); text-transform:uppercase; letter-spacing:1px; margin:1.75rem 0 .65rem; padding-bottom:.35rem; border-bottom:1px solid var(--border); }
+
+/* Two-col grid */
+.two-col { display:grid; grid-template-columns:1fr 1fr; gap:1.25rem; }
+.three-col { display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem; }
+
+/* Context block */
+.context-block { background:rgba(59,130,246,.05); border:1px solid rgba(59,130,246,.15); border-radius:8px; padding:1rem 1.25rem; font-size:.83rem; line-height:1.7; color:var(--text); margin-bottom:1rem; }
+.context-block strong { color:var(--blue); }
+
+/* Alert blocks */
+.alert { border-radius:8px; padding:.9rem 1.1rem; margin-bottom:.85rem; font-size:.83rem; line-height:1.65; }
+.alert strong { display:block; margin-bottom:.2rem; font-size:.8rem; text-transform:uppercase; letter-spacing:.4px; }
+.alert-amber { background:rgba(245,158,11,.07); border:1px solid rgba(245,158,11,.25); color:var(--text); }
+.alert-amber strong { color:var(--amber); }
+.alert-red { background:rgba(239,68,68,.07); border:1px solid rgba(239,68,68,.25); color:var(--text); }
+.alert-red strong { color:var(--red); }
+.alert-green { background:rgba(16,185,129,.07); border:1px solid rgba(16,185,129,.25); color:var(--text); }
+.alert-green strong { color:var(--green); }
+.alert-blue { background:rgba(59,130,246,.07); border:1px solid rgba(59,130,246,.25); color:var(--text); }
+.alert-blue strong { color:var(--blue); }
+.alert-purple { background:rgba(139,92,246,.07); border:1px solid rgba(139,92,246,.25); color:var(--text); }
+.alert-purple strong { color:var(--purple); }
+
+/* MEDDPIC score row */
+.meddpic-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:.75rem; }
+.meddpic-item { background:var(--card); border:1px solid var(--border); border-radius:8px; padding:.8rem 1rem; }
+.meddpic-item .m-label { font-size:.68rem; text-transform:uppercase; letter-spacing:.5px; color:var(--dim); margin-bottom:.3rem; }
+.meddpic-item .m-status { font-size:.82rem; font-weight:600; }
+.m-strong { color:var(--green); }
+.m-moderate { color:var(--amber); }
+.m-weak { color:var(--red); }
+.m-unknown { color:var(--dim); }
+
+/* Agenda table */
+.agenda-table td:first-child { width:90px; color:var(--dim); font-size:.78rem; white-space:nowrap; }
+.agenda-table td:nth-child(2) { font-weight:500; }
+.agenda-table td:last-child { color:var(--muted); font-size:.8rem; }
+
+/* Join button */
+.btn-join { display:inline-flex; align-items:center; gap:.4rem; background:var(--blue); color:#fff; font-size:.75rem; font-weight:600; padding:.4rem .9rem; border-radius:6px; text-decoration:none; transition:background .2s; white-space:nowrap; }
+.btn-join:hover { background:#2563eb; text-decoration:none; }
+.btn-join-teams { background:#5c2d91; }
+.btn-join-teams:hover { background:#4a2474; }
+
+/* Question list */
+.q-list { list-style:none; }
+.q-list li { padding:.55rem 0; border-bottom:1px solid rgba(30,41,59,.4); font-size:.84rem; line-height:1.5; display:flex; gap:.65rem; }
+.q-list li:last-child { border-bottom:none; }
+.q-list li::before { content:"Q"; font-size:.65rem; font-weight:700; color:var(--blue); background:rgba(59,130,246,.15); border-radius:3px; padding:.1rem .3rem; flex-shrink:0; margin-top:.15rem; height:fit-content; }
+
+/* Red flag list */
+.rf-list { list-style:none; }
+.rf-list li { padding:.45rem 0; border-bottom:1px solid rgba(30,41,59,.3); font-size:.83rem; display:flex; gap:.65rem; color:var(--text); }
+.rf-list li:last-child { border-bottom:none; }
+.rf-list li::before { content:"⚠"; font-size:.75rem; color:var(--red); flex-shrink:0; margin-top:.1rem; }
+
+/* Talking point */
+.tp-block { background:rgba(16,185,129,.05); border-left:3px solid var(--green); border-radius:0 8px 8px 0; padding:.7rem 1rem; margin-bottom:.6rem; font-size:.83rem; line-height:1.6; }
+.tp-block .tp-trigger { font-size:.72rem; font-weight:600; color:var(--green); text-transform:uppercase; letter-spacing:.4px; margin-bottom:.25rem; }
+
+/* Success criteria */
+.sc-list { list-style:none; }
+.sc-list li { padding:.45rem 0; border-bottom:1px solid rgba(30,41,59,.3); font-size:.83rem; display:flex; gap:.65rem; }
+.sc-list li:last-child { border-bottom:none; }
+.sc-list li::before { content:"✓"; color:var(--green); font-weight:700; flex-shrink:0; }
+
+/* Timeline row in overview */
+.timeline-time { color:var(--blue); font-weight:600; font-size:.82rem; white-space:nowrap; }
+.timeline-overlap { color:var(--amber); font-size:.72rem; }
+
+/* Responsive */
+@media(max-width:768px) {
+  .header h1 { font-size:1.4rem; }
+  .tabs { padding:0 .25rem; }
+  .tab { padding:.65rem .65rem; font-size:.7rem; }
+  .content { padding:1rem .75rem; }
+  .two-col, .three-col { grid-template-columns:1fr; }
+  .meddpic-grid { grid-template-columns:repeat(2,1fr); }
+  .meeting-header { flex-direction:column; }
+  .stats { grid-template-columns:repeat(2,1fr); }
+}
+</style>
 </head>
 <body>
-<header class="vsp-hero">
-  <div class="vsp-container">
-    <img src="/assets/images/vsp-logo.svg" alt="VSP" class="vsp-logo">
+
+<div class="header">
+  <div class="header-top">
     <h1>Mission Control</h1>
-    <p class="vsp-subtitle">VSP Internal — Wednesday, April 1, 2026</p>
   </div>
-</header>
-<main>
-  <section class="vsp-section">
-    <div class="vsp-container">
-      <h1 id="todays-priorities">Today's Priorities</h1>
-<p><strong>Wednesday, April 1, 2026</strong></p>
-<hr />
-<h2 id="critical-alerts">CRITICAL ALERTS</h2>
-<ul>
-<li>CRITICAL: Coverage ratio 0.41x (target 3.0x)</li>
-<li>56 open action items — stale since Mar 3 (29 days without a morning
-ops run)</li>
-<li>19 deals with no prospect folder</li>
-<li>15 deals missing MEDDPIC tracker</li>
-<li>10 deals missing person/org linkage</li>
-</ul>
-<hr />
-<h2 id="top-3-priorities">TOP 3 PRIORITIES</h2>
-<p><strong>1. Prospect Call Prep</strong> Two revenue-generating
-meetings today: - 10:00 AM — Alex/Henry (FDE relationship) - 2:30 PM —
-Stephanie Young Run <code>/prep-call</code> for both before their
-slots.</p>
-<p><strong>2. Pipeline Coverage Crisis</strong> 0.41x vs 3.0x target =
-dangerously thin funnel. Advance Moderate prospects or add new pipeline.
-Target: move 2–3 Moderate → Strong today.</p>
-<p><strong>3. CRM Hygiene</strong> 19 orphan deals + 10 missing linkages
-= unreliable pipeline data. Run <code>/process-call</code> and
-<code>/create-lead</code> to close gaps.</p>
-<hr />
-<h2 id="todays-calendar-all-times-et">TODAY'S CALENDAR (All Times ET)</h2>
-<p><strong>INTERNAL</strong> - 6:15 AM — Tyler &lt;&gt; Christine Stand
-Up - 7:00 AM — Pair Programming Session - 7:45 AM — SixMap Internal
-Quick Sync - 8:30 AM — Vlad/Petre/Tyler brAIN Federal - 9:00 AM — FDM
-Stand Up</p>
-<p><strong>PROSPECT</strong> - 10:00 AM — Alex/Henry Org &amp; Workflow
-Discovery Call → Prep: Henry Kaestner context, FDE relationship history
-- 2:30 PM — Stephanie &amp; Victory Square → Prep: Review Stephanie
-Young context</p>
-<p><strong>EXTERNAL</strong> - 10:30 AM — SixMap &lt;&gt; VictorySquare
-Stand-Up - 11:00 AM — Paul/Tyler/Ed Paperwork Discussion</p>
-<hr />
-<h2 id="tomorrows-calendar">TOMORROW'S CALENDAR</h2>
-<p><strong>PROSPECT</strong> - 10:00 AM — Justin/Nils/Kyle/Tyler Weekly
-Connect - 1:30 PM — Tyler/Jackie/Sophia USNA Entrepreneur Summit</p>
-<hr />
-<h2 id="pipeline-snapshot">PIPELINE SNAPSHOT</h2>
-<div class="vsp-table-wrap"><table class="vsp-table">
-<thead>
-<tr class="header">
-<th>Metric</th>
-<th>Value</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Open Deals</td>
-<td>54</td>
-</tr>
-<tr class="even">
-<td>Total Value</td>
-<td>$4,816,747</td>
-</tr>
-<tr class="odd">
-<td>Coverage</td>
-<td>0.41x (target 3.0x)</td>
-</tr>
-<tr class="even">
-<td>Stuck Deals (14+ days)</td>
-<td>0</td>
-</tr>
-</tbody>
-</table></div>
-<p><strong>Top Deals</strong></p>
-<div class="vsp-table-wrap"><table class="vsp-table">
-<thead>
-<tr><th>Deal</th><th>Value</th></tr>
-</thead>
-<tbody>
-<tr><td>GoCanvas AI</td><td>$960K</td></tr>
-<tr><td>Brivo</td><td>$900K</td></tr>
-<tr><td>GoCanvas New AI Pod</td><td>$480K</td></tr>
-<tr><td>Bear Analytics</td><td>$360K</td></tr>
-<tr><td>ClaimInformatics SOW2</td><td>$360K</td></tr>
-</tbody>
-</table></div>
-<hr />
-<h2 id="meddpic-scorecard-26-tracked">MEDDPIC SCORECARD (26 Tracked)</h2>
-<p><strong>Strong (8)</strong> - Pryze - E-Show - PBS - Ripple
-Operations - Epicutis - Temple IT - Claims Informatics - Emotionally
-Healthy Discipleship</p>
-<p><strong>Moderate (9)</strong> - Connexus Capital - Elevare Law -
-Truthly - Military By Owner - Vico - Mimic AI - AIRE Response - Brain
-Federal - Rare.org</p>
-<p><strong>Weak (5)</strong> - Luxton Capital - Well Being Systems -
-Faith Driven Entrepreneur - Sovereigns Capital - Grizzly Growth Capital
-- Epidaurus Health</p>
-<p><strong>Unknown (4)</strong> - Incisive Dental - ResolvIQ - Bryson
-Hearne - PaleoTech AI - Ad Impact</p>
-<hr />
-<h2 id="inbox-9-items">INBOX (9 Items)</h2>
-<ul>
-<li>VSP_Investor_One_Pager.md</li>
-<li>AI_Pod_SOW_Research.md</li>
-<li>AI_Pod_Pricing_Model.md</li>
-<li>TASK_ENRICH_BATCH_9_FINAL_2026-03-18.md</li>
-<li>TASK_ENRICH_BATCH_8_2026-03-17.md</li>
-<li>1845_Adventures_Research.md</li>
-<li>INTEL_FireRoad_JeremiahFund_HeronVentures.md</li>
-<li>FDM_Product_Initiative_COMPLETE_DOCUMENTATION.md</li>
-<li>Circleback sweep file (1 meeting)</li>
-</ul>
-<hr />
-<h2 id="activity-scorecard">ACTIVITY SCORECARD</h2>
-<p><em>(Week of Mar 10–17 — dashboard stale)</em></p>
-<div class="vsp-table-wrap"><table class="vsp-table">
-<thead>
-<tr class="header">
-<th>Pillar</th>
-<th>Target</th>
-<th>Actual</th>
-<th>Gap</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Networking</td>
-<td>5</td>
-<td>3</td>
-<td>-2</td>
-</tr>
-<tr class="even">
-<td>Prospecting</td>
-<td>60</td>
-<td>14</td>
-<td>-46</td>
-</tr>
-<tr class="odd">
-<td>Protecting</td>
-<td>5</td>
-<td>2</td>
-<td>-3</td>
-</tr>
-<tr class="even">
-<td>Referring</td>
-<td>15</td>
-<td>3</td>
-<td>-12</td>
-</tr>
-</tbody>
-</table></div>
-<blockquote>
-<p>Prospecting gap of -46 is the root cause of the coverage crisis.</p>
-</blockquote>
-<hr />
-<h2 id="open-action-items">OPEN ACTION ITEMS</h2>
-<p>56 open items (last updated Mar 3). Run <code>/task-approve</code> to
-review and clear stale items.</p>
-<hr />
-<h2 id="slack-roundup">SLACK ROUNDUP</h2>
-<h3 id="hot-channels-last-48h">Hot Channels (last 48h)</h3>
-<ul>
-<li><p><strong>#prospect-yourhealthpro</strong> — HOTTEST. Paperwork
-call TODAY at 11am ET with Tyler, Paul, Ed Cutler. Phase Zero scope
-(11-17 days) on table. Equity terms need to land. Vlad has Adi Nistor on
-bench ready to start week of Apr 6.</p></li>
-<li><p><strong>#prospect-ripple</strong> — Paul texted Kara yesterday.
-Matt building proposal in Monday.com. Deal advancing, waiting on Kara's
-response.</p></li>
-<li><p><strong>#prospect-bear-analytics</strong> — MEDDPIC updated Mar
-31. $30K/mo AI Pod pitched to Joe Colangelo. Written scope + 30/60/90
-milestones due before <strong>Apr 6 reconnect</strong>.</p></li>
-<li><p><strong>#prospect-bw-cyber</strong> — Tyler asked Vlad/Andrei to
-review AI security research. Matt covering while Tyler on vacation.
-<strong>Handoff plan needed before Saturday.</strong></p></li>
-<li><p><strong>#prospect-elevare-law</strong> — Paul staying in touch
-with Rebecca. Slow burn.</p></li>
-</ul>
-<h3 id="internal-highlights">Internal Highlights</h3>
-<ul>
-<li><strong>#contracts-revenue</strong> — Paul asked Tyler, Katie, Matt
-to review Matt Weir's standard contract (Mar 31 6:52pm). <strong>Tyler
-has not responded yet.</strong></li>
-</ul>
-<h3 id="mentions-needing-attention">Mentions Needing Attention</h3>
-<ul>
-<li><strong>Paul in #contracts-revenue</strong> — contract review
-request, no Tyler response visible</li>
-</ul>
-<h3 id="quiet-prospect-channels-10-days">Quiet Prospect Channels (10+ days)</h3>
-<ul>
-<li>#prospect-temple-it (58 days)</li>
-<li>#prospect-arc-integrated (58 days)</li>
-<li>#prospect-truthly-ai (54 days)</li>
-<li>#prospect-wellness-learning-systems (54 days)</li>
-<li>#prospect-vico (37 days)</li>
-<li>#prospect-charter-impact (34 days)</li>
-<li>#prospect-fugio-rare-org (29 days)</li>
-<li>#prospect-emotionally-healthy-discipleship (22 days)</li>
-<li>#prospect-eshow (19 days)</li>
-<li>#prospect-luxtoncapital (18 days)</li>
-<li>#prospect-epicutis (14 days)</li>
-<li>#prospect-more-real-estate-group (14 days)</li>
-</ul>
-<hr />
-<p><em>Generated by Mission Control at 09:40 AM ET</em></p>
+  <div class="subtitle">Wednesday, April 1, 2026 &nbsp;|&nbsp; Tyler Goble &nbsp;|&nbsp; Victory Square Partners &nbsp;|&nbsp; Eastern Time</div>
+  <div class="header-badges">
+    <span class="header-badge badge-blue">9 Meetings</span>
+    <span class="header-badge badge-green">5 Recurring</span>
+    <span class="header-badge badge-amber">4 New</span>
+    <span class="header-badge badge-red">2 Prospect Prep Required</span>
+    <span class="header-badge badge-purple">6:15 AM – 2:30 PM ET</span>
+  </div>
+</div>
+
+<div class="tabs" id="tabs">
+  <div class="tab active tab-green" onclick="showTab(0)"><span class="dot dot-green"></span>Overview</div>
+  <div class="tab" onclick="showTab(1)"><span class="dot dot-green"></span>6:15a Standup</div>
+  <div class="tab" onclick="showTab(2)"><span class="dot dot-blue"></span>7:00a Pair Prog</div>
+  <div class="tab" onclick="showTab(3)"><span class="dot dot-blue"></span>7:45a SixMap Sync</div>
+  <div class="tab" onclick="showTab(4)"><span class="dot dot-blue"></span>8:30a brAIN Federal</div>
+  <div class="tab" onclick="showTab(5)"><span class="dot dot-blue"></span>9:00a FDM Standup</div>
+  <div class="tab tab-pulse" onclick="showTab(6)"><span class="dot dot-amber"></span>10:00a Alex/Henry &#9733;</div>
+  <div class="tab" onclick="showTab(7)"><span class="dot dot-blue"></span>10:30a SixMap Standup</div>
+  <div class="tab" onclick="showTab(8)"><span class="dot dot-amber"></span>11:00a Ed Paperwork</div>
+  <div class="tab tab-pulse" onclick="showTab(9)"><span class="dot dot-amber"></span>2:30p Stephanie &#9733;</div>
+</div>
+
+<div class="content">
+
+<!-- ==================== OVERVIEW ==================== -->
+<div class="panel active" id="panel-0">
+
+<div class="stats">
+  <div class="stat"><div class="num num-blue">9</div><div class="label">Meetings Today</div></div>
+  <div class="stat"><div class="num num-green">5</div><div class="label">Recurring</div></div>
+  <div class="stat"><div class="num num-amber">4</div><div class="label">New / One-Time</div></div>
+  <div class="stat"><div class="num num-red">2</div><div class="label">Full Prep Required</div></div>
+  <div class="stat"><div class="num num-blue">8.25</div><div class="label">Hours Scheduled</div></div>
+  <div class="stat"><div class="num num-green">0</div><div class="label">Concurrent Blocks</div></div>
+</div>
+
+<div class="alert alert-red">
+  <strong>!! Coverage Ratio 0.41x (Target 3.0x) — Pipeline Dangerously Thin</strong>
+  54 open deals, $4.82M total pipeline value — but weighted coverage is far below the 3.0x target. Today's two prospect discovery calls (Alex/Henry at 10 AM, Stephanie at 2:30 PM) are the highest-leverage pipeline-building opportunities of the week. Every new engagement matters.
+</div>
+
+<div class="alert alert-amber">
+  <strong>Alex Khoury Last Day: April 3 — Champion Vacuum Risk</strong>
+  Alex is the FDE champion on the Henry Kaestner CRM engagement. The 10:00 AM discovery call is the final window to lock the paid engagement, surface Mary's name as successor champion, and confirm HubSpot API access. If these gates don't close today, the engagement stalls 2+ weeks.
+</div>
+
+<div class="alert alert-amber">
+  <strong>Pryze SOW Sent March 26 — 6 Days, No Response</strong>
+  Follow-up drafted. Monitor and escalate if no response by EOD today.
+</div>
+
+<div class="card">
+  <h3>Day Timeline</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Time (ET)</th>
+        <th>Meeting</th>
+        <th>Type</th>
+        <th>Duration</th>
+        <th>Attendees</th>
+        <th>Category</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="timeline-time">6:15 AM</td>
+        <td><strong>Tyler &lt;&gt; Christine Stand Up</strong></td>
+        <td>Standup</td>
+        <td>15 min</td>
+        <td>2</td>
+        <td><span class="tag tag-green">Internal</span></td>
+        <td><span class="tag tag-dim">Recurring</span></td>
+      </tr>
+      <tr>
+        <td class="timeline-time">7:00 AM</td>
+        <td><strong>Pair Programming Session</strong></td>
+        <td>Technical</td>
+        <td>60 min</td>
+        <td>—</td>
+        <td><span class="tag tag-green">Internal Technical</span></td>
+        <td><span class="tag tag-blue">New</span></td>
+      </tr>
+      <tr>
+        <td class="timeline-time">7:45 AM</td>
+        <td><strong>SixMap Internal Quick Sync</strong></td>
+        <td>Client Sync</td>
+        <td>30 min</td>
+        <td>—</td>
+        <td><span class="tag tag-blue">Client</span></td>
+        <td><span class="tag tag-dim">Recurring</span></td>
+      </tr>
+      <tr>
+        <td class="timeline-time">8:30 AM</td>
+        <td><strong>Vlad/Petre/Tyler brAIN Federal Walkthrough</strong></td>
+        <td>Internal</td>
+        <td>60 min</td>
+        <td>3</td>
+        <td><span class="tag tag-green">Internal</span></td>
+        <td><span class="tag tag-blue">New</span></td>
+      </tr>
+      <tr>
+        <td class="timeline-time">9:00 AM</td>
+        <td><strong>FDM Stand Up</strong></td>
+        <td>Client Standup</td>
+        <td>15 min</td>
+        <td>6</td>
+        <td><span class="tag tag-blue">Client</span></td>
+        <td><span class="tag tag-dim">Recurring</span></td>
+      </tr>
+      <tr style="background:rgba(245,158,11,.05)">
+        <td class="timeline-time">10:00 AM</td>
+        <td><strong>Alex/Henry Org &amp; Workflow Discovery</strong> <span style="color:var(--amber)">&#9733; PREP</span></td>
+        <td>Discovery</td>
+        <td>60 min</td>
+        <td>3</td>
+        <td><span class="tag tag-amber">Prospect</span></td>
+        <td><span class="tag tag-amber">&#9733; PREP</span></td>
+      </tr>
+      <tr>
+        <td class="timeline-time">10:30 AM</td>
+        <td><strong>SixMap&lt;&gt;VictorySquare Stand-up</strong></td>
+        <td>Client Standup</td>
+        <td>30 min</td>
+        <td>—</td>
+        <td><span class="tag tag-blue">Client</span></td>
+        <td><span class="tag tag-dim">Recurring</span></td>
+      </tr>
+      <tr>
+        <td class="timeline-time">11:00 AM</td>
+        <td><strong>Paul/Tyler/Ed Paperwork Discussion</strong></td>
+        <td>External</td>
+        <td>45 min</td>
+        <td>3</td>
+        <td><span class="tag tag-amber">Prospect</span></td>
+        <td><span class="tag tag-blue">New</span></td>
+      </tr>
+      <tr style="background:rgba(245,158,11,.05)">
+        <td class="timeline-time">2:30 PM</td>
+        <td><strong>Stephanie &amp; Victory Square</strong> <span style="color:var(--amber)">&#9733; PREP</span></td>
+        <td>Discovery</td>
+        <td>30 min</td>
+        <td>2</td>
+        <td><span class="tag tag-amber">Prospect</span></td>
+        <td><span class="tag tag-amber">&#9733; PREP</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="two-col">
+  <div class="card">
+    <h3>Priority Order</h3>
+    <table>
+      <tr><th>#</th><th>Meeting</th><th>Why It Matters</th></tr>
+      <tr><td><strong style="color:var(--red)">1</strong></td><td>Alex/Henry Discovery (10:00a)</td><td>Lock paid engagement before Alex departs April 3</td></tr>
+      <tr><td><strong style="color:var(--amber)">2</strong></td><td>Stephanie &amp; VSP (2:30p)</td><td>First discovery — identify pain, lock next step</td></tr>
+      <tr><td><strong style="color:var(--amber)">3</strong></td><td>Ed Paperwork (11:00a)</td><td>YourHealthPro equity terms / Phase Zero scope</td></tr>
+      <tr><td><strong style="color:var(--blue)">4</strong></td><td>brAIN Federal (8:30a)</td><td>New engagement scoping walkthrough</td></tr>
+      <tr><td><strong style="color:var(--blue)">5</strong></td><td>FDM Standup (9:00a)</td><td>Active client — Group Finder burn rate</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h3>Top 3 Outcomes Today</h3>
+    <div class="alert alert-amber" style="margin-bottom:.65rem">
+      <strong>Outcome 1 — Alex/Henry</strong>
+      Leave with verbal yes on paid 45-hour engagement model, Mary's name as successor champion, HubSpot API access confirmed, and 3 test queries from Henry (these become acceptance criteria).
     </div>
-  </section>
-</main>
-<footer class="vsp-footer">
-  <div class="vsp-container">
-    <p>Victory Square Partners — Confidential</p>
+    <div class="alert alert-amber" style="margin-bottom:.65rem">
+      <strong>Outcome 2 — Stephanie</strong>
+      Identify at least 1 concrete pain point with urgency, determine relationship type (prospect/partner/referral), lock a specific next step with date.
+    </div>
+    <div class="alert alert-blue">
+      <strong>Outcome 3 — Ed Paperwork</strong>
+      Advance equity terms for YourHealthPro Phase Zero. Confirm scope (11–17 days). Vlad has Adi Nistor on bench ready for week of April 6.
+    </div>
   </div>
-</footer>
+</div>
+
+<div class="two-col">
+  <div class="card">
+    <h3>Pipeline Health</h3>
+    <table>
+      <thead><tr><th>Metric</th><th>Value</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>Open Deals</td><td>54</td><td></td></tr>
+        <tr><td>Pipeline Value</td><td>$4,816,747</td><td></td></tr>
+        <tr><td>Coverage Ratio</td><td>0.41x</td><td><span class="tag tag-red">CRITICAL</span></td></tr>
+        <tr><td>Stuck Deals (14d)</td><td>0</td><td><span class="tag tag-green">OK</span></td></tr>
+        <tr><td>MEDDPIC Strong</td><td>8</td><td></td></tr>
+        <tr><td>MEDDPIC Moderate</td><td>9</td><td></td></tr>
+        <tr><td>MEDDPIC Weak</td><td>5</td><td></td></tr>
+        <tr><td>MEDDPIC Unknown</td><td>4</td><td></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="card">
+    <h3>Slack Roundup</h3>
+    <div class="alert alert-red" style="margin-bottom:.65rem">
+      <strong>Hot Channels</strong>
+      #prospect-yourhealthpro — paperwork call TODAY &nbsp;|&nbsp; #prospect-ripple — Paul texted Kara &nbsp;|&nbsp; #prospect-bear-analytics — scope due Apr 6 &nbsp;|&nbsp; #prospect-bw-cyber — handoff before Saturday
+    </div>
+    <div class="alert alert-amber" style="margin-bottom:.65rem">
+      <strong>Internal — Action Required</strong>
+      Paul in #contracts-revenue asked Tyler to review Matt Weir's contract — <strong>NO RESPONSE YET</strong>
+    </div>
+    <div class="alert alert-blue">
+      <strong>Quiet</strong>
+      12 prospect channels silent 10+ days — review needed.
+    </div>
+  </div>
+</div>
+
+</div><!-- /panel-0 -->
+
+<!-- ==================== TAB 1: STANDUP ==================== -->
+<div class="panel" id="panel-1">
+
+<div class="meeting-header">
+  <div class="meeting-time-block">
+    <div class="time">6:15</div>
+    <div class="dur">AM ET</div>
+    <div class="dur">15 min</div>
+  </div>
+  <div class="meeting-info">
+    <h2>Tyler &lt;&gt; Christine Stand Up</h2>
+    <div class="meta-row">
+      <span class="tag tag-dim">Recurring</span>
+      <span class="tag tag-green">Internal</span>
+      <span>2 attendees</span>
+      <span>·</span>
+      <span style="color:var(--dim)">Daily operational standup</span>
+    </div>
+  </div>
+</div>
+
+<div class="context-block">
+  <strong>Context:</strong> Daily operational standup — priorities, action items, pipeline alignment. Today has two high-stakes prospect discovery calls. Use this time to align strategy for both, especially Alex/Henry at 10 AM given the April 3 champion departure deadline.
+</div>
+
+<div class="section-title">Suggested Agenda</div>
+<div class="card">
+  <table class="agenda-table">
+    <tr><td>0–2 min</td><td>Weekend blockers / overnight items</td><td>Surface anything urgent before the day fires up</td></tr>
+    <tr><td>2–7 min</td><td>Alex/Henry strategy alignment</td><td>Confirm goals: verbal yes + Mary's name + HubSpot access</td></tr>
+    <tr><td>7–10 min</td><td>Stephanie discovery approach</td><td>Align on relationship framing (prospect vs partner vs referral)</td></tr>
+    <tr><td>10–13 min</td><td>Ed paperwork / brAIN Federal notes</td><td>Any overnight updates on either</td></tr>
+    <tr><td>13–15 min</td><td>Action items</td><td>Pryze follow-up, Matt Weir contract review</td></tr>
+  </table>
+</div>
+
+<div class="alert alert-blue">
+  <strong>Two Prospect Calls Today</strong>
+  Use standup to align on Alex/Henry strategy — the April 3 deadline makes this the most time-sensitive call of the week. For Stephanie, agree on discovery framing before 2:30 PM.
+</div>
+
+</div><!-- /panel-1 -->
+
+<!-- ==================== TAB 2: PAIR PROGRAMMING ==================== -->
+<div class="panel" id="panel-2">
+
+<div class="meeting-header">
+  <div class="meeting-time-block">
+    <div class="time">7:00</div>
+    <div class="dur">AM ET</div>
+    <div class="dur">60 min</div>
+  </div>
+  <div class="meeting-info">
+    <h2>Pair Programming Session</h2>
+    <div class="meta-row">
+      <span class="tag tag-blue">New</span>
+      <span class="tag tag-green">Internal Technical</span>
+      <span>60 min</span>
+    </div>
+  </div>
+</div>
+
+<div class="context-block">
+  <strong>Context:</strong> Internal technical working session. No prospect prep required. Use this block to advance whatever code or tooling is in flight — Pipedrive MCP features, automation scripts, or brAIN Federal prep work.
+</div>
+
+<div class="alert alert-green">
+  <strong>No Prep Required</strong>
+  Internal working session. Show up and code.
+</div>
+
+</div><!-- /panel-2 -->
+
+<!-- ==================== TAB 3: SIXMAP SYNC ==================== -->
+<div class="panel" id="panel-3">
+
+<div class="meeting-header">
+  <div class="meeting-time-block">
+    <div class="time">7:45</div>
+    <div class="dur">AM ET</div>
+    <div class="dur">30 min</div>
+  </div>
+  <div class="meeting-info">
+    <h2>SixMap Internal Quick Sync</h2>
+    <div class="meta-row">
+      <span class="tag tag-dim">Recurring</span>
+      <span class="tag tag-blue">Client</span>
+      <span>30 min</span>
+    </div>
+  </div>
+</div>
+
+<div class="context-block">
+  <strong>Context:</strong> Recurring internal SixMap sync — sprint items, blockers, engineering progress. Standard cadence. SixMap is an active VSP client engagement.
+</div>
+
+<div class="alert alert-blue">
+  <strong>Standard Client Sync</strong>
+  Recurring cadence — cover sprint status, blockers, and any upcoming milestone dates. No special prep required.
+</div>
+
+</div><!-- /panel-3 -->
+
+<!-- ==================== TAB 4: brAIN FEDERAL ==================== -->
+<div class="panel" id="panel-4">
+
+<div class="meeting-header">
+  <div class="meeting-time-block">
+    <div class="time">8:30</div>
+    <div class="dur">AM ET</div>
+    <div class="dur">60 min</div>
+  </div>
+  <div class="meeting-info">
+    <h2>Vlad / Petre / Tyler — brAIN Federal Walkthrough</h2>
+    <div class="meta-row">
+      <span class="tag tag-blue">New</span>
+      <span class="tag tag-green">Internal</span>
+      <span>3 attendees</span>
+      <span>·</span>
+      <span style="color:var(--dim)">Vlad Damian &nbsp;&middot;&nbsp; Petre &nbsp;&middot;&nbsp; Tyler Goble</span>
+    </div>
+  </div>
+</div>
+
+<div class="context-block">
+  <strong>Context:</strong> Internal scoping and walkthrough for the brAIN Federal engagement. This is a new engagement — use this session to align on delivery timeline, team allocation, and open technical questions before any external-facing commitments are made.
+</div>
+
+<div class="alert alert-amber">
+  <strong>New Engagement Scoping</strong>
+  Come prepared with questions about delivery timeline and team allocation. Confirm Vlad and Petre's availability. Define what "done" looks like for Phase 1 before client conversations begin.
+</div>
+
+<div class="section-title">Key Questions</div>
+<ul class="q-list">
+  <li>"What's the realistic delivery timeline given current bench allocation?"</li>
+  <li>"What federal-specific compliance or security requirements do we need to scope?"</li>
+  <li>"Is Adi Nistor available for brAIN Federal or committed to YourHealthPro Phase Zero?"</li>
+  <li>"What does a Phase 1 deliverable look like — demo, working prototype, or production-ready?"</li>
+</ul>
+
+</div><!-- /panel-4 -->
+
+<!-- ==================== TAB 5: FDM STANDUP ==================== -->
+<div class="panel" id="panel-5">
+
+<div class="meeting-header">
+  <div class="meeting-time-block">
+    <div class="time">9:00</div>
+    <div class="dur">AM ET</div>
+    <div class="dur">15 min</div>
+  </div>
+  <div class="meeting-info">
+    <h2>FDM Stand Up</h2>
+    <div class="meta-row">
+      <span class="tag tag-dim">Recurring</span>
+      <span class="tag tag-blue">Client</span>
+      <span>6 attendees</span>
+      <span>·</span>
+      <span style="color:var(--dim)">Liviu &nbsp;&middot;&nbsp; Tyler &nbsp;&middot;&nbsp; Matt &nbsp;&middot;&nbsp; Kyle &nbsp;&middot;&nbsp; Nils &nbsp;&middot;&nbsp; Dorel</span>
+    </div>
+  </div>
+</div>
+
+<div class="context-block">
+  <strong>Context:</strong> Daily FDM engineering standup — Group Finder sprint status, blockers, and burn rate check. FDM is an active VSP client running at ~$13K/month. Kyle and team are heads-down on Group Finder 2.0.
+</div>
+
+<div class="alert alert-blue">
+  <strong>Active Client — Standard Cadence</strong>
+  Cover sprint items, blockers, and any scope questions. Monitor Group Finder 2.0 burn rate and flag if milestone dates are shifting.
+</div>
+
+</div><!-- /panel-5 -->
+
+<!-- ==================== TAB 6: ALEX/HENRY ★ FULL PREP ==================== -->
+<div class="panel" id="panel-6">
+
+<div class="meeting-header" style="border-color:rgba(245,158,11,.3); background:linear-gradient(135deg,rgba(245,158,11,.06),rgba(239,68,68,.04));">
+  <div class="meeting-time-block">
+    <div class="time" style="color:var(--amber)">10:00</div>
+    <div class="dur">AM ET</div>
+    <div class="dur">60 min</div>
+  </div>
+  <div class="meeting-info">
+    <h2>Alex/Henry Org and Workflow Discovery Call <span style="color:var(--amber)">&#9733; FULL PREP</span></h2>
+    <div class="meta-row">
+      <span class="tag tag-blue">New</span>
+      <span class="tag tag-amber">Prospect — Discovery</span>
+      <span>3 attendees</span>
+      <span>60 min</span>
+    </div>
+  </div>
+</div>
+
+<div class="alert alert-amber">
+  <strong>CRITICAL: Alex Khoury Last Day April 3 — Final Window</strong>
+  This is the last call before Alex departs. Four gates must close today: (1) verbal yes on paid 45-hour engagement, (2) Mary's name as successor champion, (3) HubSpot API access path confirmed, (4) Henry writes 3 test queries. If these don't close today, the engagement stalls 2+ weeks while a new champion is found. Come in with urgency framing — Alex wants a clean handoff.
+</div>
+
+<div class="section-title">Attendees</div>
+<div class="card">
+  <table>
+    <thead><tr><th>Name</th><th>Title</th><th>Role in Meeting</th><th>Contact</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>Henry Kaestner</strong></td>
+        <td>Co-Founder, FDE</td>
+        <td><span class="tag tag-red">Decision-Maker</span></td>
+        <td>henry@faithdrivenentrepreneur.org</td>
+      </tr>
+      <tr>
+        <td><strong>Alex Khoury</strong></td>
+        <td>Ops (departing Apr 3)</td>
+        <td><span class="tag tag-red">Champion — DEPARTING</span></td>
+        <td>alexkhoury@faithdrivenentrepreneur.org</td>
+      </tr>
+      <tr>
+        <td><strong>Tyler Goble</strong></td>
+        <td>VSP</td>
+        <td><span class="tag tag-green">Account Lead</span></td>
+        <td>Driving agenda</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="section-title">Background</div>
+<div class="context-block">
+  <strong>Faith Driven Entrepreneur (FDE)</strong> is an existing VSP client. <strong>Henry Kaestner</strong> wants a personal AI-powered CRM connecting his 10,000+ relationships across Christian giving, VC, and nonprofit ecosystems. VSP proposed a <strong>45-hour, 6-week fixed engagement</strong>: Google Sheets as Henry's interface, FDE's HubSpot as invisible backend, Claude enrichment nightly, Slack bot for queries. Alex Khoury has been the champion throughout — but he departs April 3.<br><br>
+  <strong>The risk:</strong> Without a named successor champion (Mary?) before Alex leaves, this engagement enters a leadership vacuum. Today is the last day to bridge that gap cleanly with Alex in the room.
+</div>
+
+<div class="section-title">MEDDPIC Status</div>
+<div class="meddpic-grid">
+  <div class="meddpic-item">
+    <div class="m-label">Metrics</div>
+    <div class="m-status m-unknown">Unknown</div>
+    <div style="font-size:.75rem;color:var(--muted);margin-top:.2rem">Need success criteria — query frequency, contacts onboarded</div>
+  </div>
+  <div class="meddpic-item">
+    <div class="m-label">Economic Buyer</div>
+    <div class="m-status m-unknown">Unknown</div>
+    <div style="font-size:.75rem;color:var(--muted);margin-top:.2rem">Henry likely, but Justin/board may need to approve separate spend</div>
+  </div>
+  <div class="meddpic-item">
+    <div class="m-label">Decision Criteria</div>
+    <div class="m-status m-unknown">Unknown</div>
+    <div style="font-size:.75rem;color:var(--muted);margin-top:.2rem">Get Henry to write 3 test queries as acceptance criteria</div>
+  </div>
+  <div class="meddpic-item">
+    <div class="m-label">Decision Process</div>
+    <div class="m-status m-unknown">Unclear</div>
+    <div style="font-size:.75rem;color:var(--muted);margin-top:.2rem">FDE retainer vs. separate paid engagement — must clarify</div>
+  </div>
+  <div class="meddpic-item">
+    <div class="m-label">Paper Process</div>
+    <div class="m-status m-unknown">Unknown</div>
+    <div style="font-size:.75rem;color:var(--muted);margin-top:.2rem">New SOW or retainer amendment? Who signs?</div>
+  </div>
+  <div class="meddpic-item">
+    <div class="m-label">Identify Pain</div>
+    <div class="m-status m-moderate">Moderate</div>
+    <div style="font-size:.75rem;color:var(--muted);margin-top:.2rem">Confirmed from Kingdom CRM call — network fragmented across tools</div>
+  </div>
+  <div class="meddpic-item">
+    <div class="m-label">Champion</div>
+    <div class="m-status m-weak">Weak</div>
+    <div style="font-size:.75rem;color:var(--muted);margin-top:.2rem">Alex departing Apr 3 — GET MARY'S NAME TODAY</div>
+  </div>
+  <div class="meddpic-item">
+    <div class="m-label">Competition</div>
+    <div class="m-status m-unknown">Unknown</div>
+    <div style="font-size:.75rem;color:var(--muted);margin-top:.2rem">Clay, Airtable, other CRM tools in consideration?</div>
+  </div>
+</div>
+
+<div class="section-title">Suggested Agenda</div>
+<div class="card">
+  <table class="agenda-table">
+    <thead><tr><th>Time</th><th>Topic</th><th>Goal</th></tr></thead>
+    <tbody>
+      <tr><td>0–5 min</td><td>Rapport + urgency framing</td><td>Set tone: "Alex, with your last day Friday..."</td></tr>
+      <tr><td>5–15 min</td><td>Engagement model decision</td><td>Push for 45hr paid scope separate from FDE retainer</td></tr>
+      <tr><td>15–25 min</td><td>HubSpot API access path</td><td>Confirm Nils/Private App token or document manual fallback</td></tr>
+      <tr><td>25–35 min</td><td>Champion succession</td><td>Get Mary's name, intro, and handoff plan</td></tr>
+      <tr><td>35–50 min</td><td>Henry's test queries</td><td>"Write 3 questions you'd ask it in week 1" — these become acceptance criteria</td></tr>
+      <tr><td>50–60 min</td><td>Next steps + close</td><td>SOW draft by April 3, Week 1 build starts April 7</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="section-title">Talking Points</div>
+<div class="tp-block">
+  <div class="tp-trigger">Opening</div>
+  "Henry — great to have you both on. Alex, with your last day Friday, I want to make sure we leave with zero ambiguity so you can hand off cleanly."
+</div>
+<div class="tp-block">
+  <div class="tp-trigger">Phase 1 Frame</div>
+  "What I want to build is the simplest thing that works: your contacts in a spreadsheet, a Slack bot for questions, HubSpot underneath. You never open a new tool."
+</div>
+<div class="tp-block">
+  <div class="tp-trigger">Paid Engagement</div>
+  "I want to scope this as a dedicated 6-week engagement separate from the FDE retainer — 45 hours, fixed price — so it gets focused build time."
+</div>
+<div class="tp-block">
+  <div class="tp-trigger">If Henry expands to Kingdom CRM</div>
+  "I love the Kingdom CRM vision — it's a real product. But let's ship Phase 1 first. Phase 2 is real, but Phase 1 has to work."
+</div>
+
+<div class="section-title">Red Flags</div>
+<ul class="rf-list">
+  <li>Alex departs April 3 — without Mary's name today, engagement stalls 2+ weeks</li>
+  <li>Henry expands scope to Kingdom CRM (SWGP, Tebow, NCF, Praxis) — redirect hard to Phase 1</li>
+  <li>Kyle/internal politics — frame as "extending existing VSP infrastructure"</li>
+  <li>If engagement stays in FDE retainer, it competes with all FDE priorities for attention and budget</li>
+</ul>
+
+<div class="section-title">Success Criteria</div>
+<ul class="sc-list">
+  <li>Verbal yes on paid 45-hour engagement model</li>
+  <li>Mary's name and warm intro before Alex's last day</li>
+  <li>HubSpot API access path confirmed (Nils / Private App token)</li>
+  <li>Henry writes 3 test queries — these become acceptance criteria</li>
+  <li>SOW draft timeline agreed — target April 3, build starts April 7</li>
+</ul>
+
+</div><!-- /panel-6 -->
+
+<!-- ==================== TAB 7: SIXMAP STANDUP ==================== -->
+<div class="panel" id="panel-7">
+
+<div class="meeting-header">
+  <div class="meeting-time-block">
+    <div class="time">10:30</div>
+    <div class="dur">AM ET</div>
+    <div class="dur">30 min</div>
+  </div>
+  <div class="meeting-info">
+    <h2>SixMap &lt;&gt; VictorySquare Stand-up</h2>
+    <div class="meta-row">
+      <span class="tag tag-dim">Recurring</span>
+      <span class="tag tag-blue">External / Client</span>
+      <span>30 min</span>
+    </div>
+  </div>
+</div>
+
+<div class="context-block">
+  <strong>Context:</strong> External-facing SixMap standup with the joint VSP/SixMap team. Recurring cadence. Cover sprint progress, blockers, and upcoming milestone alignment.
+</div>
+
+<div class="alert alert-blue">
+  <strong>Standard Recurring Standup</strong>
+  Cover sprint items and blockers. Note: this follows directly after the Alex/Henry discovery call — give yourself a moment to transition mentally before rejoining.
+</div>
+
+</div><!-- /panel-7 -->
+
+<!-- ==================== TAB 8: ED PAPERWORK ==================== -->
+<div class="panel" id="panel-8">
+
+<div class="meeting-header">
+  <div class="meeting-time-block">
+    <div class="time">11:00</div>
+    <div class="dur">AM ET</div>
+    <div class="dur">45 min</div>
+  </div>
+  <div class="meeting-info">
+    <h2>Paul / Tyler / Ed — Paperwork Discussion</h2>
+    <div class="meta-row">
+      <span class="tag tag-blue">New</span>
+      <span class="tag tag-amber">External / Prospect</span>
+      <span>3 attendees</span>
+      <span>·</span>
+      <span style="color:var(--dim)">YourHealthPro equity &amp; Phase Zero</span>
+    </div>
+  </div>
+</div>
+
+<div class="alert alert-amber">
+  <strong>Ed Tentatively Accepted This Morning</strong>
+  Phase Zero scope and equity terms are the focus. Vlad has Adi Nistor on bench and ready to start the week of April 6 — this meeting sets the green light. Come prepared to discuss equity %, term sheet timeline, and Phase Zero scope definition.
+</div>
+
+<div class="section-title">Attendees</div>
+<div class="card">
+  <table>
+    <thead><tr><th>Name</th><th>Title</th><th>Role</th><th>Contact</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>Ed Cutler</strong></td>
+        <td>CEO / Founder, YourHealthPro</td>
+        <td><span class="tag tag-red">Decision-Maker</span></td>
+        <td>ecutler@alphaphlebotomy.com</td>
+      </tr>
+      <tr>
+        <td><strong>Paul Doman</strong></td>
+        <td>VSP CEO</td>
+        <td><span class="tag tag-green">Relationship Lead</span></td>
+        <td>ShiftMed background — credibility anchor</td>
+      </tr>
+      <tr>
+        <td><strong>Tyler Goble</strong></td>
+        <td>VSP</td>
+        <td><span class="tag tag-green">Account Lead</span></td>
+        <td>Driving equity structure conversation</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="context-block">
+  <strong>Context:</strong> YourHealthPro is a DoorDash-style marketplace connecting patients with 6,000+ mobile healthcare providers. The blocker: platform non-functional, no active devs, hosted on a friend's Azure account. VSP edge: Paul and Vlad built ShiftMed — identical marketplace model. <strong>Phase Zero (11–17 days)</strong> delivers infrastructure audit, rebuild recommendation, and milestone-based equity engagement structure. Adi Nistor is on bench, ready to start April 6.
+</div>
+
+<div class="section-title">Key Questions to Resolve</div>
+<ul class="q-list">
+  <li>"What equity percentage are you thinking for Phase Zero through production launch?"</li>
+  <li>"Is the Phase Zero scope (11–17 days) within your approval authority, or does Patrick need to sign off?"</li>
+  <li>"What's the liquidity event timeline — acquisition target, cash distributions, or IPO path?"</li>
+  <li>"Can we confirm Adi starts week of April 6 if we agree terms today?"</li>
+  <li>"What does the term sheet process look like — who reviews it on your end?"</li>
+</ul>
+
+<div class="section-title">Success Criteria</div>
+<ul class="sc-list">
+  <li>Equity % range discussed — even if not final</li>
+  <li>Phase Zero scope confirmed (11–17 days)</li>
+  <li>Adi Nistor start date locked — week of April 6</li>
+  <li>Next step agreed: term sheet or letter of intent by end of week</li>
+</ul>
+
+</div><!-- /panel-8 -->
+
+<!-- ==================== TAB 9: STEPHANIE ★ FULL PREP ==================== -->
+<div class="panel" id="panel-9">
+
+<div class="meeting-header" style="border-color:rgba(245,158,11,.3); background:linear-gradient(135deg,rgba(245,158,11,.06),rgba(239,68,68,.04));">
+  <div class="meeting-time-block">
+    <div class="time" style="color:var(--amber)">2:30</div>
+    <div class="dur">PM ET</div>
+    <div class="dur">30 min</div>
+  </div>
+  <div class="meeting-info">
+    <h2>Stephanie &amp; Victory Square <span style="color:var(--amber)">&#9733; FULL PREP</span></h2>
+    <div class="meta-row">
+      <span class="tag tag-blue">New</span>
+      <span class="tag tag-amber">Prospect — Discovery</span>
+      <span>2 attendees</span>
+      <span>30 min</span>
+    </div>
+  </div>
+</div>
+
+<div class="alert alert-amber">
+  <strong>First Discovery Call — All MEDDPIC Elements Unknown</strong>
+  Goal: identify at least 1 concrete pain point with urgency, determine relationship type (prospect / partner / referral / community), and lock a next step with a specific date. This is a warm relationship — don't over-pitch. Listen first.
+</div>
+
+<div class="section-title">Attendees</div>
+<div class="card">
+  <table>
+    <thead><tr><th>Name</th><th>Title</th><th>Role</th><th>Contact</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>Stephanie Roulic</strong></td>
+        <td>Founder &amp; CEO, Startup Boston</td>
+        <td><span class="tag tag-amber">Primary Contact</span></td>
+        <td>stephanie@startupbos.org</td>
+      </tr>
+      <tr>
+        <td><strong>Tyler Goble</strong></td>
+        <td>VSP</td>
+        <td><span class="tag tag-green">Account Lead</span></td>
+        <td>Discovery / relationship mapping</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="section-title">Background</div>
+<div class="context-block">
+  <strong>Startup Boston</strong> is a Boston-based nonprofit / community org empowering founders and building connections across the New England startup ecosystem. <strong>Startup Boston Week</strong> drew 2,500+ attendees — a real community infrastructure play. Stephanie is an award-winning entrepreneur focused on founder education and ecosystem building.<br><br>
+  <strong>VSP history:</strong> Contact record exists since October 2025, but no activities logged — this is the first real conversation. Relationship type is undetermined: prospect (does she need what we sell?), partner (event collaboration?), referral node (does she know our buyers?), or community (peer relationship). Discovery should resolve this.
+</div>
+
+<div class="section-title">MEDDPIC Status</div>
+<div class="meddpic-grid">
+  <div class="meddpic-item">
+    <div class="m-label">Metrics</div>
+    <div class="m-status m-unknown">Unknown</div>
+    <div style="font-size:.75rem;color:var(--muted);margin-top:.2rem">What does success look like for Startup Boston?</div>
+  </div>
+  <div class="meddpic-item">
+    <div class="m-label">Economic Buyer</div>
+    <div class="m-status m-unknown">Unknown</div>
+    <div style="font-size:.75rem;color:var(--muted);margin-top:.2rem">Is Stephanie the decision-maker? Board involvement?</div>
+  </div>
+  <div class="meddpic-item">
+    <div class="m-label">Decision Criteria</div>
+    <div class="m-status m-unknown">Unknown</div>
+    <div style="font-size:.75rem;color:var(--muted);margin-top:.2rem">How does she evaluate partners or service providers?</div>
+  </div>
+  <div class="meddpic-item">
+    <div class="m-label">Decision Process</div>
+    <div class="m-status m-unknown">Unknown</div>
+    <div style="font-size:.75rem;color:var(--muted);margin-top:.2rem">Org structure unclear — solo founder or team?</div>
+  </div>
+  <div class="meddpic-item">
+    <div class="m-label">Paper Process</div>
+    <div class="m-status m-unknown">Unknown</div>
+    <div style="font-size:.75rem;color:var(--muted);margin-top:.2rem">Nonprofit procurement and contracting process unknown</div>
+  </div>
+  <div class="meddpic-item">
+    <div class="m-label">Identify Pain</div>
+    <div class="m-status m-unknown">Unknown</div>
+    <div style="font-size:.75rem;color:var(--muted);margin-top:.2rem">Core goal of this call — what's hard for her right now?</div>
+  </div>
+  <div class="meddpic-item">
+    <div class="m-label">Champion</div>
+    <div class="m-status m-unknown">Unknown</div>
+    <div style="font-size:.75rem;color:var(--muted);margin-top:.2rem">Is Stephanie the champion or a referral to someone else?</div>
+  </div>
+  <div class="meddpic-item">
+    <div class="m-label">Competition</div>
+    <div class="m-status m-unknown">Unknown</div>
+    <div style="font-size:.75rem;color:var(--muted);margin-top:.2rem">Who else is she talking to or working with?</div>
+  </div>
+</div>
+
+<div class="section-title">Suggested Agenda</div>
+<div class="card">
+  <table class="agenda-table">
+    <thead><tr><th>Time</th><th>Topic</th><th>Goal</th></tr></thead>
+    <tbody>
+      <tr><td>0–5 min</td><td>Opening &amp; rapport</td><td>Reference Startup Boston Week, community-building track record</td></tr>
+      <tr><td>5–10 min</td><td>VSP overview</td><td>90-second pitch: community-first, not just capital</td></tr>
+      <tr><td>10–20 min</td><td>Discovery</td><td>What's hard? What does success look like? Three Whys probing.</td></tr>
+      <tr><td>20–25 min</td><td>Explore fit</td><td>Prospect? Partner? Referral node? Event collaborator?</td></tr>
+      <tr><td>25–30 min</td><td>Next steps &amp; close</td><td>Lock specific next step with date</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="section-title">Talking Points</div>
+<div class="tp-block">
+  <div class="tp-trigger">What does VSP do?</div>
+  "We help founders at the intersection of technology, community, and values. We go deep on a few relationships — we don't spread thin."
+</div>
+<div class="tp-block">
+  <div class="tp-trigger">Not sure how VSP fits</div>
+  "That's what I want to figure out together. 2,500 people at Startup Boston Week is real infrastructure — there's something worth exploring here."
+</div>
+<div class="tp-block">
+  <div class="tp-trigger">If she's excited</div>
+  "Let's set up a follow-up with a specific agenda — what's your schedule in the next two weeks?"
+</div>
+
+<div class="section-title">Red Flags</div>
+<ul class="rf-list">
+  <li>Vague enthusiasm without substance — probe harder for urgency</li>
+  <li>"We're a nonprofit" deflection — reframe around value exchange, not revenue</li>
+  <li>Competing relationships already locked in — assess differentiation</li>
+  <li>No decision-making clarity — understand org structure before locking a next step</li>
+</ul>
+
+<div class="section-title">Success Criteria</div>
+<ul class="sc-list">
+  <li>At least 1 named pain point or goal with urgency</li>
+  <li>Relationship type clarified (prospect / partner / referral / community)</li>
+  <li>Personal win surfaced — what does Stephanie gain from this relationship?</li>
+  <li>Next step locked with date and format</li>
+</ul>
+
+</div><!-- /panel-9 -->
+
+</div><!-- /content -->
+
+<script>
+function showTab(idx) {
+  document.querySelectorAll('.tab').forEach(function(t, i) {
+    t.classList.toggle('active', i === idx);
+  });
+  document.querySelectorAll('.panel').forEach(function(p, i) {
+    p.classList.toggle('active', i === idx);
+  });
+  // Apply color class to active tab based on content
+  var activeTab = document.querySelectorAll('.tab')[idx];
+  // Re-apply color if active tab has a dot color
+  ['tab-green','tab-amber','tab-red','tab-purple','tab-blue'].forEach(function(c) {
+    if(activeTab.classList.contains(c)) {
+      // already has color class — border handled by CSS
+    }
+  });
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+</script>
+
 </body>
 </html>
