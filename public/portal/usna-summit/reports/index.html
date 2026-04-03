@@ -1,0 +1,1550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>USNA Entrepreneur Summit 2026 — Command Hub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --navy: #003B6F;
+      --navy-dark: #002850;
+      --navy-mid: #004f96;
+      --navy-light: #1a5f9e;
+      --gold: #B8860B;
+      --gold-light: #D4A017;
+      --gold-bright: #f0c040;
+      --gold-pale: #f5e6b0;
+      --white: #ffffff;
+      --off-white: #f8f9fc;
+      --gray-50: #f9fafb;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-300: #d1d5db;
+      --gray-400: #9ca3af;
+      --gray-500: #6b7280;
+      --gray-600: #4b5563;
+      --gray-700: #374151;
+      --gray-900: #111827;
+      --green: #059669;
+      --green-light: #d1fae5;
+      --green-mid: #10b981;
+      --red: #dc2626;
+      --red-light: #fee2e2;
+      --amber: #d97706;
+      --amber-light: #fef3c7;
+      --blue: #2563eb;
+      --blue-light: #dbeafe;
+      --purple: #7c3aed;
+      --purple-light: #ede9fe;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+      --shadow: 0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.04);
+      --shadow-md: 0 10px 25px rgba(0,0,0,0.1), 0 4px 10px rgba(0,0,0,0.05);
+      --shadow-lg: 0 20px 40px rgba(0,0,0,0.12), 0 8px 16px rgba(0,0,0,0.06);
+      --radius: 12px;
+      --radius-sm: 8px;
+      --radius-lg: 16px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--off-white);
+      color: var(--gray-700);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ─── HERO ─────────────────────────────────────────── */
+    .hero {
+      background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy) 50%, var(--navy-mid) 100%);
+      color: var(--white);
+      padding: 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .hero-inner {
+      position: relative;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 56px 32px 48px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 20px;
+    }
+    .badge-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 999px;
+      padding: 4px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .badge-gold {
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      border-color: var(--gold);
+      color: var(--navy-dark);
+    }
+    .anchor-icon {
+      font-size: 48px;
+      line-height: 1;
+      filter: drop-shadow(0 2px 8px rgba(0,0,0,0.3));
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(28px, 5vw, 52px);
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+    }
+    .hero h1 span { color: var(--gold-bright); }
+    .hero-sub {
+      font-size: clamp(14px, 2vw, 18px);
+      opacity: 0.85;
+      font-weight: 400;
+    }
+    .countdown-wrap {
+      margin-top: 8px;
+    }
+    .countdown-label {
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      opacity: 0.6;
+      margin-bottom: 8px;
+    }
+    .countdown {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .countdown-unit {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: var(--radius-sm);
+      padding: 10px 18px;
+      min-width: 68px;
+      text-align: center;
+      backdrop-filter: blur(4px);
+    }
+    .countdown-num {
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1;
+      color: var(--gold-bright);
+    }
+    .countdown-lbl {
+      font-size: 10px;
+      opacity: 0.6;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-top: 4px;
+    }
+
+    /* ─── NAV ────────────────────────────────────────────── */
+    .nav-wrap {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--navy-dark);
+      border-bottom: 2px solid var(--gold);
+      box-shadow: var(--shadow-md);
+    }
+    .nav {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .nav::-webkit-scrollbar { display: none; }
+    .nav-btn {
+      background: none;
+      border: none;
+      color: rgba(255,255,255,0.65);
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 14px 18px;
+      cursor: pointer;
+      white-space: nowrap;
+      border-bottom: 3px solid transparent;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .nav-btn:hover { color: var(--white); background: rgba(255,255,255,0.05); }
+    .nav-btn.active {
+      color: var(--gold-bright);
+      border-bottom-color: var(--gold-bright);
+      background: rgba(240,192,64,0.07);
+    }
+
+    /* ─── MAIN LAYOUT ───────────────────────────────────── */
+    .main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 32px 24px 64px;
+    }
+    .section { display: none; animation: fadeIn 0.3s ease; }
+    .section.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    .section-header {
+      margin-bottom: 28px;
+    }
+    .section-title {
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--navy);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-sub {
+      font-size: 14px;
+      color: var(--gray-500);
+      margin-top: 4px;
+    }
+
+    /* ─── CARDS ─────────────────────────────────────────── */
+    .card {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--gray-200);
+      padding: 24px;
+      transition: box-shadow 0.2s;
+    }
+    .card:hover { box-shadow: var(--shadow-md); }
+
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
+
+    /* ─── TIMELINE ───────────────────────────────────────── */
+    .timeline-legend {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--gray-600);
+    }
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+    .ld-complete { background: var(--green); }
+    .ld-upcoming { background: var(--blue); }
+    .ld-deadline { background: var(--red); }
+    .ld-event { background: var(--gold); }
+    .ld-vacation { background: var(--gray-300); }
+    .ld-today { background: var(--purple); }
+
+    .timeline-list { display: flex; flex-direction: column; gap: 0; }
+    .tl-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0;
+      position: relative;
+    }
+    .tl-date-col {
+      width: 100px;
+      flex-shrink: 0;
+      padding: 12px 16px 12px 0;
+      text-align: right;
+    }
+    .tl-date {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--gray-500);
+      white-space: nowrap;
+    }
+    .tl-spine {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 32px;
+      flex-shrink: 0;
+    }
+    .tl-dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      margin-top: 14px;
+      flex-shrink: 0;
+      z-index: 1;
+      border: 2px solid var(--white);
+      box-shadow: 0 0 0 2px currentColor;
+    }
+    .tl-line {
+      width: 2px;
+      flex: 1;
+      min-height: 16px;
+      background: var(--gray-200);
+    }
+    .tl-content {
+      flex: 1;
+      padding: 8px 0 8px 16px;
+    }
+    .tl-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: var(--radius);
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 4px;
+      line-height: 1.4;
+    }
+    .tl-note {
+      font-size: 12px;
+      color: var(--gray-400);
+      padding-left: 4px;
+    }
+    .tl-today-marker {
+      position: relative;
+    }
+    .tl-today-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--purple);
+      color: var(--white);
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 2px 8px;
+      border-radius: 999px;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+
+    /* Status colors */
+    .s-complete { background: var(--green-light); color: var(--green); }
+    .s-upcoming  { background: var(--blue-light); color: var(--blue); }
+    .s-deadline  { background: var(--red-light); color: var(--red); }
+    .s-event     { background: var(--gold-pale); color: var(--gold); }
+    .s-vacation  { background: var(--gray-100); color: var(--gray-400); }
+
+    .dot-complete { color: var(--green); }
+    .dot-upcoming  { color: var(--blue); }
+    .dot-deadline  { color: var(--red); }
+    .dot-event     { color: var(--gold); }
+    .dot-vacation  { color: var(--gray-300); }
+    .dot-today     { color: var(--purple); }
+
+    /* ─── DELIVERABLES ───────────────────────────────────── */
+    .deliverable-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 16px;
+    }
+    .del-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      border: 1px solid var(--gray-200);
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .del-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+    }
+    .del-card.status-not-started::before { background: var(--gray-300); }
+    .del-card.status-pending::before { background: var(--amber); }
+    .del-card.status-decision::before { background: var(--purple); }
+    .del-card.status-complete::before { background: var(--green); }
+    .del-card:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
+    .del-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .del-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--gray-900);
+      line-height: 1.4;
+    }
+    .del-status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 999px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .ds-not-started { background: var(--gray-100); color: var(--gray-500); }
+    .ds-pending { background: var(--amber-light); color: var(--amber); }
+    .ds-decision { background: var(--purple-light); color: var(--purple); }
+    .ds-complete { background: var(--green-light); color: var(--green); }
+
+    .del-meta { display: flex; flex-direction: column; gap: 8px; }
+    .del-meta-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--gray-500);
+    }
+    .del-meta-label { font-weight: 600; color: var(--gray-600); min-width: 52px; }
+    .del-avatar {
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--navy), var(--navy-mid));
+      color: var(--white);
+      font-size: 9px;
+      font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .del-deadline-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 999px;
+    }
+    .deadline-urgent { background: var(--red-light); color: var(--red); }
+    .deadline-soon { background: var(--amber-light); color: var(--amber); }
+    .deadline-ok { background: var(--blue-light); color: var(--blue); }
+
+    .del-deps {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid var(--gray-100);
+    }
+    .del-deps-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--gray-400);
+      margin-bottom: 4px;
+    }
+    .dep-tag {
+      display: inline-block;
+      background: var(--gray-100);
+      color: var(--gray-600);
+      font-size: 11px;
+      padding: 2px 7px;
+      border-radius: 4px;
+      margin: 2px 2px 2px 0;
+    }
+
+    /* ─── TEAM ───────────────────────────────────────────── */
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 16px;
+    }
+    .team-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      border: 1px solid var(--gray-200);
+      padding: 24px;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.2s;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .team-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+    .team-avatar-wrap { display: flex; align-items: center; gap: 14px; }
+    .team-avatar {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--white);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .av-navy { background: linear-gradient(135deg, var(--navy), var(--navy-mid)); }
+    .av-gold { background: linear-gradient(135deg, var(--gold), var(--gold-light)); color: var(--navy-dark); }
+    .av-green { background: linear-gradient(135deg, #059669, #10b981); }
+    .av-purple { background: linear-gradient(135deg, #7c3aed, #a78bfa); }
+    .av-red { background: linear-gradient(135deg, #dc2626, #f87171); }
+    .av-blue { background: linear-gradient(135deg, #1d4ed8, #3b82f6); }
+    .team-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--gray-900);
+    }
+    .team-role {
+      font-size: 12px;
+      color: var(--gray-500);
+      line-height: 1.4;
+    }
+    .team-org-badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 2px 8px;
+      border-radius: 999px;
+      margin-top: 4px;
+    }
+    .org-vsp { background: var(--navy); color: var(--gold-bright); }
+    .org-usna { background: var(--gold-pale); color: var(--navy-dark); }
+    .org-usnaent { background: var(--navy-mid); color: var(--white); }
+    .org-flugal { background: var(--green-light); color: var(--green); }
+    .team-email {
+      font-size: 12px;
+      color: var(--blue);
+      text-decoration: none;
+      word-break: break-all;
+    }
+    .team-email:hover { text-decoration: underline; }
+    .team-focus {
+      font-size: 12px;
+      color: var(--gray-500);
+      border-top: 1px solid var(--gray-100);
+      padding-top: 10px;
+      line-height: 1.5;
+    }
+    .focus-label { font-weight: 600; color: var(--gray-600); }
+
+    /* ─── SPONSORS ───────────────────────────────────────── */
+    .sponsor-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+    .sponsor-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      border: 1px solid var(--gray-200);
+      padding: 22px;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.2s;
+    }
+    .sponsor-card:hover { box-shadow: var(--shadow-md); }
+    .sponsor-card.placeholder {
+      border-style: dashed;
+      background: var(--gray-50);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      min-height: 160px;
+      color: var(--gray-400);
+      gap: 8px;
+      cursor: pointer;
+    }
+    .sponsor-card.placeholder:hover { background: var(--blue-light); color: var(--blue); border-color: var(--blue); }
+    .sponsor-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; }
+    .sponsor-name { font-size: 16px; font-weight: 700; color: var(--navy); }
+    .sponsor-status-badge {
+      font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 999px;
+    }
+    .ss-confirmed { background: var(--green-light); color: var(--green); }
+    .ss-pending { background: var(--amber-light); color: var(--amber); }
+    .sponsor-meta { display: flex; flex-direction: column; gap: 6px; }
+    .sponsor-row { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--gray-600); }
+    .sponsor-row-label { font-weight: 600; min-width: 64px; color: var(--gray-700); }
+    .asset-check {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 4px;
+    }
+    .ac-yes { background: var(--green-light); color: var(--green); }
+    .ac-no { background: var(--red-light); color: var(--red); }
+    .ac-pending { background: var(--amber-light); color: var(--amber); }
+
+    /* ─── DECISIONS ───────────────────────────────────────── */
+    .decisions-list { display: flex; flex-direction: column; gap: 14px; }
+    .decision-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      border: 1px solid var(--amber);
+      border-left: 4px solid var(--amber);
+      padding: 20px 22px;
+      box-shadow: var(--shadow-sm);
+      display: flex; gap: 16px; align-items: flex-start;
+    }
+    .decision-num {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: var(--amber-light);
+      color: var(--amber);
+      font-size: 14px;
+      font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .decision-body { flex: 1; }
+    .decision-title { font-size: 15px; font-weight: 600; color: var(--gray-900); margin-bottom: 4px; }
+    .decision-detail { font-size: 13px; color: var(--gray-500); line-height: 1.6; }
+    .decision-owner {
+      font-size: 11px; font-weight: 600; color: var(--amber);
+      text-transform: uppercase; letter-spacing: 0.06em;
+      margin-top: 6px;
+      display: flex; align-items: center; gap: 4px;
+    }
+
+    /* ─── VENDORS ────────────────────────────────────────── */
+    .vendor-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px; }
+    .vendor-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      border: 1px solid var(--gray-200);
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+    .vendor-icon {
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+    .vendor-name { font-size: 15px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+    .vendor-detail { font-size: 13px; color: var(--gray-500); line-height: 1.6; }
+    .vendor-alert {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 11px; font-weight: 600;
+      background: var(--red-light); color: var(--red);
+      padding: 3px 8px; border-radius: 4px; margin-top: 8px;
+    }
+
+    /* ─── LESSONS ─────────────────────────────────────────── */
+    .lessons-list { display: flex; flex-direction: column; gap: 14px; }
+    .lesson-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      border: 1px solid var(--gray-200);
+      border-left: 4px solid var(--navy);
+      padding: 20px 22px;
+      box-shadow: var(--shadow-sm);
+      display: flex; gap: 16px; align-items: flex-start;
+    }
+    .lesson-icon { font-size: 24px; flex-shrink: 0; }
+    .lesson-body { flex: 1; }
+    .lesson-title { font-size: 14px; font-weight: 600; color: var(--gray-900); margin-bottom: 4px; }
+    .lesson-text { font-size: 13px; color: var(--gray-500); line-height: 1.6; }
+    .lesson-fix {
+      margin-top: 6px;
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12px; font-weight: 600;
+      color: var(--green);
+    }
+
+    /* ─── DRIVE ───────────────────────────────────────────── */
+    .drive-tree {
+      background: var(--white);
+      border-radius: var(--radius);
+      border: 1px solid var(--gray-200);
+      padding: 28px;
+      box-shadow: var(--shadow-sm);
+      font-family: 'Inter', monospace;
+    }
+    .drive-root { font-size: 15px; font-weight: 700; color: var(--navy); margin-bottom: 12px; }
+    .drive-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--gray-700);
+      padding: 3px 0;
+      line-height: 1.5;
+    }
+    .drive-item.folder { font-weight: 600; color: var(--navy); margin-top: 6px; }
+    .drive-item.file { color: var(--gray-500); }
+    .drive-indent-1 { padding-left: 20px; }
+    .drive-indent-2 { padding-left: 40px; }
+    .drive-indent-3 { padding-left: 60px; }
+    .drive-badge-note {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      background: var(--red-light); color: var(--red);
+      padding: 1px 6px; border-radius: 4px; margin-left: 6px;
+    }
+    .drive-badge-active {
+      background: var(--green-light); color: var(--green);
+    }
+
+    /* ─── FOOTER ─────────────────────────────────────────── */
+    .footer {
+      background: var(--navy-dark);
+      color: rgba(255,255,255,0.5);
+      text-align: center;
+      padding: 20px 24px;
+      font-size: 12px;
+    }
+    .footer a { color: var(--gold-bright); text-decoration: none; }
+    .footer strong { color: rgba(255,255,255,0.8); }
+
+    /* ─── UTILS ───────────────────────────────────────────── */
+    .flex { display: flex; }
+    .items-center { align-items: center; }
+    .gap-2 { gap: 8px; }
+    .gap-3 { gap: 12px; }
+    .mt-1 { margin-top: 4px; }
+    .mt-2 { margin-top: 8px; }
+    .mt-4 { margin-top: 16px; }
+    .text-sm { font-size: 13px; }
+    .text-xs { font-size: 11px; }
+    .font-bold { font-weight: 700; }
+    .text-muted { color: var(--gray-400); }
+    .text-navy { color: var(--navy); }
+
+    /* ─── RESPONSIVE ─────────────────────────────────────── */
+    @media (max-width: 640px) {
+      .hero-inner { padding: 36px 20px 36px; }
+      .main { padding: 20px 16px 48px; }
+      .nav-btn { font-size: 12px; padding: 12px 12px; }
+      .tl-date-col { width: 72px; font-size: 11px; }
+      .countdown-num { font-size: 22px; }
+      .countdown-unit { padding: 8px 12px; min-width: 54px; }
+    }
+
+    /* Scroll margin for anchors */
+    .section { scroll-margin-top: 56px; }
+
+    /* Pulse animation for "TODAY" items */
+    @keyframes pulse-ring {
+      0% { box-shadow: 0 0 0 0 rgba(124,58,237,0.4); }
+      70% { box-shadow: 0 0 0 8px rgba(124,58,237,0); }
+      100% { box-shadow: 0 0 0 0 rgba(124,58,237,0); }
+    }
+    .dot-today-pulse { animation: pulse-ring 2s ease-out infinite; }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="badge-row">
+      <span class="badge badge-gold">⚓ 3rd Annual Summit</span>
+      <span class="badge">Annapolis, MD</span>
+      <span class="badge">Victory Square Partners</span>
+    </div>
+    <div class="anchor-icon">⚓</div>
+    <h1>USNA Entrepreneur<br /><span>Summit 2026</span></h1>
+    <div class="hero-sub">June 17–18, 2026 &nbsp;·&nbsp; Flugal Center, Annapolis, MD</div>
+    <div class="countdown-wrap">
+      <div class="countdown-label">Time until Summit Day 1</div>
+      <div class="countdown" id="countdown">
+        <div class="countdown-unit"><div class="countdown-num" id="cd-days">--</div><div class="countdown-lbl">Days</div></div>
+        <div class="countdown-unit"><div class="countdown-num" id="cd-hours">--</div><div class="countdown-lbl">Hours</div></div>
+        <div class="countdown-unit"><div class="countdown-num" id="cd-mins">--</div><div class="countdown-lbl">Mins</div></div>
+        <div class="countdown-unit"><div class="countdown-num" id="cd-secs">--</div><div class="countdown-lbl">Secs</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ NAV ═══════════════ -->
+<div class="nav-wrap">
+  <div class="nav" id="main-nav">
+    <button class="nav-btn active" data-section="timeline">📅 Timeline</button>
+    <button class="nav-btn" data-section="deliverables">✅ Deliverables</button>
+    <button class="nav-btn" data-section="team">👥 Team</button>
+    <button class="nav-btn" data-section="sponsors">🏦 Sponsors</button>
+    <button class="nav-btn" data-section="decisions">🚨 Decisions Needed</button>
+    <button class="nav-btn" data-section="vendors">🔧 Vendors</button>
+    <button class="nav-btn" data-section="lessons">📚 2025 Lessons</button>
+    <button class="nav-btn" data-section="drive">📁 Google Drive</button>
+  </div>
+</div>
+
+<!-- ═══════════════ MAIN ═══════════════ -->
+<div class="main">
+
+  <!-- ─── TIMELINE ─── -->
+  <div class="section active" id="timeline">
+    <div class="section-header">
+      <div class="section-title">📅 Summit Timeline</div>
+      <div class="section-sub">Color-coded milestones from now through June 18, 2026. Today marker shows current position.</div>
+    </div>
+
+    <div class="timeline-legend">
+      <div class="legend-item"><div class="legend-dot ld-complete"></div> Complete</div>
+      <div class="legend-item"><div class="legend-dot ld-upcoming"></div> Upcoming</div>
+      <div class="legend-item"><div class="legend-dot ld-deadline"></div> Hard Deadline</div>
+      <div class="legend-item"><div class="legend-dot ld-event"></div> Event Day</div>
+      <div class="legend-item"><div class="legend-dot ld-vacation"></div> Tyler Out</div>
+      <div class="legend-item"><div class="legend-dot ld-today"></div> Today</div>
+    </div>
+
+    <div class="timeline-list" id="timeline-list">
+      <!-- Generated by JS -->
+    </div>
+  </div>
+
+  <!-- ─── DELIVERABLES ─── -->
+  <div class="section" id="deliverables">
+    <div class="section-header">
+      <div class="section-title">✅ Deliverables Tracker</div>
+      <div class="section-sub">12 deliverables tracked with owner, status, deadline, and dependencies.</div>
+    </div>
+    <div class="deliverable-grid" id="deliverable-grid">
+      <!-- Generated by JS -->
+    </div>
+  </div>
+
+  <!-- ─── TEAM ─── -->
+  <div class="section" id="team">
+    <div class="section-header">
+      <div class="section-title">👥 Team Directory</div>
+      <div class="section-sub">8 contributors across Victory Square Partners, USNA Alumni Association, USNA Entrepreneurs, and Flugal Center.</div>
+    </div>
+    <div class="team-grid" id="team-grid">
+      <!-- Generated by JS -->
+    </div>
+  </div>
+
+  <!-- ─── SPONSORS ─── -->
+  <div class="section" id="sponsors">
+    <div class="section-header">
+      <div class="section-title">🏦 Sponsor Tracker</div>
+      <div class="section-sub">Track commitments, asset receipt, and logo quality for each sponsor.</div>
+    </div>
+    <div class="sponsor-grid" id="sponsor-grid">
+      <!-- Generated by JS -->
+    </div>
+  </div>
+
+  <!-- ─── DECISIONS ─── -->
+  <div class="section" id="decisions">
+    <div class="section-header">
+      <div class="section-title">🚨 Decisions Needed</div>
+      <div class="section-sub">5 open items requiring Matt's decision before work can proceed.</div>
+    </div>
+    <div class="decisions-list" id="decisions-list">
+      <!-- Generated by JS -->
+    </div>
+  </div>
+
+  <!-- ─── VENDORS ─── -->
+  <div class="section" id="vendors">
+    <div class="section-header">
+      <div class="section-title">🔧 Key Contacts & Vendors</div>
+      <div class="section-sub">Critical vendor relationships and lead times.</div>
+    </div>
+    <div class="vendor-grid" id="vendor-grid">
+      <!-- Generated by JS -->
+    </div>
+  </div>
+
+  <!-- ─── LESSONS ─── -->
+  <div class="section" id="lessons">
+    <div class="section-header">
+      <div class="section-title">📚 Lessons Learned — 2025</div>
+      <div class="section-sub">4 lessons from last year with 2026 fixes already planned.</div>
+    </div>
+    <div class="lessons-list" id="lessons-list">
+      <!-- Generated by JS -->
+    </div>
+  </div>
+
+  <!-- ─── GOOGLE DRIVE ─── -->
+  <div class="section" id="drive">
+    <div class="section-header">
+      <div class="section-title">📁 Google Drive Structure</div>
+      <div class="section-sub">Canonical folder structure for the 2026 summit — to be set up by Tyler on Apr 4.</div>
+    </div>
+    <div class="drive-tree" id="drive-tree">
+      <!-- Generated by JS -->
+    </div>
+  </div>
+
+</div><!-- /.main -->
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<div class="footer">
+  Built by <strong>Tyler Goble</strong> &nbsp;|&nbsp; <a href="https://vspartners.us" target="_blank">Victory Square Partners</a> &nbsp;|&nbsp; Last updated: April 3, 2026
+</div>
+
+<script>
+// ═══════════════════════════════════════════════
+// COUNTDOWN TIMER
+// ═══════════════════════════════════════════════
+function updateCountdown() {
+  const target = new Date('2026-06-17T08:00:00-04:00'); // 8am ET
+  const now = new Date();
+  const diff = target - now;
+  if (diff <= 0) {
+    document.getElementById('cd-days').textContent = '0';
+    document.getElementById('cd-hours').textContent = '0';
+    document.getElementById('cd-mins').textContent = '0';
+    document.getElementById('cd-secs').textContent = '0';
+    return;
+  }
+  const days = Math.floor(diff / 86400000);
+  const hours = Math.floor((diff % 86400000) / 3600000);
+  const mins = Math.floor((diff % 3600000) / 60000);
+  const secs = Math.floor((diff % 60000) / 1000);
+  document.getElementById('cd-days').textContent = String(days).padStart(2,'0');
+  document.getElementById('cd-hours').textContent = String(hours).padStart(2,'0');
+  document.getElementById('cd-mins').textContent = String(mins).padStart(2,'0');
+  document.getElementById('cd-secs').textContent = String(secs).padStart(2,'0');
+}
+updateCountdown();
+setInterval(updateCountdown, 1000);
+
+// ═══════════════════════════════════════════════
+// NAV
+// ═══════════════════════════════════════════════
+document.querySelectorAll('.nav-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.section).classList.add('active');
+  });
+});
+
+// ═══════════════════════════════════════════════
+// DATE UTILS
+// ═══════════════════════════════════════════════
+const TODAY = new Date('2026-04-03');
+
+function daysBetween(dateStr) {
+  const d = new Date(dateStr);
+  const diffMs = d - TODAY;
+  return Math.round(diffMs / 86400000);
+}
+
+function formatDate(dateStr) {
+  const d = new Date(dateStr + 'T12:00:00');
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
+
+function deadlineClass(dateStr) {
+  const days = daysBetween(dateStr);
+  if (days < 30) return 'deadline-urgent';
+  if (days < 60) return 'deadline-soon';
+  return 'deadline-ok';
+}
+
+function daysLabel(dateStr) {
+  const days = daysBetween(dateStr);
+  if (days === 0) return 'Today';
+  if (days < 0) return `${Math.abs(days)}d ago`;
+  return `${days}d away`;
+}
+
+// ═══════════════════════════════════════════════
+// TIMELINE
+// ═══════════════════════════════════════════════
+const milestones = [
+  { date: '2026-04-04', label: 'Google Drive setup & 2025 asset upload', type: 'upcoming', note: 'Tyler sets up folder structure; Jackie uploads last year\'s assets', current: true },
+  { date: '2026-04-04', label: 'Tyler vacation begins (April 4–14)', type: 'vacation', note: 'Tyler out — async coordination only' },
+  { date: '2026-04-16', label: 'Virtual sync — Tyler, Jackie, Sophia', type: 'upcoming', note: 'First team check-in after Tyler\'s return' },
+  { date: '2026-05-04', label: 'In-person meeting at USNA', type: 'upcoming', note: 'Full team on-site planning session' },
+  { date: '2026-05-11', label: 'Weekly Update #1', type: 'upcoming', note: '' },
+  { date: '2026-05-18', label: 'Weekly Update #2', type: 'upcoming', note: '' },
+  { date: '2026-05-25', label: 'SOFT DEADLINE — 95% sponsors & attendee roster confirmed', type: 'deadline', note: 'All sponsor commitments and attendee data due' },
+  { date: '2026-06-01', label: 'HARD DEADLINE — Sponsors, badges, pop-up banners finalized', type: 'deadline', note: 'Ace Displays needs materials; no extensions' },
+  { date: '2026-06-10', label: 'Print program to printer; digital program prep', type: 'deadline', note: 'QR codes must be stress-tested BEFORE this date' },
+  { date: '2026-06-15', label: 'Staging day — materials to Flugal Center', type: 'upcoming', note: 'Coordinate with Bridgette for receiving' },
+  { date: '2026-06-16', label: 'Evening setup & AV ops check', type: 'upcoming', note: 'Night-before setup pending Bridgette confirmation' },
+  { date: '2026-06-17', label: '⭐ SUMMIT DAY 1', type: 'event', note: 'Flugal Center, Annapolis, MD' },
+  { date: '2026-06-18', label: '⭐ SUMMIT DAY 2', type: 'event', note: 'Flugal Center, Annapolis, MD' },
+];
+
+const typeMap = {
+  complete: { dotClass: 'dot-complete', pillClass: 's-complete', icon: '✓' },
+  upcoming: { dotClass: 'dot-upcoming', pillClass: 's-upcoming', icon: '→' },
+  deadline: { dotClass: 'dot-deadline', pillClass: 's-deadline', icon: '⚡' },
+  event:    { dotClass: 'dot-event',    pillClass: 's-event',    icon: '⭐' },
+  vacation: { dotClass: 'dot-vacation', pillClass: 's-vacation', icon: '✈' },
+};
+
+function buildTimeline() {
+  const container = document.getElementById('timeline-list');
+  let html = '';
+  milestones.forEach((m, i) => {
+    const t = typeMap[m.type] || typeMap.upcoming;
+    const isLast = i === milestones.length - 1;
+    const todayBadge = m.current ? `<span class="tl-today-badge">◉ Action Now</span>` : '';
+    html += `
+      <div class="tl-item">
+        <div class="tl-date-col"><span class="tl-date">${formatDate(m.date)}</span></div>
+        <div class="tl-spine">
+          <div class="tl-dot ${t.dotClass} ${m.current ? 'dot-today-pulse' : ''}"></div>
+          ${!isLast ? '<div class="tl-line"></div>' : ''}
+        </div>
+        <div class="tl-content">
+          <div class="tl-pill ${t.pillClass}">
+            <span>${t.icon}</span>
+            <span>${m.label}</span>
+            ${todayBadge}
+          </div>
+          ${m.note ? `<div class="tl-note">${m.note}</div>` : ''}
+        </div>
+      </div>
+    `;
+  });
+  container.innerHTML = html;
+}
+buildTimeline();
+
+// ═══════════════════════════════════════════════
+// DELIVERABLES
+// ═══════════════════════════════════════════════
+const deliverables = [
+  {
+    title: 'Printed Program',
+    owner: 'Sophia Smith', ownerInitials: 'SS',
+    status: 'not-started',
+    deadline: '2026-06-10',
+    deps: ['Speaker images', 'Sponsor logos', 'Cover image'],
+    note: 'Jackie oversight. First time Sophia is lead.',
+  },
+  {
+    title: 'Digital Program',
+    owner: 'Sophia Smith', ownerInitials: 'SS',
+    status: 'not-started',
+    deadline: '2026-06-10',
+    deps: ['Speaker images', 'Sponsor logos', 'Cover image'],
+    note: 'No attendee LinkedIn pages this year (removed from 2025 scope).',
+  },
+  {
+    title: 'Badges',
+    owner: 'Jackie Furton → Ace Displays', ownerInitials: 'JF',
+    status: 'not-started',
+    deadline: '2026-06-01',
+    deps: ['Attendee roster', 'Sponsor logos', 'Ribbon categories'],
+    note: 'Ace Displays needs 10 business days lead time.',
+  },
+  {
+    title: 'Pop-up Banner 1 (Check-in)',
+    owner: 'Jackie Furton → Ace Displays', ownerInitials: 'JF',
+    status: 'not-started',
+    deadline: '2026-06-01',
+    deps: ['Updated dates', 'Sponsor logos'],
+    note: 'Primarily a date/logo refresh from 2025 version.',
+  },
+  {
+    title: 'Pop-up Banner 2 (Pavilion)',
+    owner: 'Jackie Furton → Ace Displays', ownerInitials: 'JF',
+    status: 'not-started',
+    deadline: '2026-06-01',
+    deps: ['Waypoint confirmation', 'Updated date'],
+    note: 'Blocked on Waypoint Ventures sponsorship confirmation.',
+  },
+  {
+    title: 'Digital Signage — Vertical Welcome',
+    owner: 'Jackie / Sophia', ownerInitials: 'J/S',
+    status: 'not-started',
+    deadline: '2026-06-10',
+    deps: ['Updated branding'],
+    note: '',
+  },
+  {
+    title: 'Digital Signage — Horizontal Display',
+    owner: 'Jackie / Sophia + IT', ownerInitials: 'J/S',
+    status: 'not-started',
+    deadline: '2026-06-10',
+    deps: ['Speaker images', 'Panel titles', 'Sponsor logos'],
+    note: 'Flugal Center IT handles display setup — coordinate through Bridgette.',
+  },
+  {
+    title: 'Wells Fargo Lanyards',
+    owner: 'Matt → Bridgette', ownerInitials: 'MW',
+    status: 'pending',
+    deadline: '2026-06-15',
+    deps: ['Wells Fargo confirmation'],
+    note: 'Matt\'s sponsor contact. Pending commitment confirmation.',
+  },
+  {
+    title: 'Table Signs',
+    owner: 'TBD', ownerInitials: '?',
+    status: 'decision',
+    deadline: '2026-06-10',
+    deps: ['Matt decision'],
+    note: 'Jackie flagged these from 2025. Not on Matt\'s original list — confirm if wanted.',
+  },
+  {
+    title: 'Blank Badges (overflow)',
+    owner: 'Jackie Furton', ownerInitials: 'JF',
+    status: 'not-started',
+    deadline: '2026-06-01',
+    deps: ['Badge order placed'],
+    note: 'Order alongside primary badges.',
+  },
+  {
+    title: 'Badge Ribbons',
+    owner: 'Jackie → vendor', ownerInitials: 'JF',
+    status: 'not-started',
+    deadline: '2026-06-01',
+    deps: ['Category count decided', 'Entrepreneur ribbon decision'],
+    note: 'Categories: Speaker, Sponsor, Attendee, Entrepreneur (TBD)?',
+  },
+  {
+    title: 'QR Code (Digital Program)',
+    owner: 'Jackie / Sophia', ownerInitials: 'J/S',
+    status: 'not-started',
+    deadline: '2026-05-25',
+    deps: ['Digital program URL live'],
+    note: '⚠️ QR printed wrong in 2025 — MUST stress-test before sending to printer.',
+  },
+];
+
+const statusConfig = {
+  'not-started': { label: 'Not Started', badgeClass: 'ds-not-started', cardClass: 'status-not-started', icon: '○' },
+  'pending':     { label: 'Pending',     badgeClass: 'ds-pending',     cardClass: 'status-pending',     icon: '◐' },
+  'decision':    { label: 'Decision Needed', badgeClass: 'ds-decision', cardClass: 'status-decision',  icon: '?' },
+  'complete':    { label: 'Complete',    badgeClass: 'ds-complete',     cardClass: 'status-complete',    icon: '✓' },
+};
+
+function buildDeliverables() {
+  const container = document.getElementById('deliverable-grid');
+  let html = '';
+  deliverables.forEach(d => {
+    const sc = statusConfig[d.status];
+    const dlClass = deadlineClass(d.deadline);
+    const dlLabel = daysLabel(d.deadline);
+    const depsHtml = d.deps.map(dep => `<span class="dep-tag">${dep}</span>`).join('');
+    html += `
+      <div class="del-card ${sc.cardClass}">
+        <div class="del-header">
+          <div class="del-title">${d.title}</div>
+          <div class="del-status-badge ${sc.badgeClass}">${sc.icon} ${sc.label}</div>
+        </div>
+        <div class="del-meta">
+          <div class="del-meta-row">
+            <span class="del-meta-label">Owner</span>
+            <div class="del-avatar">${d.ownerInitials}</div>
+            <span>${d.owner}</span>
+          </div>
+          <div class="del-meta-row">
+            <span class="del-meta-label">Due</span>
+            <div class="del-deadline-chip ${dlClass}">${formatDate(d.deadline)} · ${dlLabel}</div>
+          </div>
+          ${d.note ? `<div class="del-meta-row text-xs text-muted" style="font-style:italic;">${d.note}</div>` : ''}
+        </div>
+        ${d.deps.length ? `
+        <div class="del-deps">
+          <div class="del-deps-label">Dependencies</div>
+          ${depsHtml}
+        </div>` : ''}
+      </div>
+    `;
+  });
+  container.innerHTML = html;
+}
+buildDeliverables();
+
+// ═══════════════════════════════════════════════
+// TEAM
+// ═══════════════════════════════════════════════
+const team = [
+  {
+    name: 'Matt Willmann',
+    initials: 'MW',
+    avatarClass: 'av-navy',
+    role: 'Founder & Executive Director',
+    org: 'USNA Entrepreneurs',
+    orgClass: 'org-usnaent',
+    email: 'matt@usnaentrepreneurs.com',
+    focus: 'Decision maker on all open items. Manages sponsor relationships (Wells Fargo, etc.). Point of escalation for budget, program scope, and final approvals.',
+  },
+  {
+    name: 'Tyler Goble',
+    initials: 'TG',
+    avatarClass: 'av-gold',
+    role: 'USNA \'16 · Project Coordinator',
+    org: 'Victory Square Partners',
+    orgClass: 'org-vsp',
+    email: 'tyler.goble@vspartners.us',
+    focus: 'Google Drive owner and setup (Apr 4). Sponsor outreach (Waypoint/Billy Haywood). Team coordination, timeline enforcement, and this hub.',
+  },
+  {
+    name: 'Jackie Furton',
+    initials: 'JF',
+    avatarClass: 'av-purple',
+    role: 'Art Director (26 years)',
+    org: 'USNA Alumni Association',
+    orgClass: 'org-usna',
+    email: 'jackie.furton@usna.com',
+    focus: 'Design lead and primary vendor contact. Manages Ace Displays relationship for badges and banners. Mentoring Sophia. QR code sign-off authority.',
+  },
+  {
+    name: 'Sophia Smith',
+    initials: 'SS',
+    avatarClass: 'av-green',
+    role: 'Creative Coordinator',
+    org: 'USNA Alumni Association',
+    orgClass: 'org-usna',
+    email: 'sophia.smith@usna.com',
+    focus: 'Hands-on design execution — printed program, digital program, digital signage. First year on this project. Jackie oversight.',
+  },
+  {
+    name: 'Isaac Phillips III',
+    initials: 'IP',
+    avatarClass: 'av-blue',
+    role: 'Data Support',
+    org: 'USNA',
+    orgClass: 'org-usna',
+    email: 'isaac.phillips@usna.com',
+    focus: 'Attendee data gathering and roster management. Feeds badge and program production.',
+  },
+  {
+    name: 'Bridgette Lundfelt',
+    initials: 'BL',
+    avatarClass: 'av-red',
+    role: 'Events Manager',
+    org: 'Flugal Center',
+    orgClass: 'org-flugal',
+    email: 'bridgette.lundfelt@usna.com',
+    focus: 'Venue logistics and materials receiving at Flugal Center. Key contact for June 16 setup confirmation and IT/AV coordination.',
+  },
+  {
+    name: 'John Schofield',
+    initials: 'JS',
+    avatarClass: 'av-navy',
+    role: 'USNA Staff — Support',
+    org: 'USNA',
+    orgClass: 'org-usna',
+    email: 'john.schofield@usna.com',
+    focus: 'General support role. Coordinates through USNA staff channels.',
+  },
+  {
+    name: 'Matthew Walnock',
+    initials: 'MWa',
+    avatarClass: 'av-gold',
+    role: 'VSP Support (tentative)',
+    org: 'Victory Square Partners',
+    orgClass: 'org-vsp',
+    email: 'matthew.walnock@vspartners.us',
+    focus: 'VSP support, tentatively attending the summit. Coordinates with Tyler.',
+  },
+];
+
+function buildTeam() {
+  const container = document.getElementById('team-grid');
+  let html = '';
+  team.forEach(m => {
+    html += `
+      <div class="team-card">
+        <div class="team-avatar-wrap">
+          <div class="team-avatar ${m.avatarClass}">${m.initials}</div>
+          <div>
+            <div class="team-name">${m.name}</div>
+            <div class="team-role">${m.role}</div>
+            <span class="team-org-badge ${m.orgClass}">${m.org}</span>
+          </div>
+        </div>
+        <a class="team-email" href="mailto:${m.email}">✉ ${m.email}</a>
+        <div class="team-focus"><span class="focus-label">Focus: </span>${m.focus}</div>
+      </div>
+    `;
+  });
+  container.innerHTML = html;
+}
+buildTeam();
+
+// ═══════════════════════════════════════════════
+// SPONSORS
+// ═══════════════════════════════════════════════
+const sponsors = [
+  {
+    name: 'Waypoint Ventures',
+    status: 'confirmed',
+    commitment: 'Entrepreneurs Pavilion Banner',
+    contact: 'Billy Haywood',
+    email: 'bh@waypointventures.com',
+    managedBy: 'Tyler (reconnecting)',
+    logoReceived: 'no',
+    hiRes: 'no',
+    notes: 'Returning sponsor. Tyler reaching out to confirm 2026 commitment level.',
+  },
+  {
+    name: 'Wells Fargo',
+    status: 'pending',
+    commitment: 'Lanyards Sponsor',
+    contact: 'Matt\'s contact',
+    email: '',
+    managedBy: 'Matt Willmann',
+    logoReceived: 'pending',
+    hiRes: 'pending',
+    notes: 'Matt handling outreach. Confirmation required before lanyard order placed.',
+  },
+];
+
+function buildSponsors() {
+  const container = document.getElementById('sponsor-grid');
+  let html = '';
+  sponsors.forEach(s => {
+    const sc = s.status === 'confirmed' ? { cls: 'ss-confirmed', label: 'Confirmed ✓' } : { cls: 'ss-pending', label: 'Pending' };
+    const logoHtml = s.logoReceived === 'yes' ? '<span class="asset-check ac-yes">✓ Received</span>'
+      : s.logoReceived === 'no' ? '<span class="asset-check ac-no">✗ Not Yet</span>'
+      : '<span class="asset-check ac-pending">⌛ Pending</span>';
+    const hiResHtml = s.hiRes === 'yes' ? '<span class="asset-check ac-yes">✓ Hi-Res</span>'
+      : s.hiRes === 'no' ? '<span class="asset-check ac-no">✗ TBD</span>'
+      : '<span class="asset-check ac-pending">⌛ TBD</span>';
+    html += `
+      <div class="sponsor-card">
+        <div class="sponsor-header">
+          <div class="sponsor-name">${s.name}</div>
+          <div class="sponsor-status-badge ${sc.cls}">${sc.label}</div>
+        </div>
+        <div class="sponsor-meta">
+          <div class="sponsor-row"><span class="sponsor-row-label">Commitment</span>${s.commitment}</div>
+          <div class="sponsor-row"><span class="sponsor-row-label">Contact</span>${s.contact}${s.email ? ` · <a href="mailto:${s.email}" style="color:var(--blue);font-size:11px;">${s.email}</a>` : ''}</div>
+          <div class="sponsor-row"><span class="sponsor-row-label">Managed By</span>${s.managedBy}</div>
+          <div class="sponsor-row"><span class="sponsor-row-label">Logo</span>${logoHtml} &nbsp; ${hiResHtml}</div>
+          ${s.notes ? `<div class="sponsor-row" style="margin-top:4px;font-style:italic;color:var(--gray-400);font-size:12px;">${s.notes}</div>` : ''}
+        </div>
+      </div>
+    `;
+  });
+  // Empty slot
+  html += `
+    <div class="sponsor-card placeholder">
+      <div style="font-size:32px;">+</div>
+      <div style="font-weight:600;font-size:14px;">Add Sponsor</div>
+      <div style="font-size:12px;">Slot available</div>
+    </div>
+    <div class="sponsor-card placeholder">
+      <div style="font-size:32px;">+</div>
+      <div style="font-weight:600;font-size:14px;">Add Sponsor</div>
+      <div style="font-size:12px;">Slot available</div>
+    </div>
+  `;
+  container.innerHTML = html;
+}
+buildSponsors();
+
+// ═══════════════════════════════════════════════
+// DECISIONS
+// ═══════════════════════════════════════════════
+const decisions = [
+  {
+    title: 'Entrepreneur Ribbon Category',
+    detail: 'Should we add a ribbon specifically for Entrepreneur Pavilion presenters? Tyler flagged this as a nice differentiator that also helps with logistics. Impacts badge ribbon order quantity and categories.',
+    owner: 'Matt Willmann',
+  },
+  {
+    title: 'Table Signs',
+    detail: 'Jackie mentioned table signs from 2025 but they are not on Matt\'s current list. Were these used and valued? If yes, need to add to deliverables and assign ownership. Deadline pressure: must decide before June 10.',
+    owner: 'Matt Willmann',
+  },
+  {
+    title: 'Cover Image',
+    detail: 'Matt suggested getting ahead on the cover image for the printed/digital program. Who provides the photo? Who approves? Is this from 2025 assets or a new shoot? Sophia needs this to start program design.',
+    owner: 'Matt Willmann',
+  },
+  {
+    title: 'June 16 Night-Before Setup',
+    detail: 'Is Flugal Center available the evening of June 16 for setup and AV check? Bridgette needs to confirm availability. This affects when materials need to arrive and team logistics.',
+    owner: 'Bridgette Lundfelt',
+  },
+  {
+    title: 'Waypoint Ventures Commitment Level',
+    detail: 'Billy Haywood / Waypoint Ventures is returning but the exact commitment level for 2026 is not confirmed. Tyler is reaching out. This unblocks the Pavilion banner design and affects sponsor package.',
+    owner: 'Tyler Goble',
+  },
+];
+
+function buildDecisions() {
+  const container = document.getElementById('decisions-list');
+  let html = '';
+  decisions.forEach((d, i) => {
+    html += `
+      <div class="decision-card">
+        <div class="decision-num">${i+1}</div>
+        <div class="decision-body">
+          <div class="decision-title">${d.title}</div>
+          <div class="decision-detail">${d.detail}</div>
+          <div class="decision-owner">⚡ Awaiting: ${d.owner}</div>
+        </div>
+      </div>
+    `;
+  });
+  container.innerHTML = html;
+}
+buildDecisions();
+
+// ═══════════════════════════════════════════════
+// VENDORS
+// ═══════════════════════════════════════════════
+const vendors = [
+  {
+    icon: '🎫',
+    name: 'Ace Displays',
+    detail: 'Badge and pop-up banner vendor. <strong>10 business day lead time</strong> — order must be placed no later than June 1 for June 17 delivery. Jackie manages the relationship.',
+    alert: '10-day lead time',
+  },
+  {
+    icon: '🖨',
+    name: 'Local Printer (Jackie\'s Contact)',
+    detail: 'Handles printed program production. Jackie has established relationship and can get fast turnaround. Needs finalized files by June 10.',
+    alert: null,
+  },
+  {
+    icon: '🖥',
+    name: 'Flugal Center IT',
+    detail: 'Handles digital signage and display setup inside the venue. All coordination goes through Bridgette Lundfelt. Plan for an on-site test day (June 16 or earlier).',
+    alert: null,
+  },
+  {
+    icon: '🏦',
+    name: 'Wells Fargo',
+    detail: 'Lanyard sponsor — Matt\'s direct contact. Pending confirmation of 2026 commitment. Once confirmed, Bridgette coordinates receiving at Flugal Center.',
+    alert: 'Awaiting confirmation',
+  },
+];
+
+function buildVendors() {
+  const container = document.getElementById('vendor-grid');
+  let html = '';
+  vendors.forEach(v => {
+    html += `
+      <div class="vendor-card">
+        <div class="vendor-icon">${v.icon}</div>
+        <div class="vendor-name">${v.name}</div>
+        <div class="vendor-detail">${v.detail}</div>
+        ${v.alert ? `<div class="vendor-alert">⚠ ${v.alert}</div>` : ''}
+      </div>
+    `;
+  });
+  container.innerHTML = html;
+}
+buildVendors();
+
+// ═══════════════════════════════════════════════
+// LESSONS LEARNED
+// ═══════════════════════════════════════════════
+const lessons = [
+  {
+    icon: '📱',
+    title: 'QR Code Printed Incorrectly',
+    text: 'In 2025, the QR code in the digital program printed incorrectly. Jackie caught it on-site and applied a sticker fix — a near-miss that added stress during setup.',
+    fix: '2026 Fix: Stress-test QR code from a physical print proof BEFORE sending to printer. QR checkpoint added to Sophia\'s checklist before May 25 deadline.',
+  },
+  {
+    icon: '⏰',
+    title: 'Sponsor Commitments at the 11th Hour',
+    text: 'Several sponsors confirmed too late to be included in printed materials, causing last-minute scrambles and some sponsors feeling underrepresented.',
+    fix: '2026 Fix: May 25 soft deadline for 95% of sponsors. Explicit communication to all sponsors that June 1 is a hard cut-off for inclusion in print.',
+  },
+  {
+    icon: '🖼',
+    title: 'Logo Quality Issues',
+    text: 'Sponsors submitted screenshots and low-res images instead of hi-res vector/print files. This caused delays and quality compromises in print materials.',
+    fix: '2026 Fix: Sponsor intake form explicitly states hi-res requirements (300dpi, SVG or EPS preferred). Jackie reviews all logos before accepting.',
+  },
+  {
+    icon: '🔗',
+    title: 'LinkedIn Attendee Pages Too Much Lift',
+    text: 'The 2025 digital program attempted to include LinkedIn profiles for attendees, which created significant data-gathering overhead with limited return.',
+    fix: '2026 Fix: LinkedIn pages removed from scope. Isaac focuses on name, title, organization, and photo only for attendee data.',
+  },
+];
+
+function buildLessons() {
+  const container = document.getElementById('lessons-list');
+  let html = '';
+  lessons.forEach(l => {
+    html += `
+      <div class="lesson-card">
+        <div class="lesson-icon">${l.icon}</div>
+        <div class="lesson-body">
+          <div class="lesson-title">${l.title}</div>
+          <div class="lesson-text">${l.text}</div>
+          <div class="lesson-fix">✓ ${l.fix}</div>
+        </div>
+      </div>
+    `;
+  });
+  container.innerHTML = html;
+}
+buildLessons();
+
+// ═══════════════════════════════════════════════
+// GOOGLE DRIVE TREE
+// ═══════════════════════════════════════════════
+function buildDriveTree() {
+  const container = document.getElementById('drive-tree');
+  const tree = `
+    <div class="drive-root">📁 USNA Entrepreneur Summit 2026 <span class="drive-badge-note drive-badge-active">SET UP APR 4</span></div>
+    <div class="drive-item folder drive-indent-1">📁 2025_Reference <span class="drive-badge-note">Jackie uploads</span></div>
+    <div class="drive-item file drive-indent-2">📄 Entrepreneur Summit 2025.zip</div>
+    <div class="drive-item file drive-indent-2">📄 Print Program 2025.pdf</div>
+    <div class="drive-item folder drive-indent-2">📁 Digital Signage 2025/</div>
+
+    <div class="drive-item folder drive-indent-1">📁 Sponsors</div>
+    <div class="drive-item folder drive-indent-2">📁 Logos <span class="drive-badge-note">Hi-res only!</span></div>
+    <div class="drive-item file drive-indent-2">📊 Sponsor_Roster.xlsx</div>
+    <div class="drive-item file drive-indent-2">📊 Commitment_Tracker.xlsx</div>
+
+    <div class="drive-item folder drive-indent-1">📁 Attendees</div>
+    <div class="drive-item file drive-indent-2">📊 Attendee_Roster.xlsx</div>
+    <div class="drive-item file drive-indent-2">📊 Badge_Categories.xlsx</div>
+
+    <div class="drive-item folder drive-indent-1">📁 Design_Assets</div>
+    <div class="drive-item folder drive-indent-2">📁 Printed_Program</div>
+    <div class="drive-item folder drive-indent-2">📁 Digital_Program</div>
+    <div class="drive-item folder drive-indent-2">📁 Badges</div>
+    <div class="drive-item folder drive-indent-2">📁 Pop_Up_Banners</div>
+    <div class="drive-item folder drive-indent-2">📁 Digital_Signage</div>
+    <div class="drive-item folder drive-indent-2">📁 Table_Signs <span class="drive-badge-note">Pending Matt decision</span></div>
+
+    <div class="drive-item folder drive-indent-1">📁 Proofs_For_Review</div>
+
+    <div class="drive-item folder drive-indent-1">📁 Meeting_Notes</div>
+    <div class="drive-item file drive-indent-2">📝 2026-04-02_Planning_Call.md</div>
+
+    <div class="drive-item folder drive-indent-1">📁 Speakers</div>
+    <div class="drive-item folder drive-indent-2">📁 Speaker_Bios/</div>
+    <div class="drive-item folder drive-indent-2">📁 Speaker_Photos/ <span class="drive-badge-note">Hi-res required</span></div>
+    <div class="drive-item file drive-indent-2">📊 Panel_Schedule.xlsx</div>
+
+    <div class="drive-item folder drive-indent-1">📁 Logistics</div>
+    <div class="drive-item file drive-indent-2">📝 Flugal_Center_Setup.md</div>
+    <div class="drive-item file drive-indent-2">📝 Vendor_Contacts.md</div>
+  `;
+  container.innerHTML = tree;
+}
+buildDriveTree();
+</script>
+</body>
+</html>
